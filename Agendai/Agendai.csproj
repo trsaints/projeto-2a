@@ -29,4 +29,19 @@
   <ItemGroup>
     <Folder Include="Views\Windows\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Components\SideBar\SideBar.axaml.cs">
+      <DependentUpon>SideBar.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Components\TodoList\TodoList.axaml.cs">
+      <DependentUpon>TodoList.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Views\Components\TodoList\TodoList.axaml" />
+  </ItemGroup>
 </Project>

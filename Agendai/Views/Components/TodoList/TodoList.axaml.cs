@@ -1,9 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 
-namespace Agendai.Views.Components;
+namespace Agendai.Views.Components.TodoList;
 
 
 public partial class TodoList : UserControl
