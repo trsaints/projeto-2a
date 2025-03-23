@@ -19,6 +19,5 @@
         <FontFamily x:Key="MontserratItalic">avares://Agendai/Assets/Font/Montserrat-Italic.ttf#Montserrat Italic</FontFamily>
         <FontFamily x:Key="MontserratThin">avares://Agendai/Assets/Font/Montserrat-Thin.ttf#Montserrat Thin</FontFamily>
         <FontFamily x:Key="MontserratBlack">avares://Agendai/Assets/Font/Montserrat-Black.ttf#Montserrat Black</FontFamily>
-
     </Application.Resources>
 </Application>
