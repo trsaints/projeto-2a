@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
         xmlns:timer="clr-namespace:Agendai.Views.Components.Timer"
+        xmlns:todoControl="clr-namespace:Agendai.Views.Components.TodoControl"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Agendai.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -20,5 +21,6 @@
     <Grid ColumnDefinitions="0.2*,0.4*,0.4*">
         <sideBar:SideBar Grid.Column="0"/>
         <timer:Timer Grid.Column="1"/>
+        <todoControl:TodoControl Grid.Column="2"/>
     </Grid>
 </Window>
