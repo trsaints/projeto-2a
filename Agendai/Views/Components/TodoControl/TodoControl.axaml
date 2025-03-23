@@ -6,8 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.TodoControl.TodoControl">
     <StackPanel>
+        <TextBlock>Minhas Tarefas</TextBlock>
         <TextBox>Comprar café</TextBox>
         <todoList:TodoList/>
-        <Button>Ver Mais</Button>
+        <Button>Ver Todas</Button>
     </StackPanel>
 </UserControl>
