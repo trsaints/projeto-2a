@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
+        xmlns:timer="clr-namespace:Agendai.Views.Components.Timer"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Agendai.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -16,5 +17,8 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <sideBar:SideBar />
+    <Grid ColumnDefinitions="0.2*,0.4*,0.4*">
+        <sideBar:SideBar Grid.Column="0"/>
+        <timer:Timer Grid.Column="1"/>
+    </Grid>
 </Window>
