@@ -3,13 +3,22 @@
              x:Class="Agendai.App"
              xmlns:local="using:Agendai"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
-  
+
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+    <Application.Resources>
+        <FontFamily x:Key="Montserrat">avares://Agendai/Assets/Font/Montserrat-Regular.ttf#Montserrat</FontFamily>
+        <FontFamily x:Key="MontserratBold">avares://Agendai/Assets/Font/Montserrat-Bold.ttf#Montserrat Bold</FontFamily>
+        <FontFamily x:Key="MontserratItalic">avares://Agendai/Assets/Font/Montserrat-Italic.ttf#Montserrat Italic</FontFamily>
+        <FontFamily x:Key="MontserratThin">avares://Agendai/Assets/Font/Montserrat-Thin.ttf#Montserrat Thin</FontFamily>
+        <FontFamily x:Key="MontserratBlack">avares://Agendai/Assets/Font/Montserrat-Black.ttf#Montserrat Black</FontFamily>
+
+    </Application.Resources>
 </Application>
