@@ -2,14 +2,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Agendai.Views.Components.TodoList.TodoList">
-    <StackPanel>
-        <CheckBox>Tarefa 1</CheckBox>
-        <CheckBox>Tarefa 1</CheckBox>
-        <CheckBox>Tarefa 1</CheckBox>
-        <CheckBox>Tarefa 1</CheckBox>
-        <CheckBox>Tarefa 1</CheckBox>
-        <CheckBox>Tarefa 1</CheckBox>
-    </StackPanel>
+             x:Class="Agendai.Views.Components.TodoList.TodoList"
+             x:DataType="vm:TodoListViewModel">
+    <ItemsControl ItemsSource="{Binding Todos}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border BorderThickness="1" Padding="4">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock
+                            Text="{Binding Due , Converter={StaticResource DateConverter}}" />
+                        <CheckBox
+                            IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}" />
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>
