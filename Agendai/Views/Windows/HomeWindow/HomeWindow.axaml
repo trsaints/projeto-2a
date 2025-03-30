@@ -24,19 +24,17 @@
                 <TextBlock>Meus Turnos</TextBlock>
                 <timer:Timer />
                 <todoList:TodoList />
+                <Button Command="{Binding OpenPomodoroCommand}">Ver Todos</Button>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0">
                 <TextBlock>Próximos Eventos</TextBlock>
-
                 <eventList:EventList />
-
                 <Button Command="{Binding OpenAgendaCommand}">Ver Todos</Button>
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="1">
                 <TextBlock>Minhas Tarefas</TextBlock>
-                <TextBox>Comprar café</TextBox>
                 <todoList:TodoList />
                 <Button Command="{Binding OpenTodoCommand}">Ver Todas</Button>
             </StackPanel>

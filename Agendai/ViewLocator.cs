@@ -20,6 +20,7 @@ public class ViewLocator : IDataTemplate
             HomeWindowViewModel => new HomeWindow(),
             AgendaWindowViewModel => new AgendaWindow(),
             TodoWindowViewModel => new TodoWindow(),
+            PomodoroWindowViewModel => new PomodoroWindow(),
             _ => throw new ArgumentException($"No view found for {param.GetType().Name}"),
         };
 

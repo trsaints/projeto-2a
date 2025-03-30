@@ -44,4 +44,11 @@ public class MainWindowViewModel : ViewModelBase
         todoViewModel.MainViewModel = this;
         CurrentViewModel = todoViewModel;
     }
+
+    public void NavigateToPomodoro()
+    {
+        var pomodoroViewModel = new PomodoroWindowViewModel();
+        pomodoroViewModel.MainViewModel = this;
+        CurrentViewModel = pomodoroViewModel;
+    }
 }
