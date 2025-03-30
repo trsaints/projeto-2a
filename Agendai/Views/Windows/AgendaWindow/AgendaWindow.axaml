@@ -6,5 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
-    <TextBlock Text="{Binding Title}"/>
+    <StackPanel Spacing="10" Margin="20">
+        <TextBlock Text="{Binding Title}" FontSize="24"/>
+        <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
+    </StackPanel>
 </UserControl>

@@ -9,12 +9,6 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Agendai">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE -->
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
-
-
-    <ContentControl Content="{Binding CurrentViewModel}"
-                    ContentTemplate="{DynamicResource ViewLocator}" />
+    <ContentControl Content="{Binding CurrentViewModel}" />
+    
 </Window>

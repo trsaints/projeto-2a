@@ -1,37 +1,42 @@
 using System;
 using Agendai.ViewModels;
+using Agendai.Views.Windows.AgendaWindow;
+using Agendai.Views.Windows.HomeWindow;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-
+using Avalonia.Threading;
 
 namespace Agendai;
 
-
 public class ViewLocator : IDataTemplate
 {
-	public Control Build(object param)
-	{
-		var viewModelType = param.GetType();
-		
-		// assure the string matches the naming convention, for avoiding
-		// inconsistencies such as "HomeWindowWindow" in the context search
-		// after replacing "ViewModel" with "Window"
-		
-		var windowName = viewModelType.Name.Replace("ViewModel", "Window")
-		                              .Replace("WindowWindow", "Window"); 
-		
-		// windowName is doubled because each window is within its own namespace
-		// example: Agendai.Views.Windows.HomeWindow.HomeWindow
-		var fullNamespace = $"Agendai.Views.Windows.{windowName}.{windowName}";
-		var viewType      = Type.GetType(fullNamespace);
+    public Control Build(object param)
+    {
+        if (param is null)
+            return new TextBlock { Text = "No ViewModel provided" };
+            
+        Control result;
+        
+        if (param is HomeWindowViewModel)
+            result = new HomeWindow();
+        else if (param is AgendaWindowViewModel)
+            result = new AgendaWindow();
+        else
+        {
+            var name = param.GetType().Name.Replace("ViewModel", "");
+            var type = Type.GetType($"Agendai.Views.{name}");
+            
+            if (type != null)
+                result = (Control)Activator.CreateInstance(type)!;
+            else
+                result = new TextBlock { Text = $"View not found for {param.GetType().FullName}" };
+        }
+        
+        return result;
+    }
 
-		if (viewType is not null)
-		{
-			return (Control)Activator.CreateInstance(viewType)!;
-		}
-
-		return new TextBlock { Text = $"View not found for {fullNamespace}" };
-	}
-
-	public bool Match(object param) { return param is ViewModelBase; }
+    public bool Match(object? data)
+    {
+        return data is ViewModelBase;
+    }
 }

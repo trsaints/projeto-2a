@@ -1,20 +1,18 @@
-using System.Reactive;
-using Agendai.Data;
-using ReactiveUI;
-
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Agendai.ViewModels;
 
-
 public class HomeWindowViewModel : ViewModelBase
 {
-	public HomeWindowViewModel()
-	{
-		OpenAgendaCommand = ReactiveCommand.Create(() =>
-		{
-			MessageBus.Current.SendMessage(new NavigateMessage(new AgendaWindowViewModel()));
-		});	
-	}
-	
-	public ReactiveCommand<Unit, Unit> OpenAgendaCommand { get; }
+    public MainWindowViewModel? MainViewModel { get; set; }
+
+    private ICommand? _openAgendaCommand;
+
+    public ICommand OpenAgendaCommand => _openAgendaCommand ??= new RelayCommand(OpenAgenda);
+
+    private void OpenAgenda()
+    {
+        MainViewModel?.NavigateToAgenda();
+    }
 }

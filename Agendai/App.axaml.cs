@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using Agendai.ViewModels;
 using Agendai.Views;
+using Avalonia.Styling;
 
 namespace Agendai;
 
@@ -14,7 +15,13 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        Resources.Add("ViewLocator", new ViewLocator());
+
+        // Register ViewLocator as a DataTemplate in application resources
+        // Updated to current Avalonia API
+        if (!Resources.TryGetResource("ViewLocator", ThemeVariant.Default, out _))
+        {
+            Resources.Add("ViewLocator", new ViewLocator());
+        }
     }
 
     public override void OnFrameworkInitializationCompleted()
