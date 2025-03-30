@@ -24,10 +24,7 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Windows\" />
+    <PackageReference Include="ReactiveUI" Version="20.2.45" />
   </ItemGroup>
 
   <ItemGroup>

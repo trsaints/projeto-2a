@@ -3,8 +3,7 @@
         xmlns:vm="using:Agendai.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
-        xmlns:homeWidget="clr-namespace:Agendai.Views.Components.HomeWidget"
+        xmlns:homeWindow="clr-namespace:Agendai.Views.Windows.HomeWindow"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Agendai.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -16,9 +15,12 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
-
-    <Grid ColumnDefinitions="0.2*,0.8*">
-        <sideBar:SideBar Grid.Column="0"/>
-        <homeWidget:HomeWidget Grid.Column="1"/>
-    </Grid>
+    
+    <ContentControl Content="{Binding CurrentViewModel}">
+        <ContentControl.ContentTemplate>
+            <DataTemplate DataType="vm:HomeWindowViewModel">
+                    <homeWindow:HomeWindow/>
+            </DataTemplate>
+        </ContentControl.ContentTemplate>
+    </ContentControl>
 </Window>
