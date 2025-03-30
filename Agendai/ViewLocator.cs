@@ -14,24 +14,15 @@ public class ViewLocator : IDataTemplate
     {
         if (param is null)
             return new TextBlock { Text = "No ViewModel provided" };
-            
-        Control result;
-        
-        if (param is HomeWindowViewModel)
-            result = new HomeWindow();
-        else if (param is AgendaWindowViewModel)
-            result = new AgendaWindow();
-        else
+
+        Control result = param switch
         {
-            var name = param.GetType().Name.Replace("ViewModel", "");
-            var type = Type.GetType($"Agendai.Views.{name}");
-            
-            if (type != null)
-                result = (Control)Activator.CreateInstance(type)!;
-            else
-                result = new TextBlock { Text = $"View not found for {param.GetType().FullName}" };
-        }
-        
+            HomeWindowViewModel => new HomeWindow(),
+            AgendaWindowViewModel => new AgendaWindow(),
+            TodoWindowViewModel => new TodoWindow(),
+            _ => throw new ArgumentException($"No view found for {param.GetType().Name}"),
+        };
+
         return result;
     }
 

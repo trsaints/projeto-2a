@@ -37,4 +37,11 @@ public class MainWindowViewModel : ViewModelBase
         agendaViewModel.MainViewModel = this;
         CurrentViewModel = agendaViewModel;
     }
+
+    public void NavigateToTodo()
+    {
+        var todoViewModel = new TodoWindowViewModel();
+        todoViewModel.MainViewModel = this;
+        CurrentViewModel = todoViewModel;
+    }
 }

@@ -9,8 +9,17 @@ public class HomeWindowViewModel : ViewModelBase
 
     public ICommand OpenAgendaCommand => _openAgendaCommand ??= new RelayCommand(OpenAgenda);
 
+    private ICommand? _openTodoCommand;
+
+    public ICommand OpenTodoCommand => _openTodoCommand ??= new RelayCommand(OpenTodo);
+
     private void OpenAgenda()
     {
         MainViewModel?.NavigateToAgenda();
+    }
+
+    private void OpenTodo()
+    {
+        MainViewModel?.NavigateToTodo();
     }
 }
