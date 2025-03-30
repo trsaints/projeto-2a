@@ -41,4 +41,8 @@
   <ItemGroup>
     <AdditionalFiles Include="Views\Components\TodoList\TodoList.axaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
+  </ItemGroup>
 </Project>

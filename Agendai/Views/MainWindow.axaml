@@ -3,7 +3,6 @@
         xmlns:vm="using:Agendai.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:homeWindow="clr-namespace:Agendai.Views.Windows.HomeWindow"
         mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="Agendai.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -11,16 +10,11 @@
         Title="Agendai">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <!-- This only sets the DataContext for the previewer in an IDE -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    
-    <ContentControl Content="{Binding CurrentViewModel}">
-        <ContentControl.ContentTemplate>
-            <DataTemplate DataType="vm:HomeWindowViewModel">
-                    <homeWindow:HomeWindow/>
-            </DataTemplate>
-        </ContentControl.ContentTemplate>
-    </ContentControl>
+
+
+    <ContentControl Content="{Binding CurrentViewModel}"
+                    ContentTemplate="{DynamicResource ViewLocator}" />
 </Window>
