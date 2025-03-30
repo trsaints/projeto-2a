@@ -9,7 +9,7 @@
     <ItemsControl ItemsSource="{Binding Todos}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Border BorderThickness="1" Padding="4">
+                <Border BorderThickness="1" Padding="4" BorderBrush="Black">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" />
                         <TextBlock
