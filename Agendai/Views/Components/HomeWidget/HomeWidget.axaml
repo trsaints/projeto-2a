@@ -5,34 +5,22 @@
              xmlns:timer="clr-namespace:Agendai.Views.Components.Timer"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              xmlns:todoControl="clr-namespace:Agendai.Views.Components.TodoControl"
+             xmlns:eventList="clr-namespace:Agendai.Views.Components.EventList"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.HomeWidget.HomeWidget">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
         <StackPanel Grid.Column="0" Grid.Row="0">
             <TextBlock>Meus Turnos</TextBlock>
-            <timer:Timer/>
-            <todoList:TodoList/>
+            <timer:Timer />
+            <todoList:TodoList />
         </StackPanel>
-        
-        <todoControl:TodoControl Grid.Column="1" Grid.Row="0"/>
-        
+
+        <todoControl:TodoControl Grid.Column="1" Grid.Row="0" />
+
         <StackPanel Grid.Column="0" Grid.Row="1">
             <TextBlock>Próximos Eventos</TextBlock>
-            
-            <WrapPanel>
-                <TextBlock>Evento 1</TextBlock>
-                <TextBlock>Um evento 1</TextBlock>
-            </WrapPanel>
-            
-            <WrapPanel>
-                <TextBlock>Evento 1</TextBlock>
-                <TextBlock>Um evento 1</TextBlock>
-            </WrapPanel>
-            
-            <WrapPanel>
-                <TextBlock>Evento 1</TextBlock>
-                <TextBlock>Um evento 1</TextBlock>
-            </WrapPanel>
+
+            <eventList:EventList />
         </StackPanel>
     </Grid>
 </UserControl>
