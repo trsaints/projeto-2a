@@ -3,11 +3,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
-    <StackPanel Spacing="10" Margin="20">
-        <TextBlock Text="{Binding Title}" FontSize="24"/>
-        <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
-    </StackPanel>
+    <Grid ColumnDefinitions="0.2*,0.8*">
+        <sideBar:SideBar Grid.Column="0" />
+
+        <StackPanel Grid.Column="1">
+            <StackPanel Spacing="10" Margin="20">
+                <TextBlock Text="{Binding Title}" FontSize="24" />
+                <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
+            </StackPanel>
+
+            <StackPanel Margin="20" Orientation="Horizontal">
+                <TextBlock>Calendário</TextBlock>
+
+                <ComboBox SelectedIndex="0" MaxDropDownHeight="100">
+                    <ComboBoxItem>Dia</ComboBoxItem>
+                    <ComboBoxItem>Semana</ComboBoxItem>
+                    <ComboBoxItem>Mês</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel>
+
+            </StackPanel>
+
+            <StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </UserControl>
