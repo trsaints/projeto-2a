@@ -20,7 +20,7 @@ public class EventListViewModel : ViewModelBase
 			},
 			new Event(2, "Feira da Foda")
 			{
-				Description = "Coferência do Agro",
+				Description = "Conferência do Agro",
 				Due = new DateTime(2025, 12, 5),
 				Repeats = Repeats.None
 			},
