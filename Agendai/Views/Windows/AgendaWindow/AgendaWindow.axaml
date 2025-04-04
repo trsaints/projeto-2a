@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
+             xmlns:agenda="clr-namespace:Agendai.Views.Components.Agenda"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
@@ -15,24 +16,9 @@
                 <TextBlock Text="{Binding Title}" FontSize="24" />
                 <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
             </StackPanel>
-
-            <StackPanel Margin="20" Orientation="Horizontal">
-                <TextBlock>Calendário</TextBlock>
-
-                <ComboBox SelectedIndex="0" MaxDropDownHeight="100">
-                    <ComboBoxItem>Dia</ComboBoxItem>
-                    <ComboBoxItem>Semana</ComboBoxItem>
-                    <ComboBoxItem>Mês</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-
-            <StackPanel>
-
-            </StackPanel>
-
-            <StackPanel>
-
-            </StackPanel>
+            
+            <agenda:Agenda />
+            
         </StackPanel>
     </Grid>
 </UserControl>
