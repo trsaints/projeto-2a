@@ -1,31 +1,79 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.Agenda.Agenda"
-             x:DataType="vm:AgendaWindowViewModel">
-    <StackPanel>
-        <StackPanel Margin="20" Orientation="Horizontal">
-            <TextBlock>Calendário</TextBlock>
+             x:DataType="vm:AgendaWindowViewModel"
+             xmlns:local="clr-namespace:Agendai.Data.Converters">
 
-            <ComboBox SelectedIndex="{Binding SelectedIndex}" MaxDropDownHeight="100">
-                <ComboBoxItem>Mes</ComboBoxItem>
-                <ComboBoxItem>Semana</ComboBoxItem>
-                <ComboBoxItem>Dia</ComboBoxItem>
-            </ComboBox>
-        </StackPanel>
+  <UserControl.Resources>
+    <DataTemplate x:Key="MonthViewTemplate" x:DataType="vm:AgendaWindowViewModel">
+      <StackPanel>
+        <TextBlock Text="{Binding SelectedMonth}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <DataGrid HeadersVisibility="Column" AutoGenerateColumns="False" ItemsSource="{Binding MonthViewRows}" GridLinesVisibility="All">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Dom" Binding="{Binding Sunday}" />
+            <DataGridTextColumn Header="Seg" Binding="{Binding Monday}"/>
+            <DataGridTextColumn Header="Ter" Binding="{Binding Tuesday}"/>
+            <DataGridTextColumn Header="Qua" Binding="{Binding Wednesday}"/>
+            <DataGridTextColumn Header="Qui" Binding="{Binding Thursday}"/>
+            <DataGridTextColumn Header="Sex" Binding="{Binding Friday}"/>
+            <DataGridTextColumn Header="Sáb" Binding="{Binding Saturday}"/>
+          </DataGrid.Columns>
+        </DataGrid>
+      </StackPanel>
+    </DataTemplate>
 
-        <StackPanel>
-            <DataGrid
-                Margin="10"
-                AutoGenerateColumns="True"
-                IsReadOnly="True"
-                GridLinesVisibility="All"
-                BorderThickness="1"
-                ItemsSource="{Binding DataGridItems}">
-            </DataGrid>
-        </StackPanel>
+    <DataTemplate x:Key="WeekViewTemplate" x:DataType="vm:AgendaWindowViewModel">
+      <StackPanel>
+        <TextBlock Text="{Binding SelectedWeek}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+          <DataGrid ItemsSource="{Binding WeekViewRows}" AutoGenerateColumns="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
+              <DataGridTextColumn Header="Dom" Binding="{Binding Sunday}" />
+              <DataGridTextColumn Header="Seg" Binding="{Binding Monday}" />
+              <DataGridTextColumn Header="Ter" Binding="{Binding Tuesday}" />
+              <DataGridTextColumn Header="Qua" Binding="{Binding Wednesday}" />
+              <DataGridTextColumn Header="Qui" Binding="{Binding Thursday}" />
+              <DataGridTextColumn Header="Sex" Binding="{Binding Friday}" />
+              <DataGridTextColumn Header="Sáb" Binding="{Binding Saturday}" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </ScrollViewer>
+      </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DayViewTemplate" x:DataType="vm:AgendaWindowViewModel">
+      <StackPanel>
+        <TextBlock Text="{Binding SelectedDay}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+          <DataGrid ItemsSource="{Binding DayViewRows}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
+              <DataGridTextColumn Header="Evento" Binding="{Binding Event}" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </ScrollViewer>
+      </StackPanel>
+    </DataTemplate>
+
+    <local:ViewIndexToTemplateConverter x:Key="ViewTemplateSelector"
+                                        MonthTemplate="{StaticResource MonthViewTemplate}"
+                                        WeekTemplate="{StaticResource WeekViewTemplate}"
+                                        DayTemplate="{StaticResource DayViewTemplate}" />
+  </UserControl.Resources>
+
+  <StackPanel>
+    <StackPanel Orientation="Horizontal" Margin="20">
+      <TextBlock Text="Calendário" FontSize="20" Margin="0,0,10,0"/>
+      <ComboBox SelectedIndex="{Binding SelectedIndex}" Width="100">
+        <ComboBoxItem Content="Mês"/>
+        <ComboBoxItem Content="Semana"/>
+        <ComboBoxItem Content="Dia"/>
+      </ComboBox>
     </StackPanel>
+
+    <ContentControl Content="{Binding}" 
+                    ContentTemplate="{Binding SelectedIndex, Converter={StaticResource ViewTemplateSelector}}" />
+  </StackPanel>
 </UserControl>
