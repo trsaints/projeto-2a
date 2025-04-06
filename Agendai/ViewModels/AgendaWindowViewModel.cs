@@ -45,6 +45,9 @@ namespace Agendai.ViewModels
         public ObservableCollection<MonthRow> MonthViewRows { get; set; } = new();
         public ObservableCollection<WeekRow> WeekViewRows { get; set; } = new();
         public ObservableCollection<DayRow> DayViewRows { get; set; } = new();
+        
+        public EventListViewModel EventList { get; set; } = new();
+        public TodoListViewModel TodoList { get; set; } = new();
 
         private string _selectedMonth;
         public string SelectedMonth
@@ -71,13 +74,7 @@ namespace Agendai.ViewModels
 
         public AgendaWindowViewModel()
         {
-            var today = DateTime.Today;
-            var culture = new CultureInfo("pt-BR");
-
-            SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-            SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(today)}";
-            SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
-
+            UpdateDateSelectors();
             AgendaViewService.AddSampleEvents(Events);
             UpdateDataGridItems();
         }
@@ -87,15 +84,12 @@ namespace Agendai.ViewModels
             switch (_selectedIndex)
             {
                 case 0:
-                    AgendaViewService.GenerateMonthView(MonthViewRows);
+                    AgendaViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos);
                     break;
                 case 1:
-                    SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(DateTime.Today)}";
                     AgendaViewService.GenerateWeekView(WeekViewRows, Hours, Events);
                     break;
                 case 2:
-                    var culture = new CultureInfo("pt-BR");
-                    SelectedDay = culture.TextInfo.ToTitleCase(DateTime.Today.ToString("dddd, dd 'de' MMMM", culture));
                     AgendaViewService.GenerateDayView(DayViewRows, Hours, Events);
                     break;
                 default:
@@ -104,6 +98,16 @@ namespace Agendai.ViewModels
                     DayViewRows.Clear();
                     break;
             }
+        }
+        
+        private void UpdateDateSelectors()
+        {
+            var today = DateTime.Today;
+            var culture = new CultureInfo("pt-BR");
+
+            SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
+            SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(today)}";
+            SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

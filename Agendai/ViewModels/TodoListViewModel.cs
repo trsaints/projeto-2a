@@ -28,6 +28,12 @@ public class TodoListViewModel : ViewModelBase
 				Description = "Preciso comprar leite",
 				Due = new DateTime(2025, 03, 31),
 				Repeats = Repeats.Daily
+			},
+			new Todo(3, "Comprar Bolo")
+			{
+				Description = "Preciso comprar bolo",
+				Due = new DateTime(2025, 04, 29),
+				Repeats = Repeats.Daily
 			}
 		];
 	}
