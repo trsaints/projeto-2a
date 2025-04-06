@@ -1,0 +1,20 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Agendai.Views.Components.Agenda.DayView"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
+             x:DataType="vm:AgendaWindowViewModel">
+    <StackPanel>
+        <TextBlock Text="{Binding SelectedDay}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+            <DataGrid 
+                ItemsSource="{Binding DayViewRows}" 
+                AutoGenerateColumns="False"
+                IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
+                    <DataGridTextColumn Header="Evento" Binding="{Binding Event}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>
