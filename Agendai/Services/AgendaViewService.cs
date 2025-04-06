@@ -110,26 +110,25 @@ namespace Agendai.Services
         }
 
 
-        public static void GenerateDayView(ObservableCollection<DayRow> rows, string[] hours, Dictionary<(string Hour, string Day), string> events)
+        public static void GenerateDayView(
+            ObservableCollection<DayRow> rows,
+            string[] hours,
+            Dictionary<string, ObservableCollection<string>> dayMap)
         {
             rows.Clear();
-            var today = DateTime.Today;
-            var culture = new CultureInfo("pt-BR");
-            string day = culture.TextInfo.ToTitleCase(
-                today.ToString("dddd, d 'de' MMMM", culture)
-            );
-
 
             foreach (var hour in hours)
             {
                 var row = new DayRow
                 {
                     Hour = hour,
-                    Event = events.TryGetValue((hour, day), out var evt) ? evt : string.Empty
+                    Items = dayMap.TryGetValue(hour, out var items) ? items : new ObservableCollection<string>()
                 };
+
                 rows.Add(row);
             }
         }
+
 
         public static void AddSampleEvents(Dictionary<(string Hour, string Day), string> events)
         {
@@ -145,5 +144,40 @@ namespace Agendai.Services
             var dayOfMonth = date.Day + firstDayOfWeek;
             return (int)Math.Ceiling(dayOfMonth / 7.0);
         }
+        
+        public static Dictionary<string, ObservableCollection<string>> MapDayItemsFrom(
+            ObservableCollection<Event> events,
+            ObservableCollection<Todo> todos,
+            DateTime selectedDay)
+        {
+            var map = new Dictionary<string, ObservableCollection<string>>();
+
+            foreach (var ev in events)
+            {
+                if (ev.Due.Date == selectedDay.Date)
+                {
+                    var hourKey = ev.Due.ToString("HH:mm");
+                    if (!map.ContainsKey(hourKey))
+                        map[hourKey] = new ObservableCollection<string>();
+
+                    map[hourKey].Add($"Evento: {ev.Name}");
+                }
+            }
+
+            foreach (var todo in todos)
+            {
+                if (todo.Due.Date == selectedDay.Date)
+                {
+                    var hourKey = todo.Due.ToString("HH:mm");
+                    if (!map.ContainsKey(hourKey))
+                        map[hourKey] = new ObservableCollection<string>();
+
+                    map[hourKey].Add($"Tarefa: {todo.Name}");
+                }
+            }
+
+            return map;
+        }
+
     }
 }

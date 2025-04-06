@@ -90,8 +90,12 @@ namespace Agendai.ViewModels
                     AgendaViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
                     break;
                 case 2:
-                    AgendaViewService.GenerateDayView(DayViewRows, Hours, Events);
+                    var culture = new CultureInfo("pt-BR");
+                    var selected = DateTime.Parse(SelectedDay, culture);
+                    var map = AgendaViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, selected);
+                    AgendaViewService.GenerateDayView(DayViewRows, Hours, map);
                     break;
+
                 default:
                     MonthViewRows.Clear();
                     WeekViewRows.Clear();
