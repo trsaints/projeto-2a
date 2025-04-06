@@ -1,0 +1,27 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Agendai.Views.Components.Agenda.WeekView"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
+             x:DataType="vm:AgendaWindowViewModel">
+    <StackPanel>
+        <TextBlock Text="{Binding SelectedWeek}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+            <DataGrid 
+                ItemsSource="{Binding WeekViewRows}" 
+                AutoGenerateColumns="False" 
+                HeadersVisibility="Column"
+                IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
+                    <DataGridTextColumn Header="Dom" Binding="{Binding Sunday}" />
+                    <DataGridTextColumn Header="Seg" Binding="{Binding Monday}" />
+                    <DataGridTextColumn Header="Ter" Binding="{Binding Tuesday}" />
+                    <DataGridTextColumn Header="Qua" Binding="{Binding Wednesday}" />
+                    <DataGridTextColumn Header="Qui" Binding="{Binding Thursday}" />
+                    <DataGridTextColumn Header="Sex" Binding="{Binding Friday}" />
+                    <DataGridTextColumn Header="Sáb" Binding="{Binding Saturday}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>
