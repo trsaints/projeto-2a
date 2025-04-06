@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Agendai.Views.Components.TodoList.TodoList"
+             x:Class="Agendai.Views.Components.CompletedTasks.CompletedTasks"
              x:DataType="vm:TodoListViewModel">
-    <ItemsControl ItemsSource="{Binding Todos}">
+    <ItemsControl ItemsSource="{Binding CompletedTasks}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid>
