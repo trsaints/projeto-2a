@@ -15,7 +15,7 @@ public class EventListViewModel : ViewModelBase
 			new Event(1, "Conferência da Pamonha")
 			{
 				Description = "Conferência de pamonhas",
-				Due = new DateTime(2021, 10, 10, 8, 0, 0),
+				Due = new DateTime(2025, 4, 10, 8, 0, 0),
 				Repeats = Repeats.Anually
 			},
 			new Event(2, "Feira da Foda")

@@ -87,7 +87,7 @@ namespace Agendai.ViewModels
                     AgendaViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos);
                     break;
                 case 1:
-                    AgendaViewService.GenerateWeekView(WeekViewRows, Hours, Events);
+                    AgendaViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
                     break;
                 case 2:
                     AgendaViewService.GenerateDayView(DayViewRows, Hours, Events);
