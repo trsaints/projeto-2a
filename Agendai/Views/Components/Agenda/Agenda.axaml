@@ -9,7 +9,13 @@
     <DataTemplate x:Key="MonthViewTemplate" x:DataType="vm:AgendaWindowViewModel">
       <StackPanel>
         <TextBlock Text="{Binding SelectedMonth}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-        <DataGrid HeadersVisibility="Column" AutoGenerateColumns="False" ItemsSource="{Binding MonthViewRows}" GridLinesVisibility="All">
+        <DataGrid 
+          HeadersVisibility="Column" 
+          AutoGenerateColumns="False" 
+          ItemsSource="{Binding MonthViewRows}" 
+          GridLinesVisibility="All"
+          IsReadOnly="True"
+          >
           <DataGrid.Columns>
             <DataGridTextColumn Header="Dom" Binding="{Binding Sunday}" />
             <DataGridTextColumn Header="Seg" Binding="{Binding Monday}"/>
@@ -27,7 +33,12 @@
       <StackPanel>
         <TextBlock Text="{Binding SelectedWeek}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
-          <DataGrid ItemsSource="{Binding WeekViewRows}" AutoGenerateColumns="False" HeadersVisibility="Column">
+          <DataGrid 
+            ItemsSource="{Binding WeekViewRows}" 
+            AutoGenerateColumns="False" 
+            HeadersVisibility="Column"
+            IsReadOnly="True"
+            >
             <DataGrid.Columns>
               <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
               <DataGridTextColumn Header="Dom" Binding="{Binding Sunday}" />
@@ -47,7 +58,11 @@
       <StackPanel>
         <TextBlock Text="{Binding SelectedDay}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
-          <DataGrid ItemsSource="{Binding DayViewRows}" AutoGenerateColumns="False">
+          <DataGrid 
+            ItemsSource="{Binding DayViewRows}" 
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            >
             <DataGrid.Columns>
               <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
               <DataGridTextColumn Header="Evento" Binding="{Binding Event}" />
