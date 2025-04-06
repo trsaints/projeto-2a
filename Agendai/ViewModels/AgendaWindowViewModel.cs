@@ -1,4 +1,5 @@
-using Avalonia.Controls;
+using Agendai.Models;
+using Agendai.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,13 +15,12 @@ namespace Agendai.ViewModels
 
         public string Title { get; set; } = "Agenda";
 
-        public string[] Days { get; set; } = new string[]
+        public string[] Days { get; set; } = new[]
         {
-            "Domingo", "Segunda", "Terça", "Quarta", "Quinta",
-            "Sexta", "Sábado"
+            "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
         };
 
-        public string[] Hours { get; set; } = new string[]
+        public string[] Hours { get; set; } = new[]
         {
             "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
             "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
@@ -75,10 +75,10 @@ namespace Agendai.ViewModels
             var culture = new CultureInfo("pt-BR");
 
             SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-            SelectedWeek = $"Semana {GetWeekOfMonth(today)}";
+            SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(today)}";
             SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
 
-            AddSampleEvents();
+            AgendaViewService.AddSampleEvents(Events);
             UpdateDataGridItems();
         }
 
@@ -87,13 +87,16 @@ namespace Agendai.ViewModels
             switch (_selectedIndex)
             {
                 case 0:
-                    GenerateMonthView();
+                    AgendaViewService.GenerateMonthView(MonthViewRows);
                     break;
                 case 1:
-                    GenerateWeekView();
+                    SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(DateTime.Today)}";
+                    AgendaViewService.GenerateWeekView(WeekViewRows, Hours, Events);
                     break;
                 case 2:
-                    GenerateDayView();
+                    var culture = new CultureInfo("pt-BR");
+                    SelectedDay = culture.TextInfo.ToTitleCase(DateTime.Today.ToString("dddd, dd 'de' MMMM", culture));
+                    AgendaViewService.GenerateDayView(DayViewRows, Hours, Events);
                     break;
                 default:
                     MonthViewRows.Clear();
@@ -101,91 +104,6 @@ namespace Agendai.ViewModels
                     DayViewRows.Clear();
                     break;
             }
-        }
-
-        private void GenerateMonthView()
-        {
-            MonthViewRows.Clear();
-            var today = DateTime.Today;
-            int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
-            DateTime firstDay = new DateTime(today.Year, today.Month, 1);
-            int startOffset = (int)firstDay.DayOfWeek;
-
-            int totalSlots = daysInMonth + startOffset;
-            int totalWeeks = (int)Math.Ceiling(totalSlots / 7.0);
-
-            int day = 1;
-            for (int w = 0; w < totalWeeks; w++)
-            {
-                var row = new MonthRow();
-                for (int d = 0; d < 7; d++)
-                {
-                    int slot = w * 7 + d;
-                    if (slot < startOffset || day > daysInMonth)
-                    {
-                        row[d] = "";
-                    }
-                    else
-                    {
-                        row[d] = day.ToString();
-                        day++;
-                    }
-                }
-                MonthViewRows.Add(row);
-            }
-        }
-
-        private void GenerateWeekView()
-        {
-            var today = DateTime.Today;
-            SelectedWeek = $"Semana {GetWeekOfMonth(today)}";
-
-            WeekViewRows.Clear();
-            foreach (var hour in Hours)
-            {
-                var row = new WeekRow { Hour = hour };
-                foreach (var day in new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" })
-                {
-                    row[day] = Events.TryGetValue((hour, day), out var evt) ? evt : string.Empty;
-                }
-                WeekViewRows.Add(row);
-            }
-        }
-
-        private void GenerateDayView()
-        {
-            var today = DateTime.Today;
-            var culture = new CultureInfo("pt-BR");
-            SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
-
-            DayViewRows.Clear();
-            string day = today.ToString("dddd", CultureInfo.CurrentCulture);
-            day = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(day);
-
-            foreach (var hour in Hours)
-            {
-                var row = new DayRow
-                {
-                    Hour = hour,
-                    Event = Events.TryGetValue((hour, day), out var evt) ? evt : string.Empty
-                };
-                DayViewRows.Add(row);
-            }
-        }
-
-        private void AddSampleEvents()
-        {
-            Events[("08:00", "Monday")] = "Team meeting";
-            Events[("14:00", "Wednesday")] = "Code review";
-            Events[("16:00", "Friday")] = "Project presentation";
-        }
-
-        private int GetWeekOfMonth(DateTime date)
-        {
-            var firstDay = new DateTime(date.Year, date.Month, 1);
-            var firstDayOfWeek = (int)firstDay.DayOfWeek;
-            var dayOfMonth = date.Day + firstDayOfWeek;
-            return (int)Math.Ceiling(dayOfMonth / 7.0);
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -201,90 +119,5 @@ namespace Agendai.ViewModels
                 OnPropertyChanged(propertyName);
             }
         }
-    }
-
-    public class MonthRow
-    {
-        public string Sunday { get; set; } = "";
-        public string Monday { get; set; } = "";
-        public string Tuesday { get; set; } = "";
-        public string Wednesday { get; set; } = "";
-        public string Thursday { get; set; } = "";
-        public string Friday { get; set; } = "";
-        public string Saturday { get; set; } = "";
-
-        public string this[int index]
-        {
-            get => index switch
-            {
-                0 => Sunday,
-                1 => Monday,
-                2 => Tuesday,
-                3 => Wednesday,
-                4 => Thursday,
-                5 => Friday,
-                6 => Saturday,
-                _ => ""
-            };
-            set
-            {
-                switch (index)
-                {
-                    case 0: Sunday = value; break;
-                    case 1: Monday = value; break;
-                    case 2: Tuesday = value; break;
-                    case 3: Wednesday = value; break;
-                    case 4: Thursday = value; break;
-                    case 5: Friday = value; break;
-                    case 6: Saturday = value; break;
-                }
-            }
-        }
-    }
-
-    public class WeekRow
-    {
-        public string Hour { get; set; }
-        public string Sunday { get; set; } = "";
-        public string Monday { get; set; } = "";
-        public string Tuesday { get; set; } = "";
-        public string Wednesday { get; set; } = "";
-        public string Thursday { get; set; } = "";
-        public string Friday { get; set; } = "";
-        public string Saturday { get; set; } = "";
-
-        public string this[string day]
-        {
-            get => day switch
-            {
-                "Sunday" => Sunday,
-                "Monday" => Monday,
-                "Tuesday" => Tuesday,
-                "Wednesday" => Wednesday,
-                "Thursday" => Thursday,
-                "Friday" => Friday,
-                "Saturday" => Saturday,
-                _ => string.Empty
-            };
-            set
-            {
-                switch (day)
-                {
-                    case "Sunday": Sunday = value; break;
-                    case "Monday": Monday = value; break;
-                    case "Tuesday": Tuesday = value; break;
-                    case "Wednesday": Wednesday = value; break;
-                    case "Thursday": Thursday = value; break;
-                    case "Friday": Friday = value; break;
-                    case "Saturday": Saturday = value; break;
-                }
-            }
-        }
-    }
-
-    public class DayRow
-    {
-        public string Hour { get; set; }
-        public string Event { get; set; }
     }
 }

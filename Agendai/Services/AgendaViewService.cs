@@ -50,7 +50,11 @@ namespace Agendai.Services
         {
             rows.Clear();
             var today = DateTime.Today;
-            string day = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(today.ToString("dddd", CultureInfo.CurrentCulture));
+            var culture = new CultureInfo("pt-BR");
+            string day = culture.TextInfo.ToTitleCase(
+                today.ToString("dddd, d 'de' MMMM", culture)
+            );
+
 
             foreach (var hour in hours)
             {
