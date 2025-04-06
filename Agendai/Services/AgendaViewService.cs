@@ -137,13 +137,26 @@ namespace Agendai.Services
             events[("16:00", "Friday")] = "Project presentation";
         }
 
-        public static int GetWeekOfMonth(DateTime date)
+        public static (int WeekNumber, DateTime StartOfWeek, DateTime EndOfWeek) GetWeekOfMonthRange(DateTime date)
         {
-            var firstDay = new DateTime(date.Year, date.Month, 1);
-            var firstDayOfWeek = (int)firstDay.DayOfWeek;
-            var dayOfMonth = date.Day + firstDayOfWeek;
-            return (int)Math.Ceiling(dayOfMonth / 7.0);
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek; 
+            
+            int totalDays = (date - firstDayOfMonth).Days + dayOfWeekOffset;
+            int weekNumber = (int)Math.Floor(totalDays / 7.0) + 1;
+            
+            var startOfWeek = date.Date.AddDays(-(int)date.DayOfWeek);
+
+            if (startOfWeek.Month < date.Month)
+                startOfWeek = new DateTime(date.Year, date.Month, 1);
+
+            var endOfWeek = startOfWeek.AddDays(6);
+            if (endOfWeek.Month > date.Month)
+                endOfWeek = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+
+            return (weekNumber, startOfWeek, endOfWeek);
         }
+
         
         public static Dictionary<string, ObservableCollection<string>> MapDayItemsFrom(
             ObservableCollection<Event> events,

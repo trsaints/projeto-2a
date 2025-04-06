@@ -10,7 +10,9 @@
                 ItemsSource="{Binding WeekViewRows}" 
                 AutoGenerateColumns="False" 
                 HeadersVisibility="Column"
-                IsReadOnly="True">
+                IsReadOnly="True"
+                GridLinesVisibility="All"
+                >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
 

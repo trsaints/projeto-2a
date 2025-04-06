@@ -110,7 +110,8 @@ namespace Agendai.ViewModels
             var culture = new CultureInfo("pt-BR");
 
             SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-            SelectedWeek = $"Semana {AgendaViewService.GetWeekOfMonth(today)}";
+            var (weekNumber, start, end) = AgendaViewService.GetWeekOfMonthRange(today);
+            SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
             SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
         }
 
