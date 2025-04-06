@@ -129,14 +129,6 @@ namespace Agendai.Services
             }
         }
 
-
-        public static void AddSampleEvents(Dictionary<(string Hour, string Day), string> events)
-        {
-            events[("08:00", "Monday")] = "Team meeting";
-            events[("14:00", "Wednesday")] = "Code review";
-            events[("16:00", "Friday")] = "Project presentation";
-        }
-
         public static (int WeekNumber, DateTime StartOfWeek, DateTime EndOfWeek) GetWeekOfMonthRange(DateTime date)
         {
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);

@@ -70,12 +70,9 @@ namespace Agendai.ViewModels
             set => SetProperty(ref _selectedDay, value);
         }
 
-        private Dictionary<(string Hour, string Day), string> Events { get; set; } = new();
-
         public AgendaWindowViewModel()
         {
             UpdateDateSelectors();
-            AgendaViewService.AddSampleEvents(Events);
             UpdateDataGridItems();
         }
 
