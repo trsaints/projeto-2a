@@ -3,18 +3,28 @@
              x:Class="Agendai.Views.Components.Agenda.DayView"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              x:DataType="vm:AgendaWindowViewModel">
-    <StackPanel>
-        <TextBlock Text="{Binding SelectedDay}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+    <StackPanel>  
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 20">
+            <TextBlock Text="{Binding SelectedDay}" FontSize="18" FontWeight="Bold" 
+                       Margin="0,0,20,0" VerticalAlignment="Center"/>
+            
+            <Image Source="../../../Assets/arrow_back.png" Height="20" Width="20" Margin="0,0,10,0"/>
+            
+            <Image Source="../../../Assets/arrow_forward.png" Height="20" Width="20" Margin="10,0,0,0"/>
+        </StackPanel>
+        <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <DataGrid 
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding DayViewRows}" 
-                HeadersVisibility="Column"
+                HeadersVisibility="None"
                 IsReadOnly="True"
-                GridLinesVisibility="All">
+                GridLinesVisibility="All"
+                MaxHeight="500"
+                VerticalScrollBarVisibility="Hidden">
+                
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Hora" Binding="{Binding Hour}" />
-                    <DataGridTemplateColumn Header="Itens">
+                    <DataGridTextColumn Binding="{Binding Hour}" />
+                    <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ItemsControl ItemsSource="{Binding Items}">
@@ -29,6 +39,6 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </ScrollViewer>
+        </Border>
     </StackPanel>
 </UserControl>

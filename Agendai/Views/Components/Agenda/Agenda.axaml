@@ -23,17 +23,25 @@
                                             DayTemplate="{StaticResource DayViewTemplate}" />
     </UserControl.Resources>
 
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="20">
-            <TextBlock Text="Calendário" FontSize="20" Margin="0,0,10,0"/>
-            <ComboBox SelectedIndex="{Binding SelectedIndex}" Width="100">
-                <ComboBoxItem Content="Mês"/>
+    <StackPanel Margin="20">
+        <Grid Margin="0 0 0 30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Calendário" FontSize="30" Grid.Column="0" />
+    
+            <ComboBox SelectedIndex="{Binding SelectedIndex}" Width="140" Grid.Column="1"
+                      FontSize="20" HorizontalContentAlignment="Center" Margin="0 0 20 0">
+                <ComboBoxItem Content="Mês" />
                 <ComboBoxItem Content="Semana"/>
                 <ComboBoxItem Content="Dia"/>
             </ComboBox>
-        </StackPanel>
+        </Grid>
+        
+            <ContentControl Content="{Binding}" 
+                            ContentTemplate="{Binding SelectedIndex, Converter={StaticResource ViewTemplateSelector}}" />
 
-        <ContentControl Content="{Binding}" 
-                        ContentTemplate="{Binding SelectedIndex, Converter={StaticResource ViewTemplateSelector}}" />
     </StackPanel>
 </UserControl>
