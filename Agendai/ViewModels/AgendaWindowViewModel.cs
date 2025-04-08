@@ -1,11 +1,11 @@
 using Agendai.Models;
-using Agendai.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Agendai.Services.Views;
 
 namespace Agendai.ViewModels
 {
@@ -81,16 +81,16 @@ namespace Agendai.ViewModels
             switch (_selectedIndex)
             {
                 case 0:
-                    AgendaViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos);
+                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos);
                     break;
                 case 1:
-                    AgendaViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
+                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
                     break;
                 case 2:
                     var culture = new CultureInfo("pt-BR");
                     var selected = DateTime.Parse(SelectedDay, culture);
-                    var map = AgendaViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, selected);
-                    AgendaViewService.GenerateDayView(DayViewRows, Hours, map);
+                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, selected);
+                    DayViewService.GenerateDayView(DayViewRows, Hours, map);
                     break;
 
                 default:
@@ -107,7 +107,7 @@ namespace Agendai.ViewModels
             var culture = new CultureInfo("pt-BR");
 
             SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-            var (weekNumber, start, end) = AgendaViewService.GetWeekOfMonthRange(today);
+            var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(today);
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
             SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
         }
