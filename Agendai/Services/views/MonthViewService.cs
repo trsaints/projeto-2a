@@ -8,22 +8,25 @@ namespace Agendai.Services.Views
 {
     public static class MonthViewService
     {
-        public static void GenerateMonthView(ObservableCollection<MonthRow> rows, IEnumerable<Event> events, IEnumerable<Todo> todos)
+        public static void GenerateMonthView(
+            ObservableCollection<MonthRow> rows,
+            IEnumerable<Event> events,
+            IEnumerable<Todo> todos,
+            DateTime referenceDate)
         {
             rows.Clear();
 
-            var today = DateTime.Today;
-            int daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
-            DateTime firstDay = new DateTime(today.Year, today.Month, 1);
+            int daysInMonth = DateTime.DaysInMonth(referenceDate.Year, referenceDate.Month);
+            DateTime firstDay = new DateTime(referenceDate.Year, referenceDate.Month, 1);
             int startOffset = (int)firstDay.DayOfWeek;
 
             var eventMap = events
-                .Where(e => e.Due.Month == today.Month && e.Due.Year == today.Year)
+                .Where(e => e.Due.Month == referenceDate.Month && e.Due.Year == referenceDate.Year)
                 .GroupBy(e => e.Due.Day)
                 .ToDictionary(g => g.Key, g => g.Select(e => e.Name).ToList());
 
             var todoMap = todos
-                .Where(t => t.Due.Month == today.Month && t.Due.Year == today.Year)
+                .Where(t => t.Due.Month == referenceDate.Month && t.Due.Year == referenceDate.Year)
                 .GroupBy(t => t.Due.Day)
                 .ToDictionary(g => g.Key, g => g.Select(t => t.Name).ToList());
 
@@ -46,15 +49,12 @@ namespace Agendai.Services.Views
                         };
 
                         if (eventMap.TryGetValue(day, out var evts))
-                        {
                             foreach (var evt in evts)
                                 cell.Items.Add(evt);
-                        }
+
                         if (todoMap.TryGetValue(day, out var tds))
-                        {
                             foreach (var todo in tds)
                                 cell.Items.Add(todo);
-                        }
 
                         row[d] = cell;
                         day++;
@@ -67,5 +67,6 @@ namespace Agendai.Services.Views
                 rows.Add(row);
             }
         }
+
     }
 }

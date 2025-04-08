@@ -27,7 +27,7 @@ public class EventListViewModel : ViewModelBase
 			new Event(3, "Festa do Peão")
 			{
 				Description = "Festa do Peão de Barretos",
-				Due = new DateTime(2021, 8, 20),
+				Due = new DateTime(2025, 8, 20),
 				Repeats = Repeats.Monthly
 			},
 			new Event(4, "Feriado")

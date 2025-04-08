@@ -69,6 +69,27 @@ namespace Agendai.ViewModels
             get => _selectedDay;
             set => SetProperty(ref _selectedDay, value);
         }
+        
+        private DateTime _currentMonth = DateTime.Today;
+        public void GoToPreviousMonth()
+        {
+            _currentMonth = _currentMonth.AddMonths(-1);
+            UpdateMonthFromDate();
+        }
+
+        public void GoToNextMonth()
+        {
+            _currentMonth = _currentMonth.AddMonths(1);
+            UpdateMonthFromDate();
+        }
+
+        private void UpdateMonthFromDate()
+        {
+            var culture = new CultureInfo("pt-BR");
+            SelectedMonth = culture.TextInfo.ToTitleCase(_currentMonth.ToString("MMMM", culture));
+            UpdateDataGridItems();
+        }
+
 
         public AgendaWindowViewModel()
         {
@@ -81,7 +102,7 @@ namespace Agendai.ViewModels
             switch (_selectedIndex)
             {
                 case 0:
-                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos);
+                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, _currentMonth);
                     break;
                 case 1:
                     WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
