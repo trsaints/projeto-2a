@@ -10,10 +10,11 @@ namespace Agendai.Services.Views
             ObservableCollection<WeekRow> rows,
             string[] hours,
             ObservableCollection<Event> events,
-            ObservableCollection<Todo> todos)
+            ObservableCollection<Todo> todos,
+            DateTime referenceDate)
         {
             rows.Clear();
-            var startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
 
             foreach (var hour in hours)
             {
@@ -30,13 +31,13 @@ namespace Agendai.Services.Views
                     foreach (var e in events)
                     {
                         if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
-                            cell.Items.Add($"Evento: {e.Description}");
+                            cell.Items.Add(e.Description);
                     }
 
                     foreach (var t in todos)
                     {
                         if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
-                            cell.Items.Add($"Tarefa: {t.Description}");
+                            cell.Items.Add(t.Description);
                     }
 
                     row[day.DayOfWeek.ToString()] = cell;

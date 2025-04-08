@@ -90,6 +90,25 @@ namespace Agendai.ViewModels
             UpdateDataGridItems();
         }
 
+        private DateTime _currentWeek = DateTime.Today;
+        public void GoToPreviousWeek()
+        {
+            _currentWeek = _currentWeek.AddDays(-7);
+            UpdateWeekFromDate();
+        }
+
+        public void GoToNextWeek()
+        {
+            _currentWeek = _currentWeek.AddDays(7);
+            UpdateWeekFromDate();
+        }
+        
+        private void UpdateWeekFromDate()
+        {
+            var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(_currentWeek);
+            SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
+            UpdateDataGridItems();
+        }
 
         public AgendaWindowViewModel()
         {
@@ -105,7 +124,7 @@ namespace Agendai.ViewModels
                     MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, _currentMonth);
                     break;
                 case 1:
-                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos);
+                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, _currentWeek);
                     break;
                 case 2:
                     var culture = new CultureInfo("pt-BR");
