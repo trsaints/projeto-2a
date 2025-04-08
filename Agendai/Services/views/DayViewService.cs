@@ -60,7 +60,7 @@ namespace Agendai.Services.Views
                     if (!map.ContainsKey(hourKey))
                         map[hourKey] = new ObservableCollection<string>();
 
-                    map[hourKey].Add($"Evento: {ev.Name}");
+                    map[hourKey].Add(ev.Name);
                 }
             }
 
@@ -72,7 +72,7 @@ namespace Agendai.Services.Views
                     if (!map.ContainsKey(hourKey))
                         map[hourKey] = new ObservableCollection<string>();
 
-                    map[hourKey].Add($"Tarefa: {todo.Name}");
+                    map[hourKey].Add(todo.Name);
                 }
             }
 

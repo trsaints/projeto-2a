@@ -76,27 +76,24 @@ namespace Agendai.ViewModels
             _currentMonth = _currentMonth.AddMonths(-1);
             UpdateMonthFromDate();
         }
-
         public void GoToNextMonth()
         {
             _currentMonth = _currentMonth.AddMonths(1);
             UpdateMonthFromDate();
         }
-
         private void UpdateMonthFromDate()
         {
             var culture = new CultureInfo("pt-BR");
             SelectedMonth = culture.TextInfo.ToTitleCase(_currentMonth.ToString("MMMM", culture));
             UpdateDataGridItems();
         }
-
+        
         private DateTime _currentWeek = DateTime.Today;
         public void GoToPreviousWeek()
         {
             _currentWeek = _currentWeek.AddDays(-7);
             UpdateWeekFromDate();
         }
-
         public void GoToNextWeek()
         {
             _currentWeek = _currentWeek.AddDays(7);
@@ -109,6 +106,24 @@ namespace Agendai.ViewModels
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
             UpdateDataGridItems();
         }
+        private DateTime _currentDay = DateTime.Today;
+        public void GoToPreviousDay()
+        {
+            _currentDay = _currentDay.AddDays(-1);
+            UpdateDayFromDate();
+        }
+        public void GoToNextDay()
+        {
+            _currentDay = _currentDay.AddDays(1);
+            UpdateDayFromDate();
+        }
+        private void UpdateDayFromDate()
+        {
+            var culture = new CultureInfo("pt-BR");
+            SelectedDay = culture.TextInfo.ToTitleCase(_currentDay.ToString("dddd, dd 'de' MMMM", culture));
+            UpdateDataGridItems();
+        }
+
 
         public AgendaWindowViewModel()
         {
@@ -127,9 +142,7 @@ namespace Agendai.ViewModels
                     WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, _currentWeek);
                     break;
                 case 2:
-                    var culture = new CultureInfo("pt-BR");
-                    var selected = DateTime.Parse(SelectedDay, culture);
-                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, selected);
+                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, _currentDay);
                     DayViewService.GenerateDayView(DayViewRows, Hours, map);
                     break;
 
@@ -146,9 +159,15 @@ namespace Agendai.ViewModels
             var today = DateTime.Today;
             var culture = new CultureInfo("pt-BR");
 
+            _currentMonth = today;
+            _currentWeek = today;
+            _currentDay = today;
+
             SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
+    
             var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(today);
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
+
             SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
         }
 
