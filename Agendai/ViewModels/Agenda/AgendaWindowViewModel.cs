@@ -5,7 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Agendai.Services.Views;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Agendai.ViewModels.Agenda
 {
@@ -95,6 +97,7 @@ namespace Agendai.ViewModels.Agenda
             set => SetProperty(ref _currentDay, value);
         }
 
+
         public void GoToPreviousMonth() => MonthController.GoToPreviousMonth();
         public void GoToNextMonth() => MonthController.GoToNextMonth();
 
@@ -103,6 +106,8 @@ namespace Agendai.ViewModels.Agenda
 
         public void GoToPreviousDay() => DayController.GoToPreviousDay();
         public void GoToNextDay() => DayController.GoToNextDay();
+        public void GoToDay(int date) => DayController.GoToDay(date);
+
 
         public AgendaWindowViewModel()
         {

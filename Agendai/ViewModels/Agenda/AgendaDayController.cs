@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Agendai.Services.Views;
 
 namespace Agendai.ViewModels.Agenda
@@ -15,14 +16,12 @@ namespace Agendai.ViewModels.Agenda
         public void GoToPreviousDay()
         {
             _viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(-1);
-            _viewModel.UpdateDataGridItems();
             UpdateDayFromDate();
         }
 
         public void GoToNextDay()
         {
             _viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(1);
-            _viewModel.UpdateDataGridItems();
             UpdateDayFromDate();
         }
 
@@ -44,6 +43,14 @@ namespace Agendai.ViewModels.Agenda
             );
             
             _viewModel.UpdateDataGridItems();
+        }
+        
+        public void GoToDay(int dayNumber)
+        {
+            var selectedDate = new DateTime(_viewModel.CurrentMonth.Year, _viewModel.CurrentMonth.Month, dayNumber);
+            _viewModel.CurrentDay = selectedDate;
+            _viewModel.SelectedIndex = 2; 
+            UpdateDayFromDate();
         }
     }
 }

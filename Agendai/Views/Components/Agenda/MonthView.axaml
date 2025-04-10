@@ -17,6 +17,7 @@
             </Button>
 
         </StackPanel>
+
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="500">
                 <DataGrid 
@@ -27,11 +28,18 @@
                     IsReadOnly="True"
                     ColumnWidth="*" RowHeight="100">
                     <DataGrid.Columns>
+
+                        <!-- Um exemplo pronto para cada dia da semana -->
                         <DataGridTemplateColumn Header="Dom">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Sunday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Sunday.DayNumber}" 
+                                                Tag="{Binding Sunday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Sunday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -48,7 +56,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Monday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Monday.DayNumber}" 
+                                                Tag="{Binding Monday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Monday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -65,7 +78,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Tuesday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Tuesday.DayNumber}" 
+                                                Tag="{Binding Tuesday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Tuesday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -82,7 +100,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Wednesday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Wednesday.DayNumber}" 
+                                                Tag="{Binding Wednesday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Wednesday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -99,7 +122,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Thursday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Thursday.DayNumber}" 
+                                                Tag="{Binding Thursday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Thursday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -116,7 +144,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Friday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Friday.DayNumber}" 
+                                                Tag="{Binding Friday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Friday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -133,7 +166,12 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Saturday.DayNumber}" FontWeight="Bold"/>
+                                        <Button Content="{Binding Saturday.DayNumber}" 
+                                                Tag="{Binding Saturday.DayNumber}" 
+                                                Click="OnDayClicked"
+                                                Background="Transparent" BorderThickness="0" 
+                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
+                                                Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Saturday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -145,6 +183,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
