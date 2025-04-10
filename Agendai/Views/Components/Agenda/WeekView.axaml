@@ -1,7 +1,7 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Agendai.Views.Components.Agenda.WeekView"
-             xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              x:DataType="vm:AgendaWindowViewModel">
     <StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 20">

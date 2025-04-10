@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using Agendai.Services.Views;
 
-namespace Agendai.ViewModels
+namespace Agendai.ViewModels.Agenda
 {
     public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
@@ -45,9 +45,13 @@ namespace Agendai.ViewModels
         public ObservableCollection<MonthRow> MonthViewRows { get; set; } = new();
         public ObservableCollection<WeekRow> WeekViewRows { get; set; } = new();
         public ObservableCollection<DayRow> DayViewRows { get; set; } = new();
-        
+
         public EventListViewModel EventList { get; set; } = new();
         public TodoListViewModel TodoList { get; set; } = new();
+
+        public AgendaMonthController MonthController { get; }
+        public AgendaWeekController WeekController { get; }
+        public AgendaDayController DayController { get; }
 
         private string _selectedMonth;
         public string SelectedMonth
@@ -69,83 +73,61 @@ namespace Agendai.ViewModels
             get => _selectedDay;
             set => SetProperty(ref _selectedDay, value);
         }
-        
+
         private DateTime _currentMonth = DateTime.Today;
-        public void GoToPreviousMonth()
+        public DateTime CurrentMonth
         {
-            _currentMonth = _currentMonth.AddMonths(-1);
-            UpdateMonthFromDate();
-        }
-        public void GoToNextMonth()
-        {
-            _currentMonth = _currentMonth.AddMonths(1);
-            UpdateMonthFromDate();
-        }
-        private void UpdateMonthFromDate()
-        {
-            var culture = new CultureInfo("pt-BR");
-            SelectedMonth = culture.TextInfo.ToTitleCase(_currentMonth.ToString("MMMM", culture));
-            UpdateDataGridItems();
-        }
-        
-        private DateTime _currentWeek = DateTime.Today;
-        public void GoToPreviousWeek()
-        {
-            _currentWeek = _currentWeek.AddDays(-7);
-            UpdateWeekFromDate();
-        }
-        public void GoToNextWeek()
-        {
-            _currentWeek = _currentWeek.AddDays(7);
-            UpdateWeekFromDate();
-        }
-        
-        private void UpdateWeekFromDate()
-        {
-            var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(_currentWeek);
-            SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
-            UpdateDataGridItems();
-        }
-        private DateTime _currentDay = DateTime.Today;
-        public void GoToPreviousDay()
-        {
-            _currentDay = _currentDay.AddDays(-1);
-            UpdateDayFromDate();
-        }
-        public void GoToNextDay()
-        {
-            _currentDay = _currentDay.AddDays(1);
-            UpdateDayFromDate();
-        }
-        private void UpdateDayFromDate()
-        {
-            var culture = new CultureInfo("pt-BR");
-            SelectedDay = culture.TextInfo.ToTitleCase(_currentDay.ToString("dddd, dd 'de' MMMM", culture));
-            UpdateDataGridItems();
+            get => _currentMonth;
+            set => SetProperty(ref _currentMonth, value);
         }
 
+        private DateTime _currentWeek = DateTime.Today;
+        public DateTime CurrentWeek
+        {
+            get => _currentWeek;
+            set => SetProperty(ref _currentWeek, value);
+        }
+
+        private DateTime _currentDay = DateTime.Today;
+        public DateTime CurrentDay
+        {
+            get => _currentDay;
+            set => SetProperty(ref _currentDay, value);
+        }
+
+        public void GoToPreviousMonth() => MonthController.GoToPreviousMonth();
+        public void GoToNextMonth() => MonthController.GoToNextMonth();
+
+        public void GoToPreviousWeek() => WeekController.GoToPreviousWeek();
+        public void GoToNextWeek() => WeekController.GoToNextWeek();
+
+        public void GoToPreviousDay() => DayController.GoToPreviousDay();
+        public void GoToNextDay() => DayController.GoToNextDay();
 
         public AgendaWindowViewModel()
         {
+            MonthController = new AgendaMonthController(this);
+            WeekController = new AgendaWeekController(this);
+            DayController = new AgendaDayController(this);
+
             UpdateDateSelectors();
             UpdateDataGridItems();
         }
 
-        private void UpdateDataGridItems()
+        public void UpdateDataGridItems()
         {
             switch (_selectedIndex)
             {
                 case 0:
-                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, _currentMonth);
+                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth);
                     break;
                 case 1:
-                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, _currentWeek);
+                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek);
                     break;
                 case 2:
-                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, _currentDay);
+                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay);
                     DayViewService.GenerateDayView(DayViewRows, Hours, map);
                     break;
-
                 default:
                     MonthViewRows.Clear();
                     WeekViewRows.Clear();
@@ -153,18 +135,18 @@ namespace Agendai.ViewModels
                     break;
             }
         }
-        
-        private void UpdateDateSelectors()
+
+        public void UpdateDateSelectors()
         {
             var today = DateTime.Today;
             var culture = new CultureInfo("pt-BR");
 
-            _currentMonth = today;
-            _currentWeek = today;
-            _currentDay = today;
+            CurrentMonth = today;
+            CurrentWeek = today;
+            CurrentDay = today;
 
             SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-    
+
             var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(today);
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
 

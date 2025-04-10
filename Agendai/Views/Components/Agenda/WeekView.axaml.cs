@@ -1,4 +1,5 @@
 ﻿using Agendai.ViewModels;
+using Agendai.ViewModels.Agenda;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
