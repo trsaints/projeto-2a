@@ -33,7 +33,8 @@ namespace Agendai.ViewModels.Agenda
                 _viewModel.Hours,
                 _viewModel.EventList.Events,
                 _viewModel.TodoList.Todos,
-                _viewModel.CurrentWeek
+                _viewModel.CurrentWeek,
+                _viewModel.ShowData
             );
             _viewModel.UpdateDataGridItems();
         }

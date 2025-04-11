@@ -37,10 +37,4 @@ public partial class MonthView : UserControl
         }
     }
 
-    private void OnShowDataClicked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is AgendaWindowViewModel vm)
-            vm.ToggleShowData();
-    }
-
 }

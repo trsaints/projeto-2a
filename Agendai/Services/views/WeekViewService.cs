@@ -11,7 +11,8 @@ namespace Agendai.Services.Views
             string[] hours,
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
-            DateTime referenceDate)
+            DateTime referenceDate,
+            bool showData)
         {
             rows.Clear();
             var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
@@ -28,16 +29,19 @@ namespace Agendai.Services.Views
                         Items = new ObservableCollection<string>()
                     };
 
-                    foreach (var e in events)
+                    if (showData)
                     {
-                        if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
-                            cell.Items.Add(e.Description);
-                    }
+                        foreach (var e in events)
+                        {
+                            if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
+                                cell.Items.Add(e.Description);
+                        }
 
-                    foreach (var t in todos)
-                    {
-                        if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
-                            cell.Items.Add(t.Description);
+                        foreach (var t in todos)
+                        {
+                            if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
+                                cell.Items.Add(t.Description);
+                        }
                     }
 
                     row[day.DayOfWeek.ToString()] = cell;
