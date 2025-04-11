@@ -23,7 +23,7 @@
                 </Button>
             </StackPanel>
 
-            <Button Grid.Column="1" Content="Ocultar/Exibir Eventos e ToDos"
+            <Button Grid.Column="1" Content="Ocultar/Exibir Eventos e Tarefas"
                     Command="{Binding ToggleShowData}" Margin="20,0,0,0" VerticalAlignment="Center"/>
         </Grid>
 

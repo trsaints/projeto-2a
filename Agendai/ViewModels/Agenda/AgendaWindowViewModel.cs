@@ -150,7 +150,7 @@ namespace Agendai.ViewModels.Agenda
                     break;
                 case 2:
                     var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay);
-                    DayViewService.GenerateDayView(DayViewRows, Hours, map);
+                    DayViewService.GenerateDayView(DayViewRows, Hours, map, _showData);
                     break;
                 default:
                     MonthViewRows.Clear();

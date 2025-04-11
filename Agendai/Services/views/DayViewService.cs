@@ -10,7 +10,8 @@ namespace Agendai.Services.Views
         public static void GenerateDayView(
             ObservableCollection<DayRow> rows,
             string[] hours,
-            Dictionary<string, ObservableCollection<string>> dayMap)
+            Dictionary<string, ObservableCollection<string>> dayMap,
+            bool showData)
         {
             rows.Clear();
 
@@ -19,7 +20,10 @@ namespace Agendai.Services.Views
                 var row = new DayRow
                 {
                     Hour = hour,
-                    Items = dayMap.TryGetValue(hour, out var items) ? items : new ObservableCollection<string>()
+                    Items = showData && dayMap.TryGetValue(hour, out var items)
+                        ? items
+                        : new ObservableCollection<string>()
+
                 };
 
                 rows.Add(row);

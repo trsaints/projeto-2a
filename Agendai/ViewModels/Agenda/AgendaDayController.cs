@@ -39,7 +39,8 @@ namespace Agendai.ViewModels.Agenda
             DayViewService.GenerateDayView(
                 _viewModel.DayViewRows,
                 _viewModel.Hours,
-                mappedItems
+                mappedItems,
+                _viewModel.ShowData
             );
             
             _viewModel.UpdateDataGridItems();
