@@ -33,7 +33,8 @@ namespace Agendai.ViewModels.Agenda
                 _viewModel.MonthViewRows,
                 _viewModel.EventList.Events,
                 _viewModel.TodoList.Todos,
-                _viewModel.CurrentMonth
+                _viewModel.CurrentMonth,
+                _viewModel.ShowData
             );
 
             _viewModel.UpdateDataGridItems();

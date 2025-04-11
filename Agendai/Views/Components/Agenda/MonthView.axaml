@@ -4,19 +4,29 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              x:DataType="vm:AgendaWindowViewModel">
     <StackPanel>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 20">
-            <TextBlock Text="{Binding SelectedMonth}" FontSize="18" FontWeight="Bold" 
-                       Margin="0,0,20,0" VerticalAlignment="Center"/>
-            
-            <Button Click="OnPreviousMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
-                <Image Source="../../../Assets/arrow_back.png" Height="20" Width="20" Margin="0,0,10,0"/>
-            </Button>
+        <Grid Margin="0 0 0 20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <Button Click="OnNextMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
-                <Image Source="../../../Assets/arrow_forward.png" Height="20" Width="20" Margin="10,0,0,0"/>
-            </Button>
+            <!-- Esquerda: Nome do mês + setas -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
+                <TextBlock Text="{Binding SelectedMonth}" FontSize="18" FontWeight="Bold" 
+                           Margin="0,0,20,0" VerticalAlignment="Center"/>
 
-        </StackPanel>
+                <Button Click="OnPreviousMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="../../../Assets/arrow_back.png" Height="20" Width="20" Margin="0,0,10,0"/>
+                </Button>
+
+                <Button Click="OnNextMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="../../../Assets/arrow_forward.png" Height="20" Width="20" Margin="10,0,0,0"/>
+                </Button>
+            </StackPanel>
+
+            <Button Grid.Column="1" Content="Ocultar/Exibir Eventos e ToDos"
+                    Command="{Binding ToggleShowData}" Margin="20,0,0,0" VerticalAlignment="Center"/>
+        </Grid>
 
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="500">

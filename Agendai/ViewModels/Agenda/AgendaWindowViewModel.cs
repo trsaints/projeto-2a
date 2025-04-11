@@ -96,8 +96,27 @@ namespace Agendai.ViewModels.Agenda
             get => _currentDay;
             set => SetProperty(ref _currentDay, value);
         }
+        
+        private bool _showData = true;
+        public bool ShowData
+        {
+            get => _showData;
+            set
+            {
+                if (_showData != value)
+                {
+                    _showData = value;
+                    OnPropertyChanged(nameof(ShowData));
+                    UpdateDataGridItems();
+                }
+            }
+        }
 
-
+        public void ToggleShowData()
+        {
+            ShowData = !ShowData;
+        }
+        
         public void GoToPreviousMonth() => MonthController.GoToPreviousMonth();
         public void GoToNextMonth() => MonthController.GoToNextMonth();
 
@@ -124,7 +143,7 @@ namespace Agendai.ViewModels.Agenda
             switch (_selectedIndex)
             {
                 case 0:
-                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth);
+                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, _showData);
                     break;
                 case 1:
                     WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek);

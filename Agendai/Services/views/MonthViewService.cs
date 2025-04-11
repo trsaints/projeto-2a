@@ -12,7 +12,8 @@ namespace Agendai.Services.Views
             ObservableCollection<MonthRow> rows,
             IEnumerable<Event> events,
             IEnumerable<Todo> todos,
-            DateTime referenceDate)
+            DateTime referenceDate,
+            bool showData)
         {
             rows.Clear();
 
@@ -48,11 +49,11 @@ namespace Agendai.Services.Views
                             Items = new ObservableCollection<string>()
                         };
 
-                        if (eventMap.TryGetValue(day, out var evts))
+                        if (showData && eventMap.TryGetValue(day, out var evts))
                             foreach (var evt in evts)
                                 cell.Items.Add(evt);
 
-                        if (todoMap.TryGetValue(day, out var tds))
+                        if (showData && todoMap.TryGetValue(day, out var tds))
                             foreach (var todo in tds)
                                 cell.Items.Add(todo);
 
