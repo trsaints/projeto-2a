@@ -3,9 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             xmlns:components="clr-namespace:Agendai.Views.Components"
-             xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
-             xmlns:addTask="clr-namespace:Agendai.Views.Components.TodoList"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.SideBar.SideBar"
              x:DataType="vm:TodoWindowViewModel">
@@ -20,7 +17,7 @@
                 Height="30"
                 x:Name="NovoButton"/>
 
-        <Popup IsOpen="{Binding IsPopupOpen}"
+        <Popup Grid.Row="0" IsOpen="{Binding IsPopupOpen}"
                Placement="Bottom"
                PlacementTarget="{Binding ElementName=NovoButton}"
                HorizontalOffset="-5"
@@ -46,7 +43,6 @@
         </Popup>
 
         <Calendar Grid.Row="1" />
-        <todoList:TodoList Grid.Row="2" DataContext="{Binding TodoListVm}" />
     </Grid>
 
 </UserControl>
