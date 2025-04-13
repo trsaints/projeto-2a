@@ -24,7 +24,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		set
 		{
 			_isPopupOpen = value;
-			OnPropertyChanged();
+			OnPropertyChanged(nameof(IsPopupOpen));
 		}
 	}
 
@@ -37,7 +37,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		set
 		{
 			_openAddTask = value;
-			OnPropertyChanged();
+			OnPropertyChanged(nameof(OpenAddTask));
 		}
 	}
 	
@@ -218,7 +218,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		set
 		{
 			_listName = value;
-			OnPropertyChanged(ListName);
+			OnPropertyChanged(nameof(ListName));
 		}
 	}
 
