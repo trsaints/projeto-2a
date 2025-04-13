@@ -56,6 +56,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				IsPopupOpen = false;
 			}
 		);
+		AddTodoCommand = new RelayCommand(AddTodo); 
 
 		_todos =
 		[
