@@ -10,18 +10,19 @@
              x:DataType="vm:TodoWindowViewModel">
   
     <Grid ColumnDefinitions="0.2*, 0.8*">
-        <sideBar:SideBar Grid.Column="0" />
+        <sideBar:SideBar Grid.Column="0" DataContext="{Binding}"/>
         
         <ScrollViewer Grid.Column="1" 
                      VerticalScrollBarVisibility="Hidden"
                      HorizontalScrollBarVisibility="Disabled">
+            
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top" 
                             Width="75" Height="75" HorizontalAlignment="Left">
                     <Image Source="avares://Agendai/Assets/arrow_back.png" Width="25" Height="25"/>
                     <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
                 </StackPanel>
-                    <StackPanel Margin="70 0 0 40" Grid.Row="1" Grid.Column="0" Width="350" Height="350" 
+                    <StackPanel Margin="70 0 0 40" Grid.Row="1" Grid.Column="0" Width="350" Height="300" 
                                 VerticalAlignment="Top">
                         <Grid HorizontalAlignment="Stretch"> 
                             <Grid.ColumnDefinitions>
@@ -31,23 +32,20 @@
             
                             <TextBlock Grid.Column="0" FontSize="18" Margin="0 0 0 15"
                                        VerticalAlignment="Center" Text="Minhas Tarefas" />
-            
-                            <Button Grid.Column="1" Content="+" FontSize="18" Width="30" Height="30"
-                                    Background="Transparent" VerticalContentAlignment="Center"
-                                    Margin="0" Padding="0" HorizontalContentAlignment="Center"/> 
+                            
                         </Grid>
                             <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" 
                                     Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList/>
                                 </ScrollViewer>
                             </Border>
                     </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="350">
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="300">
                     <TextBlock FontSize="18" Margin="0 0 0 15">Histórico</TextBlock>
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" 
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                             <completedTasks:CompletedTasks/>
                         </ScrollViewer>
                     </Border>
@@ -55,7 +53,7 @@
                 
                 <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40">Todas as Listas</TextBlock>
                 
-                <StackPanel Grid.Row="3" Grid.Column="0" Margin="70 0 0 40"  Width="350" Height="350">
+                <StackPanel Grid.Row="3" Grid.Column="0" Margin="70 0 0 40"  Width="350" Height="300">
                     <Grid HorizontalAlignment="Stretch"> 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -64,20 +62,16 @@
         
                         <TextBlock Grid.Column="0" FontSize="18" Margin="0 0 0 15"
                                    VerticalAlignment="Center" Text="Faculdade" />
-        
-                        <Button Grid.Column="1" Content="+" FontSize="18" Width="30" Height="30"
-                                Background="Transparent" VerticalContentAlignment="Center"
-                                Margin="0" Padding="0" HorizontalContentAlignment="Center"/>
                     </Grid>
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" 
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                             <todoList:TodoList/>
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
                 
-                <StackPanel Grid.Row="3" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="350">
+                <StackPanel Grid.Row="3" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="300">
                     <Grid HorizontalAlignment="Stretch"> 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -86,19 +80,24 @@
         
                         <TextBlock Grid.Column="0" FontSize="18" Margin="0 0 0 15"
                                    VerticalAlignment="Center" Text="Trabalho" />
-        
-                        <Button Grid.Column="1" Content="+" FontSize="18" Width="30" Height="30"
-                                Background="Transparent" VerticalContentAlignment="Center"
-                                Margin="0" Padding="0" HorizontalContentAlignment="Center"/>
                     </Grid>
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" 
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                             <todoList:TodoList/>
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+        <Popup IsOpen="{Binding OpenAddTask}" Placement="Center">
+            <Border Background="Transparent" Width="1000" Height="700">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Background="WhiteSmoke" CornerRadius="10" Padding="20">
+                        <todoList:AddTask DataContext="{Binding }"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>

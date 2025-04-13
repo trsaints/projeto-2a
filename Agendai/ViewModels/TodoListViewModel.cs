@@ -2,20 +2,31 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Agendai.Models;
-using System.Collections.Generic;
-using DynamicData;
-
+using System.ComponentModel;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Agendai.ViewModels;
 
-
 public class TodoListViewModel : ViewModelBase
 {
-	public TodoListViewModel()
-	{
-		CompletedTasks = new ObservableCollection<Todo>();
-		
-		Todos = [
+    
+    public Action? OnTaskAdded { get; set; }
+    public ICommand AddTodoCommand { get; }
+    public ObservableCollection<Repeats> RepeatOptions { get; } = new ObservableCollection<Repeats>
+    {
+        Repeats.None,
+        Repeats.Daily,
+        Repeats.Weekly,
+        Repeats.Monthly,
+        Repeats.Anually
+    };
+    
+    public TodoListViewModel()
+    {
+        
+        Todos = new ObservableCollection<Todo>
+        {
             new Todo(1, "Comprar Café")
             {
                 Description = "Preciso comprar café",
@@ -34,103 +45,118 @@ public class TodoListViewModel : ViewModelBase
                 Description = "Preciso comprar leite",
                 Due = new DateTime(2025, 03, 31),
                 Repeats = Repeats.Daily
-            },
-            new Todo(4, "Pagar Conta de Luz")
-            {
-                Description = "Vencimento da conta de energia",
-                Due = new DateTime(2025, 04, 10),
-                Repeats = Repeats.Monthly
-            },
-            new Todo(5, "Levar cachorro ao veterinário")
-            {
-                Description = "Consulta de rotina para o Rex",
-                Due = new DateTime(2025, 04, 15),
-                Repeats = Repeats.Weekly
-            },
-            new Todo(6, "Estudar para prova de Estrutura de Dados")
-            {
-                Description = "Revisar listas encadeadas e pilhas",
-                Due = new DateTime(2025, 04, 07),
-                Repeats = Repeats.None,
-                Status = TodoStatus.Complete
-            },
-            new Todo(7, "Fazer trabalho de Arquitetura de Computadores")
-            {
-                Description = "Pesquisar sobre pipeline de instruções",
-                Due = new DateTime(2025, 04, 10),
-                Repeats = Repeats.None
-            },
-            new Todo(8, "Terminar projeto de Programação")
-            {
-                Description = "Finalizar implementação e revisar código",
-                Due = new DateTime(2025, 04, 14),
-                Repeats = Repeats.None
-            },
-            new Todo(9, "Revisar Teoria da Computação")
-            {
-                Description = "Estudar autômatos finitos e gramáticas formais",
-                Due = new DateTime(2025, 04, 15),
-                Repeats = Repeats.None,
-                Status = TodoStatus.Complete
-            },
-            new Todo(10, "Resolver exercícios de Cálculo I")
-            {
-                Description = "Praticar derivadas e limites",
-                Due = new DateTime(2025, 04, 17),
-                Repeats = Repeats.None
-            },
-            new Todo(11, "Ir ao supermercado")
-            {
-                Description = "Comprar arroz, feijão e carne",
-                Due = new DateTime(2025, 04, 05),
-                Repeats = Repeats.Weekly
-            },
-            new Todo(12, "Lavar o carro")
-            {
-                Description = "Dar uma geral no carro no final de semana",
-                Due = new DateTime(2025, 04, 06),
-                Repeats = Repeats.Weekly
-            },
-            new Todo(13, "Ler um capítulo do livro de Machine Learning")
-            {
-                Description = "Entender redes neurais profundas",
-                Due = new DateTime(2025, 04, 08),
-                Repeats = Repeats.None
-            },
-            new Todo(14, "Fazer exercícios de lógica de programação")
-            {
-                Description = "Resolver problemas em C#",
-                Due = new DateTime(2025, 04, 09),
-                Repeats = Repeats.None
-            },
-            new Todo(15, "Renovar identidade")
-            {
-                Description = "Agendar atendimento no Poupatempo",
-                Due = new DateTime(2025, 04, 20),
-                Repeats = Repeats.None
             }
-        ];
+        };
 
-		
-		CompletedTasksTodo();
-	}
-	
-	public ObservableCollection<Todo> Todos { get; set; }
-	public ObservableCollection<Todo> CompletedTasks { get; set; }
-	
-	public bool IsComplete(Todo todo)
-	{
-		return todo.Status is TodoStatus.Complete;
-	}
-	private void CompletedTasksTodo()
-	{
-		foreach (var todo in Todos.ToList())
-		{
-			if (IsComplete(todo))
-			{
-				CompletedTasks.Add(todo); 
-				Todos.Remove(todo);
-			}
-		}
-	}
+        CompletedTasksTodo();
+        
+        AddTodoCommand = new RelayCommand(AddTodo);
+    }
+
+    private ObservableCollection<Todo> _todos;
+    public ObservableCollection<Todo> Todos
+    {
+        get => _todos;
+        set
+        {
+            _todos = value;
+            OnPropertyChanged();
+        }
+    }
+    public ObservableCollection<Todo> CompletedTasks { get; set; } = new();
+
+    public ObservableCollection<string> Options { get; } = new ObservableCollection<string>
+        {  "Minhas Tarefas", "Faculdade", "Trabalho" };
+    
+    private string _newTaskName;
+    public string NewTaskName
+    {
+        get => _newTaskName;
+        set
+        {
+            _newTaskName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private DateTime _newDue;
+
+    public DateTime NewDue
+    {
+        get => _newDue;
+        set
+        {
+            _newDue = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _newDescription;
+    public string NewDescription
+    {
+        get => _newDescription;
+        set
+        {
+            _newDescription = value;
+            OnPropertyChanged();
+        }
+    }
+    private Repeats _repeat = Repeats.None;
+    public Repeats Repeat
+    {
+        get => _repeat;
+        set
+        {
+            _repeat = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _listName = "Minhas Tarefas";
+    public string ListName
+    {
+        get => _listName;
+        set
+        {
+            _listName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsComplete(Todo todo)
+    {
+        return todo.Status == TodoStatus.Complete;
+    }
+
+    private void CompletedTasksTodo()
+    {
+        var completed = Todos.Where(IsComplete).ToList();
+        foreach (var task in completed)
+        {
+            CompletedTasks.Add(task);
+            Todos.Remove(task);
+        }
+    }
+
+    public void AddTodo()
+    {
+        if (String.IsNullOrWhiteSpace(NewTaskName)) return;
+        
+        var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+        {
+            Description = NewDescription,
+            Due = NewDue,
+            Repeats = Repeat,
+            ListName = ListName
+        };
+        Todos.Add(newTodo);
+        
+        NewTaskName = string.Empty;
+        NewDescription = String.Empty;
+        NewDue = DateTime.Today;
+        Repeat = Repeats.None;
+        ListName = string.Empty;
+        
+        OnTaskAdded?.Invoke();
+    }
 }

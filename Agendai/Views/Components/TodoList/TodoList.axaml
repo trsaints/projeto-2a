@@ -6,27 +6,30 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel">
-    <ItemsControl ItemsSource="{Binding Todos}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+    
+    <StackPanel>
+        
+        <ItemsControl ItemsSource="{Binding Todos}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0" Orientation="Vertical">
-                        <TextBlock Text="{Binding Name}" 
-                                   FontSize="14" />
-                        <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
-                                   FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
-                    </StackPanel>
+                        <StackPanel Grid.Column="0" Orientation="Vertical">
+                            <TextBlock Text="{Binding Name}" FontSize="14" />
+                            <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
+                                       FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
+                        </StackPanel>
 
-                    <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
-                              Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                              Margin="0 0 10 0"/>
-                </Grid>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+                        <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
+                                  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                  Margin="0 0 10 0"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
 </UserControl>

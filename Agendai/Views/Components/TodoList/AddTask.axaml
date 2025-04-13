@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+             x:Class="Agendai.Views.Components.TodoList.AddTask"
+             x:DataType="vm:TodoWindowViewModel">
+    
+    <Border Background="White" CornerRadius="8" Padding="25" 
+            Width="400" Height="400"
+            BorderBrush="#EEEEEE" BorderThickness="1">
+        
+        <StackPanel Spacing="20">
+            <!-- Nome -->
+            <StackPanel Spacing="6">
+                <TextBox Text="{Binding TodoListVm.NewTaskName}"
+                         FontSize="14" Watermark="Título da tarefa"
+                         BorderThickness="1"
+                         BorderBrush="#DDDDDD"
+                         Margin="0,0,0,8"/>
+            </StackPanel>
+            
+            <!-- Descrição -->
+            <StackPanel Spacing="6">
+                <TextBox Text="{Binding TodoListVm.NewDescription}"
+                         FontSize="14" Watermark="Adicione uma descrição"
+                         Padding="14,10"
+                         AcceptsReturn="True"
+                         Height="90"
+                         BorderThickness="1"
+                         BorderBrush="#DDDDDD"
+                         Margin="0,0,0,8"/>
+            </StackPanel>
+            
+            <!-- Data -->
+            <StackPanel Spacing="6">
+                <DatePicker SelectedDate="{Binding TodoListVm.NewDue, Converter={StaticResource DateConverter}}"
+                            FontSize="14"
+                            Padding="14,10"
+                            BorderThickness="1"
+                            BorderBrush="#DDDDDD"
+                            Margin="0,0,0,8"/>
+            </StackPanel>
+            
+            <!-- Repetição e Lista lado a lado -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/> 
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Repetição -->
+                <StackPanel Spacing="6" Grid.Column="0">
+                    <ComboBox ItemsSource="{Binding TodoListVm.RepeatOptions}"
+                              SelectedItem="{Binding TodoListVm.Repeat}"
+                              SelectedIndex="0"
+                              FontSize="14"
+                              BorderThickness="1"
+                              BorderBrush="#DDDDDD"/>
+                </StackPanel>
+                
+                <!-- Lista -->
+                <StackPanel Spacing="6" Grid.Column="2">
+                    <ComboBox ItemsSource="{Binding TodoListVm.Options}"
+                              SelectedItem="{Binding TodoListVm.ListName}"
+                              SelectedIndex="0"
+                              FontSize="14"
+                              BorderThickness="1"
+                              BorderBrush="#DDDDDD"/>
+                </StackPanel>
+            </Grid>
+            
+            <!-- Botão -->
+            <Button Content="Salvar"
+                    Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
+                    Padding="16,12" HorizontalContentAlignment="Center"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Background="#0078D7"
+                    Foreground="White"
+                    Command="{Binding TodoListVm.AddTodoCommand}"/>
+        </StackPanel>
+    </Border>
+</UserControl>
