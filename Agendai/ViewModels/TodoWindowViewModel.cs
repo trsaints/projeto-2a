@@ -109,6 +109,11 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 					Todos.Where(t => !IsComplete(t))
 				);
 		_todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+
+		_listNames =
+				new ObservableCollection<string>(
+					Todos.Select(t => t.ListName)!
+				);
 	}
 
 	private Action?  OnTaskAdded    { get; set; }
