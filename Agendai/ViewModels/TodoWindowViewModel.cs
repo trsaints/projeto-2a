@@ -40,23 +40,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 			OnPropertyChanged();
 		}
 	}
-
-	private string _selectedList;
-	public string SelectedList
-	{
-		get => _selectedList;
-
-		set
-		{
-			if (_selectedList == value)
-				return;
-
-			_selectedList = value;
-			OnPropertyChanged();
-
-			OpenAddTask = (value == "Tarefa");
-		}
-	}
+	
 	public ICommand OpenPopupCommand    { get; }
 	public ICommand SelectTarefaCommand { get; }
 
