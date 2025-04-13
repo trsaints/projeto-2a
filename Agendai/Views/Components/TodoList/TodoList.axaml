@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
-             x:DataType="vm:TodoListViewModel">
-    <ItemsControl ItemsSource="{Binding Items}">
+             x:DataType="vm:TodoListViewModel"
+             x:Name="root">
+    <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=root}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="*,Auto">

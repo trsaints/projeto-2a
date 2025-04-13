@@ -25,7 +25,7 @@
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <todoList:TodoList Items="{Binding IncompleteTodos}" />
+                            <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" />
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
@@ -36,7 +36,7 @@
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <todoList:TodoList Items="{Binding TodoHistory}" />
+                            <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
@@ -58,7 +58,7 @@
                                 <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                                         Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                                        <todoList:TodoList Items="{Binding Items}" />
+                                        <todoList:TodoList ItemsSource="{Binding Items}" />
                                     </ScrollViewer>
                                 </Border>
                             </StackPanel>

@@ -9,16 +9,15 @@ namespace Agendai.Views.Components.TodoList;
 public partial class TodoList : UserControl
 {
 	public static readonly StyledProperty<ObservableCollection<Todo>>
-			ItemsProperty =
-					AvaloniaProperty
-							.Register<TodoList, ObservableCollection<Todo>>(
-								nameof(Items)
-							);
+		ItemsSourceProperty =
+			AvaloniaProperty.Register<TodoList, ObservableCollection<Todo>>(
+				nameof(ItemsSource)
+			);
 
-	public ObservableCollection<Todo> Items
+	public ObservableCollection<Todo> ItemsSource
 	{
-		get => GetValue(ItemsProperty);
-		set => SetValue(ItemsProperty, value);
+		get => GetValue(ItemsSourceProperty);
+		set => SetValue(ItemsSourceProperty, value);
 	}
 
 	public TodoList()

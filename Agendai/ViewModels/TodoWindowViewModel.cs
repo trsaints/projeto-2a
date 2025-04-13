@@ -236,21 +236,23 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	}
 
 	public IEnumerable<TodosByListName> TodosByListName
-	{
-		get
-		{
-			return ListNames.Select(
-				name => new TodosByListName
-				{
-					ListName = name,
-					Items = Todos.Where(
-						t => t.ListName == name
-						     && t.Status == TodoStatus.Incomplete
-					)
-				}
-			);
-		}
-	}
+    {
+    	get
+    	{
+    		return ListNames.Select(
+    			name => new TodosByListName
+    			{
+    				ListName = name,
+    				Items = new ObservableCollection<Todo>(
+    					Todos.Where(
+    						t => t.ListName == name
+    						     && t.Status == TodoStatus.Incomplete
+    					)
+    				)
+    			}
+    		);
+    	}
+    }
 
 	private bool IsComplete(Todo todo)
 	{
