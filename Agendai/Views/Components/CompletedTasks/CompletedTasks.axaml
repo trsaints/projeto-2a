@@ -6,15 +6,10 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.CompletedTasks.CompletedTasks"
              x:DataType="vm:TodoListViewModel">
-    <ItemsControl ItemsSource="{Binding CompletedTasks}">
+    <ItemsControl ItemsSource="{Binding TodoHistory}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
+                <Grid ColumnDefinitions="*,Auto">
                     <StackPanel Grid.Column="0" Orientation="Vertical">
                         <TextBlock Text="{Binding Name}" 
                                    FontSize="14" />

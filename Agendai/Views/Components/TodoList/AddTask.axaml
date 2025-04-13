@@ -63,7 +63,7 @@
                 
                 <!-- Lista -->
                 <StackPanel Spacing="6" Grid.Column="2">
-                    <ComboBox ItemsSource="{Binding TodoListVm.Options}"
+                    <ComboBox ItemsSource="{Binding TodoListVm.ListNames}"
                               SelectedItem="{Binding TodoListVm.ListName}"
                               SelectedIndex="0"
                               FontSize="14"
