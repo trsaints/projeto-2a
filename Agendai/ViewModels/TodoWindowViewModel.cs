@@ -246,7 +246,10 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				name => new TodosByListName
 				{
 					ListName = name,
-					Items    = Todos.Where(t => t.ListName == name)
+					Items = Todos.Where(
+						t => t.ListName == name
+						     && t.Status == TodoStatus.Incomplete
+					)
 				}
 			);
 		}
