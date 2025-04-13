@@ -1,30 +1,22 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel">
-    
-    <StackPanel>
-        <!--<ItemsControl ItemsSource="{Binding Todos}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="*,Auto">
-
-                        <StackPanel Grid.Column="0" Orientation="Vertical">
-                            <TextBlock Text="{Binding Name}" FontSize="14" />
-                            <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
-                                       FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
-                        </StackPanel>
-
-                        <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
-                                  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                                  Margin="0 0 10 0"/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
-    </StackPanel>
+    <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}" FontSize="14" />
+                        <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
+                                   FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
+                    </StackPanel>
+                    <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
+                              Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
+                              Margin="0 0 10 0" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

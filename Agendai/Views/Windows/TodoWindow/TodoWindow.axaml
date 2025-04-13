@@ -3,7 +3,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
-             x:Class="Agendai.TodoWindow"
+             x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel">
 
     <Grid ColumnDefinitions="0.2*, 0.8*">
@@ -25,26 +25,7 @@
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <ItemsControl ItemsSource="{Binding IncompleteTodos}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid ColumnDefinitions="*,Auto">
-
-                                            <StackPanel Grid.Column="0" Orientation="Vertical">
-                                                <TextBlock Text="{Binding Name}" FontSize="14" />
-                                                <TextBlock
-                                                    Text="{Binding Due, Converter={StaticResource DateConverter}}"
-                                                    FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
-                                            </StackPanel>
-
-                                            <CheckBox
-                                                IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
-                                                Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                Margin="0 0 10 0" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <todoList:TodoList Items="{Binding IncompleteTodos}" />
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
@@ -55,25 +36,7 @@
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <ItemsControl ItemsSource="{Binding TodoHistory}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid ColumnDefinitions="*,Auto">
-                                            <StackPanel Grid.Column="0" Orientation="Vertical">
-                                                <TextBlock Text="{Binding Name}" FontSize="14" />
-                                                <TextBlock
-                                                    Text="{Binding Due, Converter={StaticResource DateConverter}}"
-                                                    FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
-                                            </StackPanel>
-
-                                            <CheckBox
-                                                IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
-                                                Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                Margin="0 0 10 0" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <todoList:TodoList Items="{Binding TodoHistory}" />
                         </ScrollViewer>
                     </Border>
                 </StackPanel>
@@ -86,30 +49,9 @@
                             <StackPanel>
                                 <TextBox Text="{Binding ListName}" />
 
-                                <ItemsControl ItemsSource="{Binding Items}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid ColumnDefinitions="*,Auto">
-                                                <StackPanel Grid.Column="0" Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Name}" FontSize="14" />
-                                                    <TextBlock
-                                                        Text="{Binding Due, Converter={StaticResource DateConverter}}"
-                                                        FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
-                                                </StackPanel>
-
-                                                <CheckBox
-                                                    IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
-                                                    Grid.Column="1" HorizontalAlignment="Right"
-                                                    VerticalAlignment="Center"
-                                                    Margin="0 0 10 0" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                <todoList:TodoList Items="{Binding Items}" />
                             </StackPanel>
                         </DataTemplate>
-
-
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
