@@ -1,0 +1,44 @@
+using Agendai.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+
+namespace Agendai.Data.Database
+{
+    public class AppDbContext : DbContext
+    {
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Todo> Todos { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Define o caminho do banco de dados na pasta AppData do usuário
+                string dbPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Agendai", "agendai.db");
+                
+                // Garante que a pasta exista
+                Directory.CreateDirectory(Path.GetDirectoryName(dbPath));
+                
+                // Configura o SQLite
+                optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // Configuração para herança (TPC = Table Per Concrete type)
+            modelBuilder.Entity<Entity>().UseTpcMappingStrategy();
+            
+            // Configura o tipo ulong como chave
+            modelBuilder.Entity<Entity>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever(); // Não gera automaticamente os IDs
+        }
+    }
+}
