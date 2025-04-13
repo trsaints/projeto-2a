@@ -8,7 +8,7 @@
              x:DataType="vm:TodoListViewModel">
     
     <StackPanel>
-        <ItemsControl ItemsSource="{Binding Todos}">
+        <!--<ItemsControl ItemsSource="{Binding Todos}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*,Auto">
@@ -25,6 +25,6 @@
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl>-->
     </StackPanel>
 </UserControl>

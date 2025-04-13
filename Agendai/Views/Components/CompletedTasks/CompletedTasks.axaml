@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.CompletedTasks.CompletedTasks"
              x:DataType="vm:TodoListViewModel">
-    <ItemsControl ItemsSource="{Binding TodoHistory}">
+    <!--<ItemsControl ItemsSource="{Binding TodoHistory}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="*,Auto">
@@ -23,5 +23,5 @@
                 </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    </ItemsControl>-->
 </UserControl>
