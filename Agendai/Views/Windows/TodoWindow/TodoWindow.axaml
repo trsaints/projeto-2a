@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             xmlns:sideBar="clr-namespace:Agendai.Views.Components.SideBar"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
+             xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel">
 
-    <Grid ColumnDefinitions="0.2*, 0.8*">
-        <sideBar:SideBar Grid.Column="0" DataContext="{Binding}" />
-
+    <Grid ColumnDefinitions="0.25*, 0.75*">
+        <todoSidebar:TodoSidebar/>
+        
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
