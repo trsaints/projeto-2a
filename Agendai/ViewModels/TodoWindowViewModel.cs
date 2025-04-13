@@ -98,6 +98,11 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				Status      = TodoStatus.Complete
 			}
 		];
+		
+		foreach (var todo in _todos)
+		{
+			todo.OnStatusChanged += HandleStatusChanged;
+		}
 
 		_incompleteTodos =
 				new ObservableCollection<Todo>(
@@ -123,6 +128,26 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		Repeats.None, Repeats.Daily, Repeats.Weekly, Repeats.Monthly,
 		Repeats.Anually
 	];
+	
+	private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
+	{
+		if (newStatus == TodoStatus.Complete)
+		{
+			IncompleteTodos.Remove(todo);
+			TodoHistory.Add(todo);
+		}
+		else
+		{
+			TodoHistory.Remove(todo);
+			IncompleteTodos.Add(todo);
+		}
+
+		ListNames = new ObservableCollection<string>(
+			Todos.Select(t => t.ListName).OfType<string>().Distinct()
+			);
+			
+		OnPropertyChanged(nameof(TodosByListName));
+	}
 
 	private ObservableCollection<Todo>? _todos;
 	public ObservableCollection<Todo> Todos
@@ -270,6 +295,8 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 			Repeats     = Repeat,
 			ListName    = ListName
 		};
+		
+		newTodo.OnStatusChanged += HandleStatusChanged;
 
 		Todos.Add(newTodo);
 

@@ -3,8 +3,8 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel"
-             x:Name="root">
-    <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=root}">
+             x:Name="Root">
+    <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=Root}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="*,Auto">
