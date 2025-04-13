@@ -43,13 +43,24 @@
 
                 <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40">Todas as Listas</TextBlock>
 
-                <ItemsControl Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TodosByListName}">
+                <ItemsControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TodosByListName}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <TextBox Text="{Binding ListName}" />
+                            <StackPanel Margin="70 0 0 100" Width="350" Height="300">
+                                <TextBlock FontSize="18" Margin="0 00 0 15" Text="{Binding ListName}" />
 
-                                <todoList:TodoList Items="{Binding Items}" />
+                                <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
+                                        Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                                        <todoList:TodoList Items="{Binding Items}" />
+                                    </ScrollViewer>
+                                </Border>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
