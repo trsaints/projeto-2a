@@ -6,11 +6,11 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:Class="Agendai.Views.Components.TodoList.AddTask"
              x:DataType="vm:TodoWindowViewModel">
-    
-    <Border Background="White" CornerRadius="8" Padding="25" 
+
+    <Border Background="White" CornerRadius="8" Padding="25"
             Width="400" Height="400"
             BorderBrush="#EEEEEE" BorderThickness="1">
-        
+
         <StackPanel Spacing="20">
             <!-- Nome -->
             <StackPanel Spacing="6">
@@ -18,9 +18,9 @@
                          FontSize="14" Watermark="Título da tarefa"
                          BorderThickness="1"
                          BorderBrush="#DDDDDD"
-                         Margin="0,0,0,8"/>
+                         Margin="0,0,0,8" />
             </StackPanel>
-            
+
             <!-- Descrição -->
             <StackPanel Spacing="6">
                 <TextBox Text="{Binding NewDescription}"
@@ -30,9 +30,9 @@
                          Height="90"
                          BorderThickness="1"
                          BorderBrush="#DDDDDD"
-                         Margin="0,0,0,8"/>
+                         Margin="0,0,0,8" />
             </StackPanel>
-            
+
             <!-- Data -->
             <StackPanel Spacing="6">
                 <DatePicker SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
@@ -40,9 +40,9 @@
                             Padding="14,10"
                             BorderThickness="1"
                             BorderBrush="#DDDDDD"
-                            Margin="0,0,0,8"/>
+                            Margin="0,0,0,8" />
             </StackPanel>
-            
+
             <!-- Repetição e Lista lado a lado -->
             <Grid ColumnDefinitions="*,10,*">
                 <!-- Repetição -->
@@ -52,9 +52,9 @@
                               SelectedIndex="0"
                               FontSize="14"
                               BorderThickness="1"
-                              BorderBrush="#DDDDDD"/>
+                              BorderBrush="#DDDDDD" />
                 </StackPanel>
-                
+
                 <!-- Lista -->
                 <StackPanel Spacing="6" Grid.Column="2">
                     <ComboBox ItemsSource="{Binding ListNames}"
@@ -62,19 +62,30 @@
                               SelectedIndex="0"
                               FontSize="14"
                               BorderThickness="1"
-                              BorderBrush="#DDDDDD"/>
+                              BorderBrush="#DDDDDD" />
                 </StackPanel>
             </Grid>
-            
-            <!-- Botão -->
-            <Button Content="Salvar"
-                    Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
-                    Padding="16,12" HorizontalContentAlignment="Center"
-                    FontSize="14"
-                    FontWeight="SemiBold"
-                    Background="#0078D7"
-                    Foreground="White"
-                    Command="{Binding AddTodoCommand}"/>
+
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Cancelar"
+                        Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
+                        Padding="16,12" HorizontalContentAlignment="Center"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="White"
+                        Foreground="#0078D7"
+                        Command="{Binding CancelCommand}" />
+
+                <Button Content="Salvar"
+                        Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
+                        Padding="16,12" HorizontalContentAlignment="Center"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="#0078D7"
+                        Foreground="White"
+                        Command="{Binding AddTodoCommand}" />
+            </StackPanel>
         </StackPanel>
     </Border>
 </UserControl>

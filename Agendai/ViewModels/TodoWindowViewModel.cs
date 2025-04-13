@@ -40,7 +40,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 			OnPropertyChanged(nameof(OpenAddTask));
 		}
 	}
-	
+
 	public ICommand OpenPopupCommand    { get; }
 	public ICommand SelectTarefaCommand { get; }
 
@@ -56,7 +56,14 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				IsPopupOpen = false;
 			}
 		);
-		AddTodoCommand = new RelayCommand(AddTodo); 
+		AddTodoCommand = new RelayCommand(AddTodo);
+		CancelCommand = new RelayCommand(
+			() =>
+			{
+				OpenAddTask = false;
+				IsPopupOpen = false;
+			}
+		);
 
 		_todos =
 		[
@@ -106,6 +113,9 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
 	private Action?  OnTaskAdded    { get; set; }
 	public  ICommand AddTodoCommand { get; }
+
+	public ICommand CancelCommand { get; }
+
 	public ObservableCollection<Repeats> RepeatOptions { get; } =
 	[
 		Repeats.None, Repeats.Daily, Repeats.Weekly, Repeats.Monthly,
