@@ -25,6 +25,24 @@
                     <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
                             Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                            <ItemsControl ItemsSource="{Binding IncompleteTodos}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto">
+
+                                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                                <TextBlock Text="{Binding Name}" FontSize="14" />
+                                                <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
+                                                           FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
+                                            </StackPanel>
+
+                                            <CheckBox IsChecked="{Binding Status, Converter={StaticResource StatusConverter}}"
+                                                      Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                                      Margin="0 0 10 0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </ScrollViewer>
                     </Border>
                 </StackPanel>

@@ -70,6 +70,40 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 			}
 		);
 
+		_todos =
+		[
+			new Todo(1, "Comprar Pamonha")
+			{
+				Description = "Comprar pamonha na feira",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Compras",
+				Status      = TodoStatus.Complete
+			},
+			new Todo(2, "Treino Fullbody")
+			{
+				Description = "Treino fullbody na feira",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Treinos"
+			},
+			new Todo(3, "Lavar o chão")
+			{
+				Description = "Lavar o chão da sala",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Casa"
+			},
+			new Todo(4, "Lavar o banheiro")
+			{
+				Description = "Lavar o banheiro",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Casa",
+				Status      = TodoStatus.Complete
+			}
+		];
+
 		_incompleteTodos =
 				new ObservableCollection<Todo>(
 					Todos.Where(t => !IsComplete(t))
