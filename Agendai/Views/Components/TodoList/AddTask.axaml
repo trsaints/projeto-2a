@@ -14,7 +14,7 @@
         <StackPanel Spacing="20">
             <!-- Nome -->
             <StackPanel Spacing="6">
-                <TextBox Text="{Binding TodoListVm.NewTaskName}"
+                <TextBox Text="{Binding NewTaskName}"
                          FontSize="14" Watermark="Título da tarefa"
                          BorderThickness="1"
                          BorderBrush="#DDDDDD"
@@ -23,7 +23,7 @@
             
             <!-- Descrição -->
             <StackPanel Spacing="6">
-                <TextBox Text="{Binding TodoListVm.NewDescription}"
+                <TextBox Text="{Binding NewDescription}"
                          FontSize="14" Watermark="Adicione uma descrição"
                          Padding="14,10"
                          AcceptsReturn="True"
@@ -35,7 +35,7 @@
             
             <!-- Data -->
             <StackPanel Spacing="6">
-                <DatePicker SelectedDate="{Binding TodoListVm.NewDue, Converter={StaticResource DateConverter}}"
+                <DatePicker SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
                             FontSize="14"
                             Padding="14,10"
                             BorderThickness="1"
@@ -44,17 +44,11 @@
             </StackPanel>
             
             <!-- Repetição e Lista lado a lado -->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10"/> 
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
+            <Grid ColumnDefinitions="*,10,*">
                 <!-- Repetição -->
                 <StackPanel Spacing="6" Grid.Column="0">
-                    <ComboBox ItemsSource="{Binding TodoListVm.RepeatOptions}"
-                              SelectedItem="{Binding TodoListVm.Repeat}"
+                    <ComboBox ItemsSource="{Binding RepeatOptions}"
+                              SelectedItem="{Binding Repeat}"
                               SelectedIndex="0"
                               FontSize="14"
                               BorderThickness="1"
@@ -63,8 +57,8 @@
                 
                 <!-- Lista -->
                 <StackPanel Spacing="6" Grid.Column="2">
-                    <ComboBox ItemsSource="{Binding TodoListVm.ListNames}"
-                              SelectedItem="{Binding TodoListVm.ListName}"
+                    <ComboBox ItemsSource="{Binding ListNames}"
+                              SelectedItem="{Binding ListName}"
                               SelectedIndex="0"
                               FontSize="14"
                               BorderThickness="1"
@@ -80,7 +74,7 @@
                     FontWeight="SemiBold"
                     Background="#0078D7"
                     Foreground="White"
-                    Command="{Binding TodoListVm.AddTodoCommand}"/>
+                    Command="{Binding AddTodoCommand}"/>
         </StackPanel>
     </Border>
 </UserControl>
