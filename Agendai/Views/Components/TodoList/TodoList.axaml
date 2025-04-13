@@ -8,15 +8,10 @@
              x:DataType="vm:TodoListViewModel">
     
     <StackPanel>
-        
         <ItemsControl ItemsSource="{Binding Todos}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid ColumnDefinitions="*,Auto">
 
                         <StackPanel Grid.Column="0" Orientation="Vertical">
                             <TextBlock Text="{Binding Name}" FontSize="14" />
