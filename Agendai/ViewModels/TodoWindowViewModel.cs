@@ -1,10 +1,13 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Agendai.Data;
 using Agendai.Models;
+using DynamicData.Binding;
 
 
 namespace Agendai.ViewModels;
@@ -232,6 +235,20 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		{
 			_listName = value;
 			OnPropertyChanged(ListName);
+		}
+	}
+
+	public IEnumerable<TodosByListName> TodosByListName
+	{
+		get
+		{
+			return ListNames.Select(
+				name => new TodosByListName
+				{
+					ListName = name,
+					Items    = Todos.Where(t => t.ListName == name)
+				}
+			);
 		}
 	}
 
