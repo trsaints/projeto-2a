@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace Agendai.Views.Components.SideBar;
 
 
-public partial class SideBar : UserControl, INotifyPropertyChanged
+public partial class SideBar : UserControl
 {
 	public SideBar()
 	{
