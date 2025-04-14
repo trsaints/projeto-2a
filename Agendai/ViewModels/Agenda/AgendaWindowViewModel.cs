@@ -49,7 +49,7 @@ namespace Agendai.ViewModels.Agenda
         public ObservableCollection<DayRow> DayViewRows { get; set; } = new();
 
         public EventListViewModel EventList { get; set; } = new();
-        public TodoListViewModel TodoList { get; set; } = new();
+        public TodoWindowViewModel TodoList { get; set; } = new();
 
         public AgendaMonthController MonthController { get; }
         public AgendaWeekController WeekController { get; }
