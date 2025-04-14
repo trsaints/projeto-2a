@@ -2,15 +2,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
              x:Class="Agendai.Views.Components.Timer.Timer">
-    <StackPanel>
-        <Label>Insira a duração</Label>
-        <TimePicker ClockIdentifier="24HourClock" />
+    <Border Padding="16" CornerRadius="16" Background="#EBE6E7" BoxShadow="0 0 8 0 #20202010">
+        <StackPanel>
+            <StackPanel Margin="0 0 0 32">
+                <Label Target="TimePicker" Margin="0 0 0 16" FontWeight="Medium">Insira a duração</Label>
+                <TimePicker ClockIdentifier="24HourClock" BorderThickness="2" BorderBrush="#2873AC" x:Name="TimePicker" />
 
-        <Grid ColumnDefinitions="0.1*,0.1*">
-            <Button Grid.Column="0">Cancelar</Button>
-            <Button Grid.Column="1">Salvar</Button>
-        </Grid>
-    </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="80" Margin="0 8 0 0">
+                    <TextBlock>Horas</TextBlock>
+                    <TextBlock>Minutos</TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Right">
+                <Button Margin="0,0,0,0" CornerRadius="24"
+                        Padding="16,8"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#0078D7">
+                    Cancelar
+                </Button>
+
+                <Button Margin="0,0,0,0" CornerRadius="24"
+                        Padding="16,8"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#0078D7">
+                    Iniciar
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
 </UserControl>
