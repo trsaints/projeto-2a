@@ -5,16 +5,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
 
-namespace Agendai.Views.Components.SideBar;
 
+namespace Agendai.Views.Components.SideBar;
 
 public partial class SideBar : UserControl
 {
 	public SideBar()
 	{
 		InitializeComponent();
-		DataContext = new TodoWindowViewModel();
 	}
-	
 }
-

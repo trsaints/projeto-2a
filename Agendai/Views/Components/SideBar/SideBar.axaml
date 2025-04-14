@@ -5,39 +5,43 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.SideBar.SideBar"
-             x:DataType="vm:TodoWindowViewModel">
-    
+             x:DataType="vm:HomeWindowViewModel">
+
     <Grid RowDefinitions="0.1*,0.4*,0.5*">
-        <Button Content="Novo..." 
+        <Button Content="Criar"
                 Command="{Binding OpenPopupCommand}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Margin="10,10,0,0"
-                Width="80"
-                Height="30"
-                x:Name="NovoButton"/>
+                x:Name="ButtonCreate" />
 
-        <Popup Grid.Row="0" IsOpen="{Binding IsPopupOpen}"
+        <Popup IsOpen="{Binding IsPopupOpen}"
                Placement="Bottom"
-               PlacementTarget="{Binding ElementName=NovoButton}"
+               PlacementTarget="{Binding ElementName=ButtonCreate}"
                HorizontalOffset="-5"
                VerticalOffset="0"
                Width="100"
                Height="50">
-        
+
             <Border Background="White"
                     CornerRadius="3"
                     BorderBrush="#CCCCCC"
                     BorderThickness="1">
-            
+
                 <StackPanel Margin="0 0 0 5">
-                    <Button Content="Tarefa"
-                            Command="{Binding SelectTarefaCommand}"
-                            CommandParameter="Tarefa"
+                    <Button Content="Evento"
+                            Command="{Binding OpenAgendaCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left"/>
+                            HorizontalContentAlignment="Left" />
+
+                    <Button Content="Tarefa"
+                            Command="{Binding OpenTodoCommand}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left" />
                 </StackPanel>
             </Border>
         </Popup>
