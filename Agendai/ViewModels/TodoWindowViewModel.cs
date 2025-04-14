@@ -98,7 +98,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				Status      = TodoStatus.Complete
 			}
 		];
-		
+
 		foreach (var todo in _todos)
 		{
 			todo.OnStatusChanged += HandleStatusChanged;
@@ -112,10 +112,13 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
 		_listNames = new ObservableCollection<string>(
 			Todos
-				.Select(t => t.ListName)
-				.OfType<string>()
-				.Distinct()
+					.Select(t => t.ListName)
+					.OfType<string>()
+					.Distinct()
 		);
+
+		_incompleteResume =
+				new ObservableCollection<Todo>(_incompleteTodos.Take(7));
 	}
 
 	private Action?  OnTaskAdded    { get; set; }
@@ -128,7 +131,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		Repeats.None, Repeats.Daily, Repeats.Weekly, Repeats.Monthly,
 		Repeats.Anually
 	];
-	
+
 	private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
 	{
 		if (newStatus == TodoStatus.Complete)
@@ -144,8 +147,8 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
 		ListNames = new ObservableCollection<string>(
 			Todos.Select(t => t.ListName).OfType<string>().Distinct()
-			);
-			
+		);
+
 		OnPropertyChanged(nameof(TodosByListName));
 	}
 
@@ -174,6 +177,18 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		}
 	}
 
+	private ObservableCollection<Todo>? _incompleteResume;
+
+	public ObservableCollection<Todo> IncompleteResume
+	{
+		get => _incompleteResume ?? [];
+
+		set
+		{
+			_incompleteResume = value;
+			OnPropertyChanged(nameof(IncompleteResume));
+		}
+	}
 
 	private ObservableCollection<Todo>? _todoHistory;
 	public ObservableCollection<Todo> TodoHistory
@@ -261,23 +276,23 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	}
 
 	public IEnumerable<TodosByListName> TodosByListName
-    {
-    	get
-    	{
-    		return ListNames.Select(
-    			name => new TodosByListName
-    			{
-    				ListName = name,
-    				Items = new ObservableCollection<Todo>(
-    					Todos.Where(
-    						t => t.ListName == name
-    						     && t.Status == TodoStatus.Incomplete
-    					)
-    				)
-    			}
-    		);
-    	}
-    }
+	{
+		get
+		{
+			return ListNames.Select(
+				name => new TodosByListName
+				{
+					ListName = name,
+					Items = new ObservableCollection<Todo>(
+						Todos.Where(
+							t => t.ListName == name
+							     && t.Status == TodoStatus.Incomplete
+						)
+					)
+				}
+			);
+		}
+	}
 
 	private bool IsComplete(Todo todo)
 	{
@@ -295,7 +310,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 			Repeats     = Repeat,
 			ListName    = ListName
 		};
-		
+
 		newTodo.OnStatusChanged += HandleStatusChanged;
 
 		Todos.Add(newTodo);
@@ -309,6 +324,9 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 		IncompleteTodos = new ObservableCollection<Todo>(
 			Todos.Where(t => !IsComplete(t)).ToList()
 		);
+
+		IncompleteResume =
+				new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
 		OnTaskAdded?.Invoke();
 	}
