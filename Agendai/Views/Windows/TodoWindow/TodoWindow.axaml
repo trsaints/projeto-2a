@@ -25,7 +25,7 @@
 
                 <StackPanel Margin="64 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
                             VerticalAlignment="Top">
-                    <TextBlock FontSize="18" Margin="0 0 0 15"
+                    <TextBlock FontSize="18" Margin="0 0 0 15" FontWeight="Bold"
                                VerticalAlignment="Center" Text="Minhas Tarefas" />
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
@@ -34,14 +34,16 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="64 0 0 48" Width="350" Height="300">
-                    <TextBlock FontSize="16" Margin="0 0 0 16">Histórico</TextBlock>
+                    <TextBlock FontSize="18" Margin="0 0 0 16" FontWeight="Bold">Histórico</TextBlock>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
                     </ScrollViewer>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40">Todas as Listas</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40" FontWeight="Bold">
+                    Todas as Listas
+                </TextBlock>
 
                 <ItemsControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TodosByListName}">
                     <ItemsControl.ItemsPanel>
@@ -53,7 +55,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="70 0 0 100" Width="350" Height="300">
-                                <TextBlock FontSize="18" Margin="0 00 0 15" Text="{Binding ListName}" />
+                                <TextBlock FontSize="18" Margin="0 00 0 15" Text="{Binding ListName}" FontWeight="Bold" />
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}" />
