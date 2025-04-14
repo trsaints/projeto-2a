@@ -2,6 +2,7 @@ using System;
 using Agendai.ViewModels;
 using Agendai.Views.Windows.AgendaWindow;
 using Agendai.Views.Windows.HomeWindow;
+using Agendai.Views.Windows.TodoWindow;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Threading;

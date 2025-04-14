@@ -1,11 +1,13 @@
+using Agendai.ViewModels;
 using Avalonia.Controls;
 
-namespace Agendai;
+
+namespace Agendai.Views.Windows.TodoWindow;
 
 public partial class TodoWindow : UserControl
 {
-    public TodoWindow()
-    {
-        InitializeComponent();
-    }
+	public TodoWindow()
+	{
+		InitializeComponent();
+	}
 }
