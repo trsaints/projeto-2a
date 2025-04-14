@@ -10,7 +10,7 @@
     <Grid ColumnDefinitions="0.25*, 0.75*">
         <todoSidebar:TodoSidebar />
 
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
                             Width="75" Height="75" HorizontalAlignment="Left" Margin="32 0 0 0">

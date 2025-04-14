@@ -10,74 +10,75 @@
              x:Class="Agendai.Views.Windows.HomeWindow.HomeWindow"
              x:DataType="vm:HomeWindowViewModel"
              mc:Ignorable="d">
-    <Grid ColumnDefinitions="0.25*,0.75*">
+    <Grid ColumnDefinitions="0.25*,0.75*" Margin="0 0 0 48">
         <homeSidebar:HomeSidebar Grid.Column="0" />
 
-        <Grid Grid.Column="1"
-              ColumnDefinitions="Auto,Auto"
-              RowDefinitions="Auto,Auto"
-              Margin="32 0 0 0">
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 32 48">
-                <TextBlock FontSize="18" Margin="0 16 0 15" FontWeight="Bold">Meus Turnos</TextBlock>
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid ColumnDefinitions="Auto,Auto"
+                  RowDefinitions="Auto,Auto"
+                  Margin="32 0 0 0">
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 32 48">
+                    <TextBlock FontSize="18" Margin="0 16 0 24" FontWeight="Bold">Meus Turnos</TextBlock>
 
-                <timer:Timer Margin="0 0 0 24" />
+                    <timer:Timer Margin="0 0 0 24" />
 
-                <todoList:TodoList />
+                    <todoList:TodoList />
 
-                <Button Command="{Binding OpenPomodoroCommand}"
-                        Margin="0,0,0,0"
-                        CornerRadius="24"
-                        Padding="16,8"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Background="#0078D7"
-                        Foreground="White"
-                        BorderBrush="#0078D7"
-                        BorderThickness="2"
-                        HorizontalAlignment="Right">
-                    Ver Turnos
-                </Button>
-            </StackPanel>
+                    <Button Command="{Binding OpenPomodoroCommand}"
+                            Margin="0,0,0,0"
+                            CornerRadius="24"
+                            Padding="16,8"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Background="#0078D7"
+                            Foreground="White"
+                            BorderBrush="#0078D7"
+                            BorderThickness="2"
+                            HorizontalAlignment="Right">
+                        Ver Turnos
+                    </Button>
+                </StackPanel>
 
-            <StackPanel Grid.Row="1" Grid.Column="0">
-                <TextBlock>Próximos Eventos</TextBlock>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <TextBlock FontSize="18" Margin="0 16 0 24" FontWeight="Bold">Próximos Eventos</TextBlock>
 
-                <eventList:EventList />
+                    <eventList:EventList />
 
-                <Button Command="{Binding OpenAgendaCommand}"
-                        Margin="0,0,0,0" 
-                        CornerRadius="24"
-                        Padding="16,8"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Background="#0078D7"
-                        Foreground="White"
-                        BorderBrush="#0078D7"
-                        BorderThickness="2" 
-                        HorizontalAlignment="Right">
-                    Ver Eventos
-                </Button>
-            </StackPanel>
+                    <Button Command="{Binding OpenAgendaCommand}"
+                            Margin="0,0,0,0"
+                            CornerRadius="24"
+                            Padding="16,8"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Background="#0078D7"
+                            Foreground="White"
+                            BorderBrush="#0078D7"
+                            BorderThickness="2"
+                            HorizontalAlignment="Right">
+                        Ver Eventos
+                    </Button>
+                </StackPanel>
 
-            <StackPanel Grid.Row="0" Grid.Column="1">
-                <TextBlock FontSize="18" Margin="0 16 0 15" FontWeight="Bold">Minhas Tarefas</TextBlock>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                    <TextBlock FontSize="18" Margin="0 16 0 24" FontWeight="Bold">Minhas Tarefas</TextBlock>
 
-                <todoList:TodoList />
+                    <todoList:TodoList />
 
-                <Button Command="{Binding OpenTodoCommand}"
-                        Margin="0,0,0,0" 
-                        CornerRadius="24"
-                        Padding="16,8"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Background="#0078D7"
-                        Foreground="White"
-                        BorderBrush="#0078D7"
-                        BorderThickness="2"
-                        HorizontalAlignment="Right">
-                    Ver Tarefas
-                </Button>
-            </StackPanel>
-        </Grid>
+                    <Button Command="{Binding OpenTodoCommand}"
+                            Margin="0,0,0,0"
+                            CornerRadius="24"
+                            Padding="16,8"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Background="#0078D7"
+                            Foreground="White"
+                            BorderBrush="#0078D7"
+                            BorderThickness="2"
+                            HorizontalAlignment="Right">
+                        Ver Tarefas
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
