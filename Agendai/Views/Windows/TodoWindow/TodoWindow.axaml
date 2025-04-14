@@ -3,6 +3,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
+             xmlns:taskForm="clr-namespace:Agendai.Views.Components.TaskForm"
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel">
 
@@ -67,11 +68,24 @@
             </Grid>
         </ScrollViewer>
 
-        <Popup Grid.Column="0" IsOpen="{Binding OpenAddTask}" Placement="Center">
-            <Border Background="Transparent" Width="1000" Height="700">
+        <Popup IsOpen="{Binding OpenAddTask}">
+            <Border Width="{Binding $parent[Window].Width}" 
+                    Height="{Binding $parent[Window].Height}"
+                    Background="#80202020" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+        
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border Background="WhiteSmoke" CornerRadius="10" Padding="20">
-                        <todoList:AddTask DataContext="{Binding }" />
+                    <Border Background="WhiteSmoke" 
+                            CornerRadius="10" 
+                            Padding="20" 
+                            BoxShadow="0 4 20 0 #66000000">
+                        <taskForm:TaskForm DataContext="{Binding}" />
                     </Border>
                 </Grid>
             </Border>
