@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
-             x:Class="Agendai.Views.Components.TaskForm.TaskForm"
+             x:Class="Agendai.Views.Components.TodoForm.TodoForm"
              x:DataType="vm:TodoWindowViewModel">
 
     <StackPanel Spacing="16">

@@ -3,7 +3,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
-             xmlns:taskForm="clr-namespace:Agendai.Views.Components.TaskForm"
+             xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel">
 
@@ -87,7 +87,7 @@
                             CornerRadius="10"
                             Padding="20"
                             BoxShadow="0 4 20 0 #66000000">
-                        <taskForm:TaskForm DataContext="{Binding}" />
+                        <todoForm:TodoForm DataContext="{Binding}" />
                     </Border>
                 </Grid>
             </Border>
