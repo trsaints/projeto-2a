@@ -7,12 +7,11 @@
              x:Class="Agendai.Views.Components.HomeSidebar.HomeSidebar"
              x:DataType="vm:HomeWindowViewModel">
 
-    <Grid RowDefinitions="0.1*,0.4*,0.5*">
+    <Grid RowDefinitions="Auto,0.4*,0.5*" Margin="16">
         <Button Content="Criar"
                 Command="{Binding OpenPopupCommand}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Margin="10,10,0,0"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Padding="16,10,16,10" CornerRadius="32" Background="#39A0ED"
                 x:Name="ButtonCreate" />
 
         <Popup IsOpen="{Binding IsPopupOpen}"
@@ -21,7 +20,7 @@
                HorizontalOffset="-5"
                VerticalOffset="0"
                Width="100"
-               Height="50">
+               VerticalAlignment="Stretch">
 
             <Border Background="White"
                     CornerRadius="3"
@@ -46,7 +45,11 @@
             </Border>
         </Popup>
 
-        <Calendar Grid.Row="1" />
+        <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" Margin="0,16,0,0">
+            <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" />
+        </Border>
     </Grid>
 
 </UserControl>
