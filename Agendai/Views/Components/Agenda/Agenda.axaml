@@ -30,10 +30,10 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Calendário" FontSize="30" Grid.Column="0" />
+            <TextBlock Text="Calendário" FontSize="30" FontWeight="Bold" Grid.Column="0" />
     
             <ComboBox SelectedIndex="{Binding SelectedIndex}" Width="140" Grid.Column="1"
-                      FontSize="20" HorizontalContentAlignment="Center" Margin="0 0 20 0">
+                      FontSize="20" HorizontalContentAlignment="Center" Margin="0 0 20 0" FontWeight="SemiBold">
                 <ComboBoxItem Content="Mês" />
                 <ComboBoxItem Content="Semana"/>
                 <ComboBoxItem Content="Dia"/>

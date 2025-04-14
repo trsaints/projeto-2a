@@ -10,21 +10,59 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0">
-                <TextBlock Text="{Binding SelectedMonth}" FontSize="18" FontWeight="Bold" 
-                           Margin="0,0,20,0" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0" Spacing="12">
+                <TextBlock Text="{Binding SelectedWeek}" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           VerticalAlignment="Center"/>
 
-                <Button Click="OnPreviousMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
-                    <Image Source="../../../Assets/arrow_back.png" Height="20" Width="20" Margin="0,0,10,0"/>
-                </Button>
+                <Border CornerRadius="24" Padding="0" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 
-                <Button Click="OnNextMonthClicked" Padding="0" Background="Transparent" BorderBrush="Transparent">
-                    <Image Source="../../../Assets/arrow_forward.png" Height="20" Width="20" Margin="10,0,0,0"/>
-                </Button>
+                        <Button Click="OnPreviousMonthClicked" 
+                                Padding="8"
+                                Background="Transparent"
+                                BorderBrush="Transparent" 
+                                CornerRadius="24 0 0 24"
+                                VerticalAlignment="Center">
+                            <Image Source="../../../Assets/arrow_back.png"
+                                   Height="20"
+                                   Width="20"
+                                   Margin="0,0,10,0"/>
+                        </Button>
+
+                        <Button Click="OnNextMonthClicked"
+                                Padding="8"
+                                Background="Transparent"
+                                BorderBrush="Transparent" 
+                                CornerRadius="0 24 24 0"
+                                VerticalAlignment="Center">
+                            <Image Source="../../../Assets/arrow_forward.png"
+                                   Height="20"
+                                   Width="20"
+                                   Margin="10,0,0,0"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
-            <Button Grid.Column="1" Content="Ocultar/Exibir Eventos e Tarefas"
-                    Command="{Binding ToggleShowData}" Margin="20,0,0,0" VerticalAlignment="Center"/>
+
+            <Button Grid.Column="1"
+                    Command="{Binding ToggleShowData}"
+                    Margin="0,0,0,0"
+                    CornerRadius="24"
+                    Padding="16,8"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Background="#0078D7"
+                    Foreground="White"
+                    BorderBrush="#0078D7"
+                    BorderThickness="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+                <TextBlock Text="Ocultar/Exibir Eventos e Tarefas" VerticalAlignment="Center" TextAlignment="Center"/>
+            </Button>
+
         </Grid>
 
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
@@ -52,7 +90,9 @@
                                         <ItemsControl ItemsSource="{Binding Sunday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -74,7 +114,9 @@
                                         <ItemsControl ItemsSource="{Binding Monday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -96,7 +138,9 @@
                                         <ItemsControl ItemsSource="{Binding Tuesday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -118,7 +162,9 @@
                                         <ItemsControl ItemsSource="{Binding Wednesday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -140,7 +186,9 @@
                                         <ItemsControl ItemsSource="{Binding Thursday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -162,7 +210,9 @@
                                         <ItemsControl ItemsSource="{Binding Friday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -184,7 +234,9 @@
                                         <ItemsControl ItemsSource="{Binding Saturday.Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontSize="10"/>
+                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
+                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
+                                                    </Border>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>

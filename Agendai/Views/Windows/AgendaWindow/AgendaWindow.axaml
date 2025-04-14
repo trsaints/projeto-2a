@@ -8,11 +8,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
-    <Grid ColumnDefinitions="0.2*,0.8*">
+    <Grid ColumnDefinitions="0.25*,0.75*">
         <homeSidebar:HomeSidebar Grid.Column="0" />
 
         <StackPanel Grid.Column="1">
-            <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
+            <StackPanel Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
                         Width="75" Height="75" HorizontalAlignment="Left" Margin="32 0 0 0">
                 <Button Command="{Binding ReturnHomeCommand}" CornerRadius="24" Padding="16 8 16 8">
                     <StackPanel Orientation="Horizontal" Spacing="8">
