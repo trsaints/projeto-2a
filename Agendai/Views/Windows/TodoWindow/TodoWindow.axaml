@@ -68,27 +68,29 @@
             </Grid>
         </ScrollViewer>
 
-        <Popup IsOpen="{Binding OpenAddTask}">
-            <Border Width="{Binding $parent[Window].Width}" 
-                    Height="{Binding $parent[Window].Height}"
-                    Background="#80202020" 
-                    HorizontalAlignment="Stretch" 
+        <Panel IsVisible="{Binding OpenAddTask}"
+               ZIndex="100"
+               Grid.ColumnSpan="2">
+            <Border Width="{Binding $parent[Window].Bounds.Width}"
+                    Height="{Binding $parent[Window].Bounds.Height}"
+                    Background="#80202020"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <Border.Transitions>
                     <Transitions>
                         <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
                     </Transitions>
                 </Border.Transitions>
-        
+
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border Background="WhiteSmoke" 
-                            CornerRadius="10" 
-                            Padding="20" 
+                    <Border Background="WhiteSmoke"
+                            CornerRadius="10"
+                            Padding="20"
                             BoxShadow="0 4 20 0 #66000000">
                         <taskForm:TaskForm DataContext="{Binding}" />
                     </Border>
                 </Grid>
             </Border>
-        </Popup>
+        </Panel>
     </Grid>
 </UserControl>
