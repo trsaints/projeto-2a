@@ -2,6 +2,7 @@ using Agendai.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Agendai.Data.Database
 {
@@ -39,6 +40,24 @@ namespace Agendai.Data.Database
             modelBuilder.Entity<Entity>()
                 .Property(e => e.Id)
                 .ValueGeneratedNever(); // Não gera automaticamente os IDs
+            
+            // Configura o relacionamento Todo -> Shift (1-N)
+            modelBuilder.Entity<Shift>()
+                .HasOne<Todo>() // Todo associado ao Shift
+                .WithMany(t => t.Shifts) // Referência à coleção de Shifts no Todo
+                .HasForeignKey("TodoId") // Nome da chave estrangeira
+                .IsRequired(false); // Torna o relacionamento opcional inicialmente
+                
+            // Configuração para o armazenamento de IEnumerable<DateTime> em Reminders
+            modelBuilder.Entity<Recurrence>()
+                .Property(r => r.Reminders)
+                .HasConversion(
+                    v => string.Join(',', v ?? Array.Empty<DateTime>()),
+                    v => string.IsNullOrEmpty(v) 
+                        ? null 
+                        : v.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(DateTime.Parse)
+                            .ToList());
         }
     }
 }

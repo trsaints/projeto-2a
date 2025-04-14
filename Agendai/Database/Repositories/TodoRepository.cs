@@ -125,5 +125,22 @@ namespace Agendai.Data.Database.Repositories
         {
             return UpdateTodoStatus(id, TodoStatus.Skipped);
         }
+
+        // Obter todas as tarefas com seus turnos relacionados
+        public List<Todo> GetAllTodosWithShifts()
+        {
+        return _context.Todos
+            .Include(t => t.Shifts)
+            .ToList();
+        }
+
+        // Obter uma tarefa específica com seus turnos relacionados
+        public Todo GetTodoWithShiftsById(ulong id)
+        {
+         return _context.Todos
+            .Include(t => t.Shifts)
+            .FirstOrDefault(t => t.Id == id);
+        }
+
     }
 }

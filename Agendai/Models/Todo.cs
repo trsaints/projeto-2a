@@ -1,10 +1,38 @@
+using System.ComponentModel;
+using System;
+using System.Collections.Generic;
+
 namespace Agendai.Models;
 
-
-public class Todo(ulong id, string name) : Recurrence(id, name)
+public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
 {
-	public string?    ListName       { get; set; }
-	public TodoStatus Status         { get; set; }
-	public uint       FinishedShifts { get; set; }
-	public uint       TotalShifts    { get; set; }
+    public string? ListName { get; set; }
+    public uint FinishedShifts { get; set; }
+    public uint TotalShifts { get; set; }
+    
+    // Adicionando coleção de Shifts
+    public ICollection<Shift> Shifts { get; set; } = new List<Shift>();
+    
+    private TodoStatus _status;
+    public TodoStatus Status
+    {
+        get => _status;
+        set
+        {
+            if (_status != value)
+            {
+                _status = value;
+                OnPropertyChanged(nameof(Status));
+                OnStatusChanged?.Invoke(this, _status);
+            }
+        }
+    }
+    
+    public event PropertyChangedEventHandler PropertyChanged;
+    public event Action<Todo, TodoStatus>? OnStatusChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
