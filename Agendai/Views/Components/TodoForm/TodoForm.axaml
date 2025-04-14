@@ -52,7 +52,7 @@
                 <Label Target="TodoRepeats" FontWeight="Medium">Frequência</Label>
 
                 <ComboBox ItemsSource="{Binding RepeatOptions}"
-                          SelectedItem="{Binding Repeat}"
+                          SelectedItem="{Binding SelectedRepeats}"
                           SelectedIndex="0"
                           FontSize="14"
                           CornerRadius="8"
