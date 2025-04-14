@@ -12,12 +12,18 @@
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
-                            Width="75" Height="75" HorizontalAlignment="Left">
-                    <Image Source="avares://Agendai/Assets/arrow_back.png" Width="25" Height="25" />
-                    <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
+                            Width="75" Height="75" HorizontalAlignment="Left" Margin="64 0 0 0">
+                    <Button Command="{Binding ReturnHomeCommand}" CornerRadius="24" Padding="16 8 16 8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Image Source="avares://Agendai/Assets/arrow_back.png" Width="25" Height="25" />
+
+                            <TextBlock FontSize="16" Text="Voltar" TextAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
-                <StackPanel Margin="70 0 0 40" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
+                <StackPanel Margin="64 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
                             VerticalAlignment="Top">
                     <TextBlock FontSize="18" Margin="0 0 0 15"
                                VerticalAlignment="Center" Text="Minhas Tarefas" />
@@ -27,8 +33,8 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="300">
-                    <TextBlock FontSize="18" Margin="0 0 0 15">Histórico</TextBlock>
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="64 0 0 48" Width="350" Height="300">
+                    <TextBlock FontSize="16" Margin="0 0 0 16">Histórico</TextBlock>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
