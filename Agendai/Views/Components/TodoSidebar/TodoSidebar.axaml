@@ -4,17 +4,17 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              x:Class="Agendai.Views.Components.TodoSidebar.TodoSidebar"
              x:DataType="vm:TodoWindowViewModel">
-    <Grid RowDefinitions="0.1*,0.4*,0.5*" Margin="16">
+    <Grid RowDefinitions="Auto,0.4*,0.5*" Margin="16">
         <Button Grid.Row="0" Content="Nova Tarefa" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Padding="16,10,16,10" x:Name="NewTaskButton" CornerRadius="32" Background="#39A0ED"
                 Command="{Binding  SelectTarefaCommand}" />
 
         <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch" Margin="0,16,0,0">
             <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch" />
         </Border>
 
-        <todoList:TodoList Grid.Row="1" />
+        <todoList:TodoList Grid.Row="2" Margin="0,16,0,0" />
     </Grid>
 </UserControl>
