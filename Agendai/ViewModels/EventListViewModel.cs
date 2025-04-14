@@ -18,18 +18,25 @@ public class EventListViewModel : ViewModelBase
 			new Event(1, "Conferência da Pamonha")
 			{
 				Description = "Conferência de pamonhas",
-				Due = new DateTime(2021, 10, 10, 8, 0, 0),
+				Due = new DateTime(2025, 4, 6, 8, 0, 0),
 				Repeats = Repeats.Anually
 			},
 			new Event(2, "Feira da Foda")
 			{
-				Description = "Coferência do Agro",
-				Due = new DateTime(2025, 12, 5),
+				Description = "Conferência do Agro",
+				Due = new DateTime(2025, 4, 5, 14, 0, 0),
 				Repeats = Repeats.None
 			},
 			new Event(3, "Festa do Peão")
 			{
 				Description = "Festa do Peão de Barretos",
+				Due = new DateTime(2025, 8, 20, 12, 0, 0),
+				Repeats = Repeats.Monthly
+			},
+			new Event(4, "Feriado")
+			{
+				Description = "Feriado de alguma coisa",
+				Due = new DateTime(2025, 4, 18, 22, 0, 0),
 				Due = new DateTime(2021, 8, 20), 
 				Repeats = Repeats.Monthly
 			}

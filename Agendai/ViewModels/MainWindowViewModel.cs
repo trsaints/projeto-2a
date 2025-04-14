@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Agendai.ViewModels.Agenda;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Agendai.ViewModels;
 
