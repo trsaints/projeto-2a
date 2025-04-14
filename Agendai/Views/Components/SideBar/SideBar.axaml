@@ -2,13 +2,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:components="clr-namespace:Agendai.Views.Components"
-             xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Agendai.Views.Components.SideBar.SideBar">
+             x:Class="Agendai.Views.Components.SideBar.SideBar"
+             x:DataType="vm:TodoWindowViewModel">
+    
     <Grid RowDefinitions="0.1*,0.4*,0.5*">
-        <Button>Novo...</Button>
+        <Button Content="Novo..." 
+                Command="{Binding OpenPopupCommand}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="10,10,0,0"
+                Width="80"
+                Height="30"
+                x:Name="NovoButton"/>
+
+        <Popup Grid.Row="0" IsOpen="{Binding IsPopupOpen}"
+               Placement="Bottom"
+               PlacementTarget="{Binding ElementName=NovoButton}"
+               HorizontalOffset="-5"
+               VerticalOffset="0"
+               Width="100"
+               Height="50">
+        
+            <Border Background="White"
+                    CornerRadius="3"
+                    BorderBrush="#CCCCCC"
+                    BorderThickness="1">
+            
+                <StackPanel Margin="0 0 0 5">
+                    <Button Content="Tarefa"
+                            Command="{Binding SelectTarefaCommand}"
+                            CommandParameter="Tarefa"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+
         <Calendar Grid.Row="1" />
-        <todoList:TodoList Grid.Row="2" />
     </Grid>
+
 </UserControl>

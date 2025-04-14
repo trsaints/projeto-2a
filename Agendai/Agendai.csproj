@@ -38,6 +38,13 @@
       <DependentUpon>TodoList.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Components\EventList\AddEvent.axaml.cs">
+      <DependentUpon>AddEvent.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Components\TaskForm\TaskForm.axaml.cs">
+      <DependentUpon>AddTask.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

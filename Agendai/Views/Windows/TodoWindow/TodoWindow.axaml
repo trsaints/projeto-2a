@@ -1,12 +1,96 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             x:Class="Agendai.TodoWindow"
+             xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
+             xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
+             xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
+             x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel">
-  <StackPanel Spacing="10" Margin="20">
-        <TextBlock Text="{Binding Title}" FontSize="24"/>
-        <Button Command="{Binding ReturnHomeCommand}">Voltar para Home</Button>
-    </StackPanel>
+
+    <Grid ColumnDefinitions="0.25*, 0.75*">
+        <todoSidebar:TodoSidebar />
+
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
+                            Width="75" Height="75" HorizontalAlignment="Left" Margin="64 0 0 0">
+                    <Button Command="{Binding ReturnHomeCommand}" CornerRadius="24" Padding="16 8 16 8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Image Source="avares://Agendai/Assets/arrow_back.png" Width="25" Height="25" />
+
+                            <TextBlock FontSize="16" Text="Voltar" TextAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Margin="64 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
+                            VerticalAlignment="Top">
+                    <TextBlock FontSize="18" Margin="0 0 0 15" FontWeight="Bold"
+                               VerticalAlignment="Center" Text="Minhas Tarefas" />
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" />
+                    </ScrollViewer>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="64 0 0 48" Width="350" Height="300">
+                    <TextBlock FontSize="18" Margin="0 0 0 16" FontWeight="Bold">Histórico</TextBlock>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                        <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
+                    </ScrollViewer>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="64  0 0 24" FontWeight="Bold">
+                    Todas as Listas
+                </TextBlock>
+
+                <ItemsControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding TodosByListName}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="64 0 0 48" Width="350" Height="300">
+                                <TextBlock FontSize="18" Margin="0 00 0 16" Text="{Binding ListName}" FontWeight="Bold" />
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                                    <todoList:TodoList ItemsSource="{Binding Items}" />
+                                </ScrollViewer>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+
+        <Panel IsVisible="{Binding OpenAddTask}"
+               ZIndex="100"
+               Grid.ColumnSpan="2">
+            <Border Width="{Binding $parent[Window].Bounds.Width}"
+                    Height="{Binding $parent[Window].Bounds.Height}"
+                    Background="#80202020"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Background="WhiteSmoke"
+                            CornerRadius="10"
+                            Padding="20"
+                            BoxShadow="0 4 20 0 #66000000">
+                        <todoForm:TodoForm DataContext="{Binding}" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Panel>
+    </Grid>
 </UserControl>
