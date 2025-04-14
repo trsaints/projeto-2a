@@ -7,8 +7,8 @@
              x:DataType="vm:TodoWindowViewModel">
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
-        <todoSidebar:TodoSidebar/>
-        
+        <todoSidebar:TodoSidebar />
+
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
@@ -22,23 +22,17 @@
                     <TextBlock FontSize="18" Margin="0 0 0 15"
                                VerticalAlignment="Center" Text="Minhas Tarefas" />
 
-                    <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
-                            Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" />
-                        </ScrollViewer>
-                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" />
+                    </ScrollViewer>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="70 0 0 40" Width="350" Height="300">
                     <TextBlock FontSize="18" Margin="0 0 0 15">Histórico</TextBlock>
 
-                    <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
-                            Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                            <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
-                        </ScrollViewer>
-                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                        <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
+                    </ScrollViewer>
                 </StackPanel>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40">Todas as Listas</TextBlock>
@@ -55,12 +49,9 @@
                             <StackPanel Margin="70 0 0 100" Width="350" Height="300">
                                 <TextBlock FontSize="18" Margin="0 00 0 15" Text="{Binding ListName}" />
 
-                                <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10"
-                                        Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                                        <todoList:TodoList ItemsSource="{Binding Items}" />
-                                    </ScrollViewer>
-                                </Border>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                                    <todoList:TodoList ItemsSource="{Binding Items}" />
+                                </ScrollViewer>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
