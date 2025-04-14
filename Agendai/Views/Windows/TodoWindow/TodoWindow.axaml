@@ -41,7 +41,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="70 60 0 40" FontWeight="Bold">
+                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="64  0 0 24" FontWeight="Bold">
                     Todas as Listas
                 </TextBlock>
 
@@ -54,8 +54,8 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="70 0 0 100" Width="350" Height="300">
-                                <TextBlock FontSize="18" Margin="0 00 0 15" Text="{Binding ListName}" FontWeight="Bold" />
+                            <StackPanel Margin="64 0 0 48" Width="350" Height="300">
+                                <TextBlock FontSize="18" Margin="0 00 0 16" Text="{Binding ListName}" FontWeight="Bold" />
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}" />
