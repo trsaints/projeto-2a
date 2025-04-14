@@ -7,20 +7,19 @@
              x:Class="Agendai.Views.Components.TaskForm.TaskForm"
              x:DataType="vm:TodoWindowViewModel">
 
-    <StackPanel Spacing="20">
-        <StackPanel Spacing="6">
-            <Label Target="TodoTitle">Título</Label>
+    <StackPanel Spacing="16">
+        <StackPanel Spacing="4" Margin="0,0,0,8">
+            <Label Target="TodoTitle" FontWeight="Medium">Título</Label>
 
             <TextBox Text="{Binding NewTaskName}"
                      FontSize="14" Watermark="Ex.: Comprar café"
                      BorderThickness="1"
                      BorderBrush="#DDDDDD"
-                     Margin="0,0,0,8"
                      x:Name="TodoTitle" />
         </StackPanel>
 
-        <StackPanel Spacing="6">
-            <Label Target="TodoDesc">Descrição</Label>
+        <StackPanel Spacing="4" Margin="0,0,0,8">
+            <Label Target="TodoDesc" FontWeight="Medium">Descrição</Label>
 
             <TextBox Text="{Binding NewDescription}"
                      FontSize="14" Watermark="Adicione uma descrição"
@@ -29,64 +28,74 @@
                      Height="90"
                      BorderThickness="1"
                      BorderBrush="#DDDDDD"
-                     Margin="0,0,0,8"
                      x:Name="TodoDesc" />
         </StackPanel>
 
-        <StackPanel Spacing="6">
-            <Label Target="TodoDue">Prazo</Label>
+        <Border CornerRadius="16"
+                Margin="0,0,0,8"
+                BorderBrush="Transparent"
+                Background="#EBE6E7"
+                Padding="16 8">
+            <StackPanel Spacing="4">
+                <Label Target="TodoDue" FontWeight="Medium">Prazo</Label>
 
-            <DatePicker SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
-                        FontSize="14"
-                        BorderThickness="1"
-                        BorderBrush="#DDDDDD"
-                        Margin="0,0,0,8"
-                        x:Name="TodoDue" />
-        </StackPanel>
+                <DatePicker SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
+                            FontSize="14"
+                            BorderBrush="Transparent"
+                            Background="#EBE6E7"
+                            x:Name="TodoDue" />
+            </StackPanel>
+        </Border>
 
-        <Grid ColumnDefinitions="*,10,*">
-            <StackPanel Spacing="6" Grid.Column="0">
-                <Label Target="TodoRepeats">Frequência</Label>
+        <StackPanel Orientation="Horizontal" Spacing="16">
+            <StackPanel Spacing="4">
+                <Label Target="TodoRepeats" FontWeight="Medium">Frequência</Label>
 
                 <ComboBox ItemsSource="{Binding RepeatOptions}"
                           SelectedItem="{Binding Repeat}"
                           SelectedIndex="0"
                           FontSize="14"
-                          BorderThickness="1"
-                          BorderBrush="#DDDDDD"
+                          CornerRadius="8"
+                          BorderBrush="Transparent"
+                          Background="#EBE6E7"
                           x:Name="TodoRepeats" />
             </StackPanel>
 
-            <StackPanel Spacing="6" Grid.Column="2">
-                <Label Target="TodoListName">Adicionar à</Label>
+            <StackPanel Spacing="4">
+                <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
 
                 <ComboBox ItemsSource="{Binding ListNames}"
                           SelectedItem="{Binding ListName}"
                           SelectedIndex="0"
                           FontSize="14"
-                          BorderThickness="1"
-                          BorderBrush="#DDDDDD"
+                          CornerRadius="8"
+                          BorderBrush="Transparent"
+                          Background="#EBE6E7"
                           x:Name="TodoListName" />
             </StackPanel>
-        </Grid>
+        </StackPanel>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
             <Button Content="Cancelar"
-                    Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
-                    Padding="16,12" HorizontalContentAlignment="Center"
+                    Margin="0,0,0,0" CornerRadius="24"
+                    Padding="16,8"
                     FontSize="14"
                     FontWeight="SemiBold"
                     Background="White"
                     Foreground="#0078D7"
+                    BorderBrush="#0078D7"
+                    BorderThickness="2"
                     Command="{Binding CancelCommand}" />
 
             <Button Content="Salvar"
-                    Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
-                    Padding="16,12" HorizontalContentAlignment="Center"
+                    Margin="0,0,0,0" CornerRadius="24"
+                    Padding="16,8"
                     FontSize="14"
                     FontWeight="SemiBold"
                     Background="#0078D7"
                     Foreground="White"
+                    BorderBrush="#0078D7"
+                    BorderThickness="2"
                     Command="{Binding AddTodoCommand}" />
         </StackPanel>
     </StackPanel>
