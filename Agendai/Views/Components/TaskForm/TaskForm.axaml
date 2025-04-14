@@ -8,17 +8,20 @@
              x:DataType="vm:TodoWindowViewModel">
 
     <StackPanel Spacing="20">
-        <!-- Nome -->
         <StackPanel Spacing="6">
+            <Label Target="TodoTitle">Título</Label>
+
             <TextBox Text="{Binding NewTaskName}"
-                     FontSize="14" Watermark="Título da tarefa"
+                     FontSize="14" Watermark="Ex.: Comprar café"
                      BorderThickness="1"
                      BorderBrush="#DDDDDD"
-                     Margin="0,0,0,8" />
+                     Margin="0,0,0,8"
+                     x:Name="TodoTitle" />
         </StackPanel>
 
-        <!-- Descrição -->
         <StackPanel Spacing="6">
+            <Label Target="TodoDesc">Descrição</Label>
+
             <TextBox Text="{Binding NewDescription}"
                      FontSize="14" Watermark="Adicione uma descrição"
                      Padding="14,10"
@@ -26,42 +29,46 @@
                      Height="90"
                      BorderThickness="1"
                      BorderBrush="#DDDDDD"
-                     Margin="0,0,0,8" />
+                     Margin="0,0,0,8"
+                     x:Name="TodoDesc" />
         </StackPanel>
 
-        <!-- Data -->
         <StackPanel Spacing="6">
+            <Label Target="TodoDue">Prazo</Label>
+
             <DatePicker SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
                         FontSize="14"
-                        Padding="14,10"
                         BorderThickness="1"
                         BorderBrush="#DDDDDD"
-                        Margin="0,0,0,8" />
+                        Margin="0,0,0,8"
+                        x:Name="TodoDue" />
         </StackPanel>
 
-        <!-- Repetição e Lista lado a lado -->
         <Grid ColumnDefinitions="*,10,*">
-            <!-- Repetição -->
             <StackPanel Spacing="6" Grid.Column="0">
+                <Label Target="TodoRepeats">Frequência</Label>
+
                 <ComboBox ItemsSource="{Binding RepeatOptions}"
                           SelectedItem="{Binding Repeat}"
                           SelectedIndex="0"
                           FontSize="14"
                           BorderThickness="1"
-                          BorderBrush="#DDDDDD" />
+                          BorderBrush="#DDDDDD"
+                          x:Name="TodoRepeats" />
             </StackPanel>
 
-            <!-- Lista -->
             <StackPanel Spacing="6" Grid.Column="2">
+                <Label Target="TodoListName">Adicionar à</Label>
+
                 <ComboBox ItemsSource="{Binding ListNames}"
                           SelectedItem="{Binding ListName}"
                           SelectedIndex="0"
                           FontSize="14"
                           BorderThickness="1"
-                          BorderBrush="#DDDDDD" />
+                          BorderBrush="#DDDDDD"
+                          x:Name="TodoListName" />
             </StackPanel>
         </Grid>
-
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Cancelar"
