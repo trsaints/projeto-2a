@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Agendai.Views.Components.SideBar.SideBar"
+             x:Class="Agendai.Views.Components.HomeSidebar.HomeSidebar"
              x:DataType="vm:HomeWindowViewModel">
 
     <Grid RowDefinitions="0.1*,0.4*,0.5*">
