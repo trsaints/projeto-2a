@@ -17,23 +17,66 @@
               ColumnDefinitions="Auto,Auto"
               RowDefinitions="Auto,Auto"
               Margin="32 0 0 0">
-            <StackPanel Grid.Row="0" Grid.Column="0" >
-                <TextBlock>Meus Turnos</TextBlock>
-                <timer:Timer />
+            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 32 48">
+                <TextBlock FontSize="18" Margin="0 16 0 15" FontWeight="Bold">Meus Turnos</TextBlock>
+
+                <timer:Timer Margin="0 0 0 24" />
+
                 <todoList:TodoList />
-                <Button Command="{Binding OpenPomodoroCommand}">Ver Todos</Button>
+
+                <Button Command="{Binding OpenPomodoroCommand}"
+                        Margin="0,0,0,0"
+                        CornerRadius="24"
+                        Padding="16,8"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="#0078D7"
+                        Foreground="White"
+                        BorderBrush="#0078D7"
+                        BorderThickness="2"
+                        HorizontalAlignment="Right">
+                    Ver Turnos
+                </Button>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0">
                 <TextBlock>Próximos Eventos</TextBlock>
+
                 <eventList:EventList />
-                <Button Command="{Binding OpenAgendaCommand}">Ver Todos</Button>
+
+                <Button Command="{Binding OpenAgendaCommand}"
+                        Margin="0,0,0,0" 
+                        CornerRadius="24"
+                        Padding="16,8"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="#0078D7"
+                        Foreground="White"
+                        BorderBrush="#0078D7"
+                        BorderThickness="2" 
+                        HorizontalAlignment="Right">
+                    Ver Eventos
+                </Button>
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="1">
-                <TextBlock>Minhas Tarefas</TextBlock>
+                <TextBlock FontSize="18" Margin="0 16 0 15" FontWeight="Bold">Minhas Tarefas</TextBlock>
+
                 <todoList:TodoList />
-                <Button Command="{Binding OpenTodoCommand}">Ver Todas</Button>
+
+                <Button Command="{Binding OpenTodoCommand}"
+                        Margin="0,0,0,0" 
+                        CornerRadius="24"
+                        Padding="16,8"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Background="#0078D7"
+                        Foreground="White"
+                        BorderBrush="#0078D7"
+                        BorderThickness="2"
+                        HorizontalAlignment="Right">
+                    Ver Tarefas
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>
