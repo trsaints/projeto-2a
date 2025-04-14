@@ -9,13 +9,18 @@
     <ItemsControl ItemsSource="{Binding Events}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Border Background="#F2EDEE" BorderThickness="1" Padding="16" BorderBrush="#EBE6E7" CornerRadius="8" Margin="0 0 0 16">
+                <Border Background="#F2EDEE" BorderThickness="1" Padding="16" BorderBrush="#EBE6E7" CornerRadius="8"
+                        Margin="0 0 0 16">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Spacing="8" Margin="0 0 16 0">
                             <TextBlock>
-                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Medium" Margin="0 0 8 0" />
-                                <TextBlock Text="{Binding Due , Converter={StaticResource DateConverter}}"
-                                           HorizontalAlignment="Right" FontSize="12" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Medium" Margin="0 0 8 0"
+                                           VerticalAlignment="Center" />
+
+                                <Border Padding="8 4" CornerRadius="16" Background="#CEC9CA">
+                                    <TextBlock Text="{Binding Due , Converter={StaticResource DateConverter}}"
+                                               HorizontalAlignment="Right" FontSize="12" VerticalAlignment="Center" />
+                                </Border>
                             </TextBlock>
                             <TextBlock Text="{Binding Description}" FontSize="12" />
                         </StackPanel>
