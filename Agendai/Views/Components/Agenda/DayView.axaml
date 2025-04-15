@@ -11,7 +11,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0" Spacing="12">
-                <TextBlock Text="{Binding SelectedWeek}" 
+                <TextBlock Text="{Binding SelectedDay}" 
                            FontSize="18" 
                            FontWeight="Bold" 
                            VerticalAlignment="Center"/>
