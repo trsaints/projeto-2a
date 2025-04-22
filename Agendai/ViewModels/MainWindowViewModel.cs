@@ -1,4 +1,5 @@
-﻿using Agendai.ViewModels.Agenda;
+﻿using System;
+using Agendai.ViewModels.Agenda;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Agendai.ViewModels;
@@ -51,5 +52,22 @@ public class MainWindowViewModel : ViewModelBase
         var pomodoroViewModel = new PomodoroWindowViewModel();
         pomodoroViewModel.MainViewModel = this;
         CurrentViewModel = pomodoroViewModel;
+    }
+    
+    public void NavigateToSpecificDay(DateTime selectedDate)
+    {
+        if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
+        {
+            agendaViewModel.CurrentDay = selectedDate;
+            agendaViewModel.SelectedIndex = 2;
+            agendaViewModel.UpdateDataGridItems();
+        }
+        else
+        {
+            var newAgendaViewModel = new AgendaWindowViewModel();
+            newAgendaViewModel.MainViewModel = this;
+            newAgendaViewModel.SelectedIndex = 2;
+            newAgendaViewModel.UpdateDataGridItems();
+        }
     }
 }
