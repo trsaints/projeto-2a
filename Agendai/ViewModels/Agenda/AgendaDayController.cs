@@ -16,16 +16,16 @@ namespace Agendai.ViewModels.Agenda
         public void GoToPreviousDay()
         {
             _viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(-1);
-            UpdateDayFromDate();
+            UpdateDayFromDate(_viewModel.CurrentDay);  
         }
 
         public void GoToNextDay()
         {
             _viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(1);
-            UpdateDayFromDate();
+            UpdateDayFromDate(_viewModel.CurrentDay); 
         }
 
-        public void UpdateDayFromDate()
+        public void UpdateDayFromDate(DateTime selectedDate)
         {
             var culture = new CultureInfo("pt-BR");
             _viewModel.SelectedDay = culture.TextInfo.ToTitleCase(_viewModel.CurrentDay.ToString("dddd, dd 'de' MMMM", culture));
@@ -33,7 +33,7 @@ namespace Agendai.ViewModels.Agenda
             var mappedItems = DayViewService.MapDayItemsFrom(
                 _viewModel.EventList.Events,
                 _viewModel.TodoList.Todos,
-                _viewModel.CurrentDay
+                selectedDate
             );
 
             DayViewService.GenerateDayView(
@@ -51,7 +51,7 @@ namespace Agendai.ViewModels.Agenda
             var selectedDate = new DateTime(_viewModel.CurrentMonth.Year, _viewModel.CurrentMonth.Month, dayNumber);
             _viewModel.CurrentDay = selectedDate;
             _viewModel.SelectedIndex = 2; 
-            UpdateDayFromDate();
+            UpdateDayFromDate(selectedDate);
         }
     }
 }

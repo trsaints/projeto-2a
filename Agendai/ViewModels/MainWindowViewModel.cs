@@ -1,8 +1,12 @@
 ﻿using System;
+using Agendai.Models;
 using Agendai.ViewModels.Agenda;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
+using Agendai.Messages;
 
 public class MainWindowViewModel : ViewModelBase
 {
@@ -15,6 +19,11 @@ public class MainWindowViewModel : ViewModelBase
         {
             homeViewModel.MainViewModel = this;
         }
+        
+        WeakReferenceMessenger.Default.Register<NavigateToDateMessenger>(this, (r, message) =>
+        {
+            NavigateToSpecificDay(message.SelectedDate);
+        });
     }
 
     private ViewModelBase? _currentViewModel;
@@ -56,18 +65,37 @@ public class MainWindowViewModel : ViewModelBase
     
     public void NavigateToSpecificDay(DateTime selectedDate)
     {
-        if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
+        switch (CurrentViewModel)
         {
-            agendaViewModel.CurrentDay = selectedDate;
-            agendaViewModel.SelectedIndex = 2;
-            agendaViewModel.UpdateDataGridItems();
-        }
-        else
-        {
-            var newAgendaViewModel = new AgendaWindowViewModel();
-            newAgendaViewModel.MainViewModel = this;
-            newAgendaViewModel.SelectedIndex = 2;
-            newAgendaViewModel.UpdateDataGridItems();
+            case null:
+            {
+                var newAgendaViewModel = new AgendaWindowViewModel();
+                newAgendaViewModel.MainViewModel = this;
+                newAgendaViewModel.CurrentDay = selectedDate;
+                newAgendaViewModel.SelectedIndex = 2;
+                newAgendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                
+                CurrentViewModel = newAgendaViewModel;
+                break;
+            }
+            case AgendaWindowViewModel agendaViewModel:
+                agendaViewModel.SelectedIndex = 2;
+                agendaViewModel.CurrentDay = selectedDate;
+                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                break;
+            default:
+            {
+                var newAgendaViewModel = new AgendaWindowViewModel();
+                newAgendaViewModel.MainViewModel = this;
+                newAgendaViewModel.CurrentDay = selectedDate;
+                newAgendaViewModel.SelectedIndex = 2;
+                newAgendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+
+                CurrentViewModel = newAgendaViewModel;
+                break;
+            }
         }
     }
+
+    
 }

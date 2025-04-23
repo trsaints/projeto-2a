@@ -1,5 +1,10 @@
+using System;
+using System.Linq;
+using Agendai.Messages;
 using Agendai.ViewModels;
 using Avalonia.Controls;
+using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.Views.Components.HomeSidebar;
 
@@ -10,16 +15,11 @@ public partial class HomeSidebar : UserControl
         InitializeComponent();
     }
     
-    private void OnCalendarDateChanged(object sender, SelectionChangedEventArgs e)
+    private void OnCalendarDateChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (DataContext is MainWindowViewModel mainViewModel)
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is DateTime selectedDate)
         {
-            var calendar = sender as Calendar;
-            if (calendar?.SelectedDate.HasValue == true)
-            {
-                var selectedDate = calendar.SelectedDate.Value;
-                mainViewModel.NavigateToSpecificDay(selectedDate);
-            }
+            WeakReferenceMessenger.Default.Send(new NavigateToDateMessenger(selectedDate));
         }
     }
 }

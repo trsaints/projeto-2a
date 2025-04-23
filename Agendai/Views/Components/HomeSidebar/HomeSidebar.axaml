@@ -48,7 +48,7 @@
         <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch" Margin="0,16,0,0">
             <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" />
+                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
         </Border>
     </Grid>
 
