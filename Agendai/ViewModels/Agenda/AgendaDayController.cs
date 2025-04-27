@@ -35,13 +35,6 @@ namespace Agendai.ViewModels.Agenda
                 _viewModel.TodoList.Todos,
                 selectedDate
             );
-
-            DayViewService.GenerateDayView(
-                _viewModel.DayViewRows,
-                _viewModel.Hours,
-                mappedItems,
-                _viewModel.ShowData
-            );
             
             _viewModel.UpdateDataGridItems();
         }

@@ -67,34 +67,23 @@ public class MainWindowViewModel : ViewModelBase
     {
         switch (CurrentViewModel)
         {
-            case null:
-            {
-                var newAgendaViewModel = new AgendaWindowViewModel();
-                newAgendaViewModel.MainViewModel = this;
-                newAgendaViewModel.CurrentDay = selectedDate;
-                newAgendaViewModel.SelectedIndex = 2;
-                newAgendaViewModel.DayController.UpdateDayFromDate(selectedDate);
-                
-                CurrentViewModel = newAgendaViewModel;
-                break;
-            }
             case AgendaWindowViewModel agendaViewModel:
-                agendaViewModel.SelectedIndex = 2;
                 agendaViewModel.CurrentDay = selectedDate;
+                agendaViewModel.SelectedIndex = 2;
                 agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
                 break;
             default:
             {
-                var newAgendaViewModel = new AgendaWindowViewModel();
-                newAgendaViewModel.MainViewModel = this;
-                newAgendaViewModel.CurrentDay = selectedDate;
-                newAgendaViewModel.SelectedIndex = 2;
-                newAgendaViewModel.DayController.UpdateDayFromDate(selectedDate);
-
-                CurrentViewModel = newAgendaViewModel;
+                CurrentViewModel = new AgendaWindowViewModel(selectedDate, 2);
+                if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
+                {
+                    agendaViewModel.MainViewModel = this;
+                    agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                }
                 break;
             }
         }
+
     }
 
     
