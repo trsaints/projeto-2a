@@ -1,5 +1,6 @@
 using Agendai.Models;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System;
 using System.IO;
 using System.Linq;
@@ -45,7 +46,13 @@ namespace Agendai.Data.Database
             modelBuilder.Entity<Shift>()
                 .HasOne<Todo>() // Todo associado ao Shift
                 .WithMany(t => t.Shifts) // Referência à coleção de Shifts no Todo
-                .HasForeignKey("TodoId") // Nome da chave estrangeira
+                .HasForeignKey(s => s.TodoId) // Nome da chave estrangeira
+                .IsRequired(false); // Torna o relacionamento opcional inicialmente
+                
+            modelBuilder.Entity<Todo>()
+                .HasOne(t => t.Shift) // Todo associado ao Shift
+                .WithMany(s => s.Todos) // Referência à coleção de Shifts no Todo
+                .HasForeignKey(t => t.ShiftId) // Nome da chave estrangeira
                 .IsRequired(false); // Torna o relacionamento opcional inicialmente
                 
             // Configuração para o armazenamento de IEnumerable<DateTime> em Reminders
