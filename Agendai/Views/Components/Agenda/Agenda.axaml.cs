@@ -13,6 +13,5 @@ public partial class Agenda : UserControl
     public Agenda()
     {
         InitializeComponent();
-        DataContext = new AgendaWindowViewModel();
     }
 }

@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Agendai.Views.Components.HomeSidebar.HomeSidebar"
+             x:DataType="vm:HomeWindowViewModel">
+
+    <Grid RowDefinitions="Auto,0.4*,0.5*" Margin="16">
+        <Button Content="Criar"
+                Command="{Binding OpenPopupCommand}"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Padding="16,10,16,10" CornerRadius="32" Background="#39A0ED"
+                x:Name="ButtonCreate" />
+
+        <Popup IsOpen="{Binding IsPopupOpen}"
+               Placement="Bottom"
+               PlacementTarget="{Binding ElementName=ButtonCreate}"
+               HorizontalOffset="-5"
+               VerticalOffset="0"
+               Width="100"
+               VerticalAlignment="Stretch">
+
+            <Border Background="White"
+                    CornerRadius="3"
+                    BorderBrush="#CCCCCC"
+                    BorderThickness="1">
+
+                <StackPanel Margin="0 0 0 5">
+                    <Button Content="Evento"
+                            Command="{Binding OpenAgendaCommand}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left" />
+
+                    <Button Content="Tarefa"
+                            Command="{Binding OpenTodoCommand}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left" />
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" Margin="0,16,0,0">
+            <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
+        </Border>
+    </Grid>
+
+</UserControl>

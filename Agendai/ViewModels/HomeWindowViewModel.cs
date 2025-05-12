@@ -1,32 +1,31 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
+
 namespace Agendai.ViewModels;
 
 public class HomeWindowViewModel : ViewModelBase
 {
-    private ICommand? _openAgendaCommand;
-    public ICommand OpenAgendaCommand => _openAgendaCommand ??= new RelayCommand(OpenAgenda);
+	private bool _isPopupOpen;
 
-    private ICommand? _openTodoCommand;
-    public ICommand OpenTodoCommand => _openTodoCommand ??= new RelayCommand(OpenTodo);
+	public bool IsPopupOpen
+	{
+		get => _isPopupOpen;
+		set => SetProperty(ref _isPopupOpen, value);
+	}
 
-    private ICommand? _openPomodoroCommand;
-    public ICommand OpenPomodoroCommand => _openPomodoroCommand ??= new RelayCommand(OpenPomodoro);
+	public ICommand OpenPopupCommand =>
+			new RelayCommand(() => IsPopupOpen = true);
 
+	public ICommand OpenAgendaCommand => new RelayCommand(OpenAgenda);
 
-    private void OpenAgenda()
-    {
-        MainViewModel?.NavigateToAgenda();
-    }
+	public ICommand OpenTodoCommand => new RelayCommand(OpenTodo);
 
-    private void OpenTodo()
-    {
-        MainViewModel?.NavigateToTodo();
-    }
+	public ICommand OpenPomodoroCommand => new RelayCommand(OpenPomodoro);
+	
+	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
 
-    private void OpenPomodoro()
-    {
-        MainViewModel?.NavigateToPomodoro();
-    }
+	private void OpenTodo() { MainViewModel?.NavigateToTodo(); }
+
+	private void OpenPomodoro() { MainViewModel?.NavigateToPomodoro(); }
 }

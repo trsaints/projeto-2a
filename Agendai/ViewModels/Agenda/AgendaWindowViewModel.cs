@@ -49,7 +49,7 @@ namespace Agendai.ViewModels.Agenda
         public ObservableCollection<DayRow> DayViewRows { get; set; } = new();
 
         public EventListViewModel EventList { get; set; } = new();
-        public TodoListViewModel TodoList { get; set; } = new();
+        public TodoWindowViewModel TodoList { get; set; } = new();
 
         public AgendaMonthController MonthController { get; }
         public AgendaWeekController WeekController { get; }
@@ -128,15 +128,21 @@ namespace Agendai.ViewModels.Agenda
         public void GoToDay(int date) => DayController.GoToDay(date);
 
 
-        public AgendaWindowViewModel()
+        public AgendaWindowViewModel(DateTime? specificDay = null, int selectedIndex = 0)
         {
             MonthController = new AgendaMonthController(this);
             WeekController = new AgendaWeekController(this);
             DayController = new AgendaDayController(this);
 
+            SelectedIndex = selectedIndex;
+
+            if (specificDay != null)
+                CurrentDay = specificDay.Value;
+
             UpdateDateSelectors();
             UpdateDataGridItems();
         }
+
 
         public void UpdateDataGridItems()
         {
@@ -162,20 +168,20 @@ namespace Agendai.ViewModels.Agenda
 
         public void UpdateDateSelectors()
         {
-            var today = DateTime.Today;
             var culture = new CultureInfo("pt-BR");
 
-            CurrentMonth = today;
-            CurrentWeek = today;
-            CurrentDay = today;
+            // Usa a data já atribuída (CurrentDay), ao invés de DateTime.Today
+            SelectedMonth = culture.TextInfo.ToTitleCase(CurrentDay.ToString("MMMM", culture));
 
-            SelectedMonth = culture.TextInfo.ToTitleCase(today.ToString("MMMM", culture));
-
-            var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(today);
+            var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(CurrentDay);
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
 
-            SelectedDay = culture.TextInfo.ToTitleCase(today.ToString("dddd, dd 'de' MMMM", culture));
+            SelectedDay = culture.TextInfo.ToTitleCase(CurrentDay.ToString("dddd, dd 'de' MMMM", culture));
+
+            CurrentMonth = CurrentDay;
+            CurrentWeek = CurrentDay;
         }
+
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

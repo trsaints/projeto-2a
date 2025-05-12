@@ -37,7 +37,6 @@ public class EventListViewModel : ViewModelBase
 			{
 				Description = "Feriado de alguma coisa",
 				Due = new DateTime(2025, 4, 18, 22, 0, 0),
-				Due = new DateTime(2021, 8, 20), 
 				Repeats = Repeats.Monthly
 			}
 		];

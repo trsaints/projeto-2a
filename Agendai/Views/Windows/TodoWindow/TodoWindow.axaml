@@ -10,10 +10,10 @@
     <Grid ColumnDefinitions="0.25*, 0.75*">
         <todoSidebar:TodoSidebar />
 
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
                 <StackPanel Grid.Row="0" Grid.Column="0" Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
-                            Width="75" Height="75" HorizontalAlignment="Left" Margin="64 0 0 0">
+                            Width="75" Height="75" HorizontalAlignment="Left" Margin="32 0 0 0">
                     <Button Command="{Binding ReturnHomeCommand}" CornerRadius="24" Padding="16 8 16 8">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <Image Source="avares://Agendai/Assets/arrow_back.png" Width="25" Height="25" />
@@ -24,7 +24,7 @@
                     </Button>
                 </StackPanel>
 
-                <StackPanel Margin="64 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
+                <StackPanel Margin="32 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
                             VerticalAlignment="Top">
                     <TextBlock FontSize="18" Margin="0 0 0 15" FontWeight="Bold"
                                VerticalAlignment="Center" Text="Minhas Tarefas" />
@@ -34,7 +34,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="64 0 0 48" Width="350" Height="300">
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="32 0 0 48" Width="350" Height="300">
                     <TextBlock FontSize="18" Margin="0 0 0 16" FontWeight="Bold">Histórico</TextBlock>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
@@ -42,7 +42,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="64  0 0 24" FontWeight="Bold">
+                <TextBlock Grid.Row="2" Grid.Column="0" FontSize="24" Margin="32  0 0 24" FontWeight="Bold">
                     Todas as Listas
                 </TextBlock>
 
@@ -55,7 +55,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="64 0 0 48" Width="350" Height="300">
+                            <StackPanel Margin="32 0 0 48" Width="350" Height="300">
                                 <TextBlock FontSize="18" Margin="0 00 0 16" Text="{Binding ListName}" FontWeight="Bold" />
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">

@@ -13,7 +13,7 @@ using DynamicData.Binding;
 
 namespace Agendai.ViewModels;
 
-public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
+public class TodoWindowViewModel : ViewModelBase
 {
 	public TodoWindowViewModel()
 	{
@@ -98,11 +98,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _isPopupOpen;
 
-		set
-		{
-			_isPopupOpen = value;
-			OnPropertyChanged(nameof(IsPopupOpen));
-		}
+		set => SetProperty(ref _isPopupOpen, value);
 	}
 
 	private bool _openAddTask;
@@ -111,11 +107,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _openAddTask;
 
-		set
-		{
-			_openAddTask = value;
-			OnPropertyChanged(nameof(OpenAddTask));
-		}
+		set => SetProperty(ref _openAddTask, value);
 	}
 
 	public ICommand OpenPopupCommand    { get; }
@@ -158,11 +150,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _todos ?? [];
 
-		set
-		{
-			_todos = value;
-			OnPropertyChanged(nameof(Todos));
-		}
+		set => SetProperty(ref _todos, value);
 	}
 
 	private ObservableCollection<Todo>? _incompleteTodos;
@@ -171,11 +159,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _incompleteTodos ?? [];
 
-		set
-		{
-			_incompleteTodos = value;
-			OnPropertyChanged(nameof(IncompleteTodos));
-		}
+		set => SetProperty(ref _incompleteTodos, value);
 	}
 
 	private ObservableCollection<Todo>? _incompleteResume;
@@ -184,11 +168,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _incompleteResume ?? [];
 
-		set
-		{
-			_incompleteResume = value;
-			OnPropertyChanged(nameof(IncompleteResume));
-		}
+		set => SetProperty(ref _incompleteResume, value);
 	}
 
 	private ObservableCollection<Todo>? _todoHistory;
@@ -196,11 +176,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _todoHistory ?? [];
 
-		set
-		{
-			_todoHistory = value;
-			OnPropertyChanged(nameof(TodoHistory));
-		}
+		set => SetProperty(ref _todoHistory, value);
 	}
 
 	private ObservableCollection<string> _listNames;
@@ -209,11 +185,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _listNames;
 
-		set
-		{
-			_listNames = value;
-			OnPropertyChanged(nameof(ListNames));
-		}
+		set => SetProperty(ref _listNames, value);
 	}
 
 	private string _newTaskName;
@@ -221,11 +193,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _newTaskName;
 
-		set
-		{
-			_newTaskName = value;
-			OnPropertyChanged(nameof(NewTaskName));
-		}
+		set => SetProperty(ref _newTaskName, value);
 	}
 
 	private DateTime _newDue;
@@ -234,11 +202,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _newDue;
 
-		set
-		{
-			_newDue = value;
-			OnPropertyChanged(nameof(NewDue));
-		}
+		set => SetProperty(ref _newDue, value);
 	}
 
 	private string _newDescription;
@@ -246,22 +210,14 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _newDescription;
 
-		set
-		{
-			_newDescription = value;
-			OnPropertyChanged(NewDescription);
-		}
+		set => SetProperty(ref _newDescription, value);
 	}
 	private RepeatsOption _selectedRepeats;
 	public RepeatsOption SelectedRepeats
 	{
 		get => _selectedRepeats;
 
-		set
-		{
-			_selectedRepeats = value;
-			OnPropertyChanged(nameof(SelectedRepeats));
-		}
+		set => SetProperty(ref _selectedRepeats, value);
 	}
 
 	private string _listName = "Minhas Tarefas";
@@ -269,11 +225,7 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		get => _listName;
 
-		set
-		{
-			_listName = value;
-			OnPropertyChanged(nameof(ListName));
-		}
+		set => SetProperty(ref _listName, value);
 	}
 
 	public IEnumerable<TodosByListName> TodosByListName
@@ -341,15 +293,5 @@ public class TodoWindowViewModel : ViewModelBase, INotifyPropertyChanged
 				new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
 		OnTaskAdded?.Invoke();
-	}
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	protected new virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(
-			this,
-			new PropertyChangedEventArgs(propertyName)
-		);
 	}
 }
