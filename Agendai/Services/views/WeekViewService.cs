@@ -1,4 +1,5 @@
-﻿using Agendai.Models;
+﻿using Agendai.Data.Models;
+using Agendai.Models;
 using System;
 using System.Collections.ObjectModel;
 

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Agendai.Models;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Agendai.Data.Models;
 
 
 namespace Agendai.ViewModels;

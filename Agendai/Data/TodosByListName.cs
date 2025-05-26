@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Agendai.Models;
-
+using Agendai.Data.Models;
 
 namespace Agendai.Data;
 

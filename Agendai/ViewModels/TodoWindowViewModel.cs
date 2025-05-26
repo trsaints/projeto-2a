@@ -7,8 +7,8 @@ using System.ComponentModel;
 using System.Linq;
 using Agendai.Data;
 using Agendai.Data.Converters;
-using Agendai.Models;
 using DynamicData.Binding;
+using Agendai.Data.Models;
 
 
 namespace Agendai.ViewModels;

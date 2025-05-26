@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Agendai.Models;
 using Avalonia;
+using Agendai.Data.Models;
 
 
 namespace Agendai.Views.Components.TodoList;

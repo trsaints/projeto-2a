@@ -1,3 +1,5 @@
+using Agendai.Data.Models;
+
 namespace Agendai.Models;
 
 

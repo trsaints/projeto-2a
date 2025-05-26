@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 
 public abstract class Recurrence(ulong id, string name) : Entity(id, name)

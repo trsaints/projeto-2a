@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System;
 
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 
 public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
@@ -24,7 +24,7 @@ public class Todo(ulong id, string name) : Recurrence(id, name), INotifyProperty
 			}
 		}
 	}
-	
+
 	public event PropertyChangedEventHandler PropertyChanged;
 	public event Action<Todo, TodoStatus>? OnStatusChanged;
 
