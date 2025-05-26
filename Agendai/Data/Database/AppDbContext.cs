@@ -23,7 +23,12 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={Path.Combine(DatabasePath, "agendai.db")}");
+        if (!Path.Exists(DataPath))
+        {
+            Directory.CreateDirectory(DataPath);
+        }
+
+        optionsBuilder.UseSqlite($"Data Source={Path.Combine(DatabasePath, "Agendai", "Dados", "agendai.db")}");
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -44,6 +49,10 @@ public class AppDbContext : DbContext
                 .HasForeignKey(s => s.TodoId)
                 .OnDelete(DeleteBehavior.Cascade);
     }
+
+    private string DataPath => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        "Agendai", "Dados");
 
     private string DatabasePath
     {
