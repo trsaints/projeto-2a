@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
+             xmlns:eventList="clr-namespace:Agendai.Views.Components.EventList"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Agendai.Views.Components.AgendaSidebar.AgendaSidebar"
+             x:DataType="vm:AgendaWindowViewModel">
+    <Grid RowDefinitions="Auto,0.4*,0.5*" Margin="16">
+        <Button Grid.Row="0" Content="Criar Evento" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Padding="16,10,16,10" x:Name="NewTaskButton" CornerRadius="32" Background="#39A0ED"
+                Command="{Binding  }" />
+
+        <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" Margin="0,16,0,0">
+            <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
+        </Border>
+        
+    </Grid>
+</UserControl>

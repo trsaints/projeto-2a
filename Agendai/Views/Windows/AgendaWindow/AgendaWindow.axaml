@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:agenda="clr-namespace:Agendai.Views.Components.Agenda"
-             xmlns:homeSidebar="clr-namespace:Agendai.Views.Components.HomeSidebar"
+             xmlns:agendaSidebar="clr-namespace:Agendai.Views.Components.AgendaSidebar"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
     <Grid ColumnDefinitions="0.25*,0.75*">
-        <homeSidebar:HomeSidebar Grid.Column="0" />
+        <agendaSidebar:AgendaSidebar Grid.Column="0" />
 
         <StackPanel Grid.Column="1">
             <StackPanel Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
