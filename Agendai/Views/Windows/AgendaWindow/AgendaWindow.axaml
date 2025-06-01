@@ -5,7 +5,6 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:agenda="clr-namespace:Agendai.Views.Components.Agenda"
              xmlns:agendaSidebar="clr-namespace:Agendai.Views.Components.AgendaSidebar"
-             xmlns:eventForm="clr-namespace:Agendai.Views.Components.EventForm"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
@@ -27,12 +26,5 @@
             
             <agenda:Agenda />
         </StackPanel>
-        
-        <Panel 
-            Grid.ColumnSpan="2"
-            IsVisible="True"
-            ZIndex="100">
-            <eventForm:EventForm />
-        </Panel>
     </Grid>
 </UserControl>
