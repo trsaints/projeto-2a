@@ -36,7 +36,7 @@
                             HorizontalContentAlignment="Left" />
 
                     <Button Content="Tarefa"
-                            Command="{Binding OpenTodoCommand}"
+                            Command="{Binding OpenTodoFormCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"
