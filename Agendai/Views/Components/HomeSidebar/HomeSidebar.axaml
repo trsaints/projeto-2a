@@ -29,7 +29,7 @@
 
                 <StackPanel Margin="0 0 0 5">
                     <Button Content="Evento"
-                            Command="{Binding OpenAgendaCommand}"
+                            Command="{Binding OpenEventFormCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"

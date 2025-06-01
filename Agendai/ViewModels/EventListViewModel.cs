@@ -13,6 +13,21 @@ public class EventListViewModel : ViewModelBase
 	public Action? OnEventAdded { get; set; }
 	public EventListViewModel()
 	{
+		OnEventAdded = () => { OpenAddEvent = false; };
+		SelectTarefaCommand = new RelayCommand(
+			() =>
+			{
+				OpenAddEvent = true;
+			}
+		);
+		AddEventCommand = new RelayCommand(AddEvent);
+		CancelCommand = new RelayCommand(
+			() =>
+			{
+				OpenAddEvent = false;
+			}
+		);
+		
 		Events =
 		[
 			new Event(1, "Conferência da Pamonha")
@@ -51,6 +66,21 @@ public class EventListViewModel : ViewModelBase
             Repeats.Monthly,
             Repeats.Anually
 	};
+	
+	private bool _openAddEvent;
+
+	public bool OpenAddEvent
+	{
+		get => _openAddEvent;
+
+		set => SetProperty(ref _openAddEvent, value);
+	}
+	
+	public  ICommand AddEventCommand { get; }
+
+	public ICommand CancelCommand { get; }
+	
+	public ICommand SelectTarefaCommand { get; }
 	
 	private string _newEventName;
 	public string NewEventName

@@ -6,85 +6,81 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.EventList.AddEvent"
              x:DataType="vm:EventListViewModel">
-    
-    <Border Background="White" CornerRadius="8" Padding="25" 
-            Width="400" Height="400"
-            BorderBrush="#EEEEEE" BorderThickness="1">
+    <StackPanel Spacing="16">
         
-        <StackPanel Spacing="20">
-            <TextBlock 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                FontWeight="Bold">
-                Criar Novo Evento
-            </TextBlock>
-            <!-- Nome -->
-            <StackPanel Spacing="6">
-                <Label Target="EventTitle">Título</Label>
-                <TextBox Text="{Binding NewEventName}"
-                         FontSize="14" Watermark="Ex.: Confra da Empresa"
-                         BorderThickness="1"
-                         BorderBrush="#DDDDDD"
-                         Margin="0,0,0,8"
-                         Name="EventTitle"/>
-            </StackPanel>
-            
-            <!-- Descrição -->
-            <StackPanel Spacing="6">
-                <Label Target="EventDesc">Descrição</Label>
-                <TextBox Text="{Binding NewDescription}"
-                         FontSize="14" Watermark="Ex.: Confra de comemoração de fim de ano"
-                         Padding="14,10"
-                         AcceptsReturn="True"
-                         Height="90"
-                         BorderThickness="1"
-                         BorderBrush="#DDDDDD"
-                         Margin="0,0,0,8"
-                         Name="EventDesc"/>
-            </StackPanel>
-            
-            <StackPanel Spacing="6">
-                <Label Target="EventDate">Data do Evento</Label>
-                <DatePicker SelectedDate="{Binding NewDue, 
-                            Converter={StaticResource DateConverter}}"
-                            FontSize="14"
-                            Padding="14,10"
-                            BorderThickness="1"
-                            BorderBrush="#DDDDDD"
-                            Margin="0,0,0,8"
-                            Name="EventDate"/>
-            </StackPanel>
-                
-            <StackPanel Spacing="6" Grid.Column="0">
-                <Label Target="EventFrequency">Frequência</Label>
-                <ComboBox ItemsSource="{Binding RepeatOptions}"
-                          SelectedItem="{Binding Repeat}"
-                          SelectedIndex="0"
-                          FontSize="14"
-                          BorderThickness="1"
-                          BorderBrush="#DDDDDD"
-                          Name="EventFrequency"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
-                <Button Content="Cancelar" 
-                        Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
-                        Padding="16,12" HorizontalContentAlignment="Center"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Background="#0078D7"
-                        Foreground="White"
-                        Command="{Binding }"/>
-                <Button Content="Salvar"
-                        Margin="0,0,0,0" CornerRadius="10" HorizontalAlignment="Right"
-                        Padding="16,12" HorizontalContentAlignment="Center"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Background="#0078D7"
-                        Foreground="White"
-                        Command="{Binding AddEvent}"/>
-            </StackPanel>
+        <StackPanel Spacing="4">
+            <Label Target="EventName" FontWeight="Medium">Nome do evento</Label>
+            <TextBox x:Name="EventName"
+                     Text="{Binding NewEventName}"
+                     FontSize="14"
+                     Watermark="Ex.: Reunião de equipe"
+                     BorderThickness="1"
+                     BorderBrush="#DDDDDD" />
         </StackPanel>
-    </Border>
-  
+
+        <StackPanel Spacing="4">
+            <Label Target="EventDescription" FontWeight="Medium">Descrição</Label>
+            <TextBox x:Name="EventDescription"
+                     Text="{Binding NewDescription}"
+                     FontSize="14"
+                     Watermark="Adicione uma descrição"
+                     Padding="14,10"
+                     AcceptsReturn="True"
+                     Height="90"
+                     BorderThickness="1"
+                     BorderBrush="#DDDDDD" />
+        </StackPanel>
+
+        <Border CornerRadius="16"
+                BorderBrush="Transparent"
+                Background="#EBE6E7"
+                Padding="16 8">
+            <StackPanel Spacing="4">
+                <Label Target="EventDue" FontWeight="Medium">Data e hora</Label>
+                <DatePicker x:Name="EventDue"
+                            SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
+                            FontSize="14"
+                            BorderBrush="Transparent"
+                            Background="#EBE6E7" />
+            </StackPanel>
+        </Border>
+        
+        <StackPanel Spacing="4">
+            <Label Target="EventRepeats" FontWeight="Medium">Repetição</Label>
+            <ComboBox x:Name="EventRepeats"
+                      ItemsSource="{Binding RepeatOptions}"
+                      SelectedItem="{Binding Repeat}"
+                      FontSize="14"
+                      CornerRadius="8"
+                      BorderBrush="Transparent"
+                      Background="#EBE6E7" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="16">
+            <Button Content="Cancelar"
+                    CornerRadius="24"
+                    Padding="16,8"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Background="White"
+                    Foreground="#0078D7"
+                    BorderBrush="#0078D7"
+                    BorderThickness="2"
+                    Command="{Binding CancelCommand}" />
+
+            <Button Content="Salvar"
+                    CornerRadius="24"
+                    Padding="16,8"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Background="#0078D7"
+                    Foreground="White"
+                    BorderBrush="#0078D7"
+                    BorderThickness="2"
+                    Command="{Binding AddEventCommand}" />
+        </StackPanel>
+
+    </StackPanel>
 </UserControl>
