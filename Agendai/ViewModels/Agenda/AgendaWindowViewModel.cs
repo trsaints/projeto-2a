@@ -126,6 +126,10 @@ namespace Agendai.ViewModels.Agenda
         public void GoToPreviousDay() => DayController.GoToPreviousDay();
         public void GoToNextDay() => DayController.GoToNextDay();
         public void GoToDay(int date) => DayController.GoToDay(date);
+        
+        public HomeWindowViewModel HomeWindowVm { get; set; }
+        public TodoWindowViewModel TodoWindowVm { get; set; }
+        public EventListViewModel EventListVm { get; set; }
 
 
         public AgendaWindowViewModel(DateTime? specificDay = null, int selectedIndex = 0)
@@ -141,6 +145,9 @@ namespace Agendai.ViewModels.Agenda
 
             UpdateDateSelectors();
             UpdateDataGridItems();
+            HomeWindowVm = new HomeWindowViewModel();
+            TodoWindowVm = new TodoWindowViewModel();
+            EventListVm = new EventListViewModel();
         }
 
 
