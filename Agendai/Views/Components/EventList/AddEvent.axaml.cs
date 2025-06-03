@@ -10,6 +10,5 @@ public partial class AddEvent : UserControl
     public AddEvent()
     {
         InitializeComponent();
-        DataContext = new EventListViewModel();
     }
 }
