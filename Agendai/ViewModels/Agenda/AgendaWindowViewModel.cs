@@ -132,7 +132,7 @@ namespace Agendai.ViewModels.Agenda
         public EventListViewModel EventListVm { get; set; }
 
 
-        public AgendaWindowViewModel(DateTime? specificDay = null, int selectedIndex = 0)
+        public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
         {
             MonthController = new AgendaMonthController(this);
             WeekController = new AgendaWeekController(this);
@@ -145,9 +145,12 @@ namespace Agendai.ViewModels.Agenda
 
             UpdateDateSelectors();
             UpdateDataGridItems();
-            HomeWindowVm = new HomeWindowViewModel();
-            TodoWindowVm = new TodoWindowViewModel();
-            EventListVm = new EventListViewModel();
+            if (homeWindowVm != null)
+            {
+                HomeWindowVm = homeWindowVm;
+                TodoWindowVm = HomeWindowVm.TodoWindowVm;
+                EventListVm = HomeWindowVm.EventListVm;
+            }
         }
 
 

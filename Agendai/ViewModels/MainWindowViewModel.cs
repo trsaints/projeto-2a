@@ -44,9 +44,20 @@ public class MainWindowViewModel : ViewModelBase
 
     public void NavigateToAgenda()
     {
-        var agendaViewModel = new AgendaWindowViewModel();
-        agendaViewModel.MainViewModel = this;
-        CurrentViewModel = agendaViewModel;
+        if (CurrentViewModel is HomeWindowViewModel homeViewModel)
+        {
+            var agendaViewModel = new AgendaWindowViewModel(homeViewModel, null, 0);
+            agendaViewModel.MainViewModel = this;
+            CurrentViewModel = agendaViewModel;
+        }
+        else
+        {
+            var fallbackHomeVm = new HomeWindowViewModel();
+            fallbackHomeVm.MainViewModel = this;
+            var agendaViewModel = new AgendaWindowViewModel(fallbackHomeVm, null, 0);
+            agendaViewModel.MainViewModel = this;
+            CurrentViewModel = agendaViewModel;
+        }
     }
 
     public void NavigateToTodo()
@@ -72,19 +83,27 @@ public class MainWindowViewModel : ViewModelBase
                 agendaViewModel.SelectedIndex = 2;
                 agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
                 break;
+            case HomeWindowViewModel homeViewModel:
+            {
+                var agendaViewModel = new AgendaWindowViewModel(homeViewModel, selectedDate, 2);
+                agendaViewModel.MainViewModel = this;
+                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                CurrentViewModel = agendaViewModel;
+                break;
+            }
             default:
             {
-                CurrentViewModel = new AgendaWindowViewModel(selectedDate, 2);
-                if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
-                {
-                    agendaViewModel.MainViewModel = this;
-                    agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
-                }
+                var fallbackHomeVm = new HomeWindowViewModel();
+                fallbackHomeVm.MainViewModel = this;
+                var agendaViewModel = new AgendaWindowViewModel(fallbackHomeVm, selectedDate, 2);
+                agendaViewModel.MainViewModel = this;
+                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                CurrentViewModel = agendaViewModel;
                 break;
             }
         }
-
     }
+
 
     
 }
