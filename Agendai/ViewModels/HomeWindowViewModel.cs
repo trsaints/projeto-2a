@@ -8,8 +8,8 @@ public class HomeWindowViewModel : ViewModelBase
 {
 	private bool _isPopupOpen;
 
-	public TodoWindowViewModel TodoWindowVM { get; set; }
-	public EventListViewModel EventListVM { get; set; }
+	public TodoWindowViewModel TodoWindowVm { get; set; }
+	public EventListViewModel EventListVm { get; set; }
 
 	private ICommand _openPopupCommand;
 	private ICommand _openTodoFormCommand;
@@ -40,8 +40,8 @@ public class HomeWindowViewModel : ViewModelBase
 		_openTodoCommand = new RelayCommand(OpenTodo);
 		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
 		_openEventFormCommand = new RelayCommand(OpenEventForm);
-		TodoWindowVM = new TodoWindowViewModel();
-		EventListVM = new EventListViewModel();
+		TodoWindowVm = new TodoWindowViewModel();
+		EventListVm = new EventListViewModel();
 	}
 
 	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
@@ -53,18 +53,18 @@ public class HomeWindowViewModel : ViewModelBase
 	private void OpenTodoForm()
 	{
 		IsPopupOpen = false;
-		if (TodoWindowVM != null)
+		if (TodoWindowVm != null)
 		{
-			TodoWindowVM.OpenAddTask = true;
+			TodoWindowVm.OpenAddTask = true;
 		}
 	}
 
 	private void OpenEventForm()
 	{
 		IsPopupOpen = false;
-		if (EventListVM != null)
+		if (EventListVm != null)
 		{
-			EventListVM.OpenAddEvent = true;
+			EventListVm.OpenAddEvent = true;
 			
 		}
 	}
