@@ -148,17 +148,42 @@ namespace Agendai.ViewModels.Agenda
                 TodoList = HomeWindowVm.TodoWindowVm;
                 EventList = HomeWindowVm.EventListVm;
             }
-            
+
             EventList.Events.CollectionChanged += (s, e) =>
             {
+                if (e.NewItems != null)
+                {
+                    foreach (INotifyPropertyChanged item in e.NewItems)
+                        item.PropertyChanged += (s2, e2) => UpdateDataGridItems();
+                }
+                if (e.OldItems != null)
+                {
+                    foreach (INotifyPropertyChanged item in e.OldItems)
+                        item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+                }
                 UpdateDataGridItems();
             };
 
             TodoList.Todos.CollectionChanged += (s, e) =>
             {
+                if (e.NewItems != null)
+                {
+                    foreach (INotifyPropertyChanged item in e.NewItems)
+                        item.PropertyChanged += (s2, e2) => UpdateDataGridItems();
+                }
+                if (e.OldItems != null)
+                {
+                    foreach (INotifyPropertyChanged item in e.OldItems)
+                        item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+                }
                 UpdateDataGridItems();
             };
-            
+
+            foreach (INotifyPropertyChanged item in EventList.Events)
+                item.PropertyChanged += (s2, e2) => UpdateDataGridItems();
+
+            foreach (INotifyPropertyChanged item in TodoList.Todos)
+                item.PropertyChanged += (s2, e2) => UpdateDataGridItems();
         }
 
 
