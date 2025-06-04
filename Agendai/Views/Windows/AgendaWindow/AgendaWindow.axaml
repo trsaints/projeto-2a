@@ -29,7 +29,7 @@
             <agenda:Agenda />
         </StackPanel>
         
-        <Panel IsVisible="{Binding TodoWindowVm.OpenAddTask}"
+        <Panel IsVisible="{Binding TodoList.OpenAddTask}"
                ZIndex="100"
                Grid.ColumnSpan="2">
             <Border Width="{Binding $parent[Window].Bounds.Width}"
@@ -48,14 +48,14 @@
                             CornerRadius="10"
                             Padding="20"
                             BoxShadow="0 4 20 0 #66000000">
-                        <todoForm:TodoForm DataContext="{Binding TodoWindowVm}" />
+                        <todoForm:TodoForm DataContext="{Binding TodoList}" />
                     </Border>
                 </Grid>
             </Border>
         </Panel>
         <Panel 
             Grid.ColumnSpan="2"
-            IsVisible="{Binding EventListVm.OpenAddEvent}"
+            IsVisible="{Binding EventList.OpenAddEvent}"
             ZIndex="100">
             <Border Width="{Binding $parent[Window].Bounds.Width}"
                     Height="{Binding $parent[Window].Bounds.Height}"
@@ -72,7 +72,7 @@
                             CornerRadius="10"
                             Padding="20"
                             BoxShadow="0 4 20 0 #66000000">
-                        <addEvent:AddEvent DataContext="{Binding EventListVm}" />
+                        <addEvent:AddEvent DataContext="{Binding EventList}" />
                     </Border>
                 </Grid>
             </Border>

@@ -128,8 +128,6 @@ namespace Agendai.ViewModels.Agenda
         public void GoToDay(int date) => DayController.GoToDay(date);
         
         public HomeWindowViewModel HomeWindowVm { get; set; }
-        public TodoWindowViewModel TodoWindowVm { get; set; }
-        public EventListViewModel EventListVm { get; set; }
 
 
         public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
@@ -148,8 +146,8 @@ namespace Agendai.ViewModels.Agenda
             if (homeWindowVm != null)
             {
                 HomeWindowVm = homeWindowVm;
-                TodoWindowVm = HomeWindowVm.TodoWindowVm;
-                EventListVm = HomeWindowVm.EventListVm;
+                TodoList = HomeWindowVm.TodoWindowVm;
+                EventList = HomeWindowVm.EventListVm;
             }
         }
 
