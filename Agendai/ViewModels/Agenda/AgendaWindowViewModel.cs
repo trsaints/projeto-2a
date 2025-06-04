@@ -5,9 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Agendai.Services.Views;
-using CommunityToolkit.Mvvm.Input;
+using Agendai.Views.Components.EventList;
 
 namespace Agendai.ViewModels.Agenda
 {
@@ -149,6 +148,17 @@ namespace Agendai.ViewModels.Agenda
                 TodoList = HomeWindowVm.TodoWindowVm;
                 EventList = HomeWindowVm.EventListVm;
             }
+            
+            EventList.Events.CollectionChanged += (s, e) =>
+            {
+                UpdateDataGridItems();
+            };
+
+            TodoList.Todos.CollectionChanged += (s, e) =>
+            {
+                UpdateDataGridItems();
+            };
+            
         }
 
 
@@ -178,7 +188,6 @@ namespace Agendai.ViewModels.Agenda
         {
             var culture = new CultureInfo("pt-BR");
 
-            // Usa a data já atribuída (CurrentDay), ao invés de DateTime.Today
             SelectedMonth = culture.TextInfo.ToTitleCase(CurrentDay.ToString("MMMM", culture));
 
             var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(CurrentDay);
@@ -204,5 +213,6 @@ namespace Agendai.ViewModels.Agenda
                 OnPropertyChanged(propertyName);
             }
         }
+
     }
 }
