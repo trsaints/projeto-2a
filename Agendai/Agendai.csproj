@@ -53,5 +53,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
+    <UpToDateCheckInput Remove="Views\Components\AgendaSidebar\AgendaSidebar.axaml" />
   </ItemGroup>
 </Project>
