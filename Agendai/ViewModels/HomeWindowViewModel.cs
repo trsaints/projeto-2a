@@ -40,7 +40,7 @@ public class HomeWindowViewModel : ViewModelBase
 		_openTodoCommand = new RelayCommand(OpenTodo);
 		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
 		_openEventFormCommand = new RelayCommand(OpenEventForm);
-		TodoWindowVm = new TodoWindowViewModel();
+		TodoWindowVm = new TodoWindowViewModel(this);
 		EventListVm = new EventListViewModel();
 	}
 

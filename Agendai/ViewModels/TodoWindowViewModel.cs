@@ -15,7 +15,11 @@ namespace Agendai.ViewModels;
 
 public class TodoWindowViewModel : ViewModelBase
 {
-	public TodoWindowViewModel()
+	
+	public HomeWindowViewModel HomeWindowVm { get; set; }
+	public EventListViewModel EventListVm { get; set; }
+	
+	public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
 	{
 		OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
 		OnTaskAdded      = () => { OpenAddTask = false; };
@@ -89,6 +93,12 @@ public class TodoWindowViewModel : ViewModelBase
 
 		_incompleteResume =
 				new ObservableCollection<Todo>(_incompleteTodos.Take(7));
+
+		if (homeWindowVm != null)
+		{
+			HomeWindowVm = homeWindowVm;
+			EventListVm = HomeWindowVm.EventListVm;
+		}
 	}
 
 	public string Title { get; set; } = "Tarefas";

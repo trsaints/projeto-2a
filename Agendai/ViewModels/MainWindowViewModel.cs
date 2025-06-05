@@ -59,12 +59,22 @@ public class MainWindowViewModel : ViewModelBase
             CurrentViewModel = agendaViewModel;
         }
     }
-
+    
     public void NavigateToTodo()
     {
-        var todoViewModel = new TodoWindowViewModel();
-        todoViewModel.MainViewModel = this;
-        CurrentViewModel = todoViewModel;
+        if (CurrentViewModel is HomeWindowViewModel homeViewModel)
+        {
+            var todoViewModel = homeViewModel.TodoWindowVm;
+            todoViewModel.EventListVm = homeViewModel.EventListVm;
+            todoViewModel.MainViewModel = this;
+            CurrentViewModel = todoViewModel;
+        }
+        else
+        {
+            var todoViewModel = new TodoWindowViewModel();
+            todoViewModel.MainViewModel = this;
+            CurrentViewModel = todoViewModel;   
+        }
     }
 
     public void NavigateToPomodoro()
