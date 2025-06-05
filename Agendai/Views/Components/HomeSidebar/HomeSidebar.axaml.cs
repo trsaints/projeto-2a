@@ -1,10 +1,10 @@
 using System;
-using System.Linq;
 using Agendai.Messages;
-using Agendai.ViewModels;
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Messaging;
+using Agendai.ViewModels;
+using Avalonia.Interactivity;
 
 namespace Agendai.Views.Components.HomeSidebar;
 
@@ -20,6 +20,14 @@ public partial class HomeSidebar : UserControl
         if (e.AddedItems.Count > 0 && e.AddedItems[0] is DateTime selectedDate)
         {
             WeakReferenceMessenger.Default.Send(new NavigateToDateMessenger(selectedDate));
+        }
+    }
+
+    private void OnCheckBoxChecked(object? sender, RoutedEventArgs e)
+    {
+        if (sender is CheckBox checkBox && checkBox.DataContext is TodoWindowViewModel todo)
+        {
+            Console.WriteLine($"Item selecionado: {todo.ListName} (Checked)");
         }
     }
 }
