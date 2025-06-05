@@ -24,6 +24,28 @@ public class HomeWindowViewModel : ViewModelBase
 		set => SetProperty(ref _isPopupOpen, value);
 	}
 
+	private bool _isAgendaWindow;
+	public bool IsAgendaWindow
+	{
+		get => _isAgendaWindow;
+		set => SetProperty(ref _isAgendaWindow, value);
+	}
+
+	private bool _isTodoWindow;
+	public bool IsTodoWindow
+	{
+		get => _isTodoWindow;
+		set => SetProperty(ref _isTodoWindow, value);
+	}
+
+	private bool _isPomodoroWindow;
+	public bool IsPomodoroWindow
+	{
+		get => _isPomodoroWindow;
+		set => SetProperty(ref _isPomodoroWindow, value);
+	}
+
+
 	public ICommand OpenPopupCommand => _openPopupCommand;
 	public ICommand OpenTodoFormCommand => _openTodoFormCommand;
 	
