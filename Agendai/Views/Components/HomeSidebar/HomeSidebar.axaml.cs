@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Messaging;
 using Agendai.ViewModels;
 using Avalonia.Interactivity;
+using Agendai.Data;
 
 namespace Agendai.Views.Components.HomeSidebar;
 
@@ -25,9 +26,16 @@ public partial class HomeSidebar : UserControl
 
     private void OnCheckBoxChecked(object? sender, RoutedEventArgs e)
     {
-        if (sender is CheckBox checkBox && checkBox.DataContext is TodoWindowViewModel todo)
+        if (sender is CheckBox checkBox)
         {
-            Console.WriteLine($"Item selecionado: {todo.ListName} (Checked)");
+            var dataContext = checkBox.DataContext;
+
+            if (dataContext is TodosByListName todoList)
+            {
+                Console.WriteLine($"Item: {todoList.ListName}, IsChecked: {checkBox.IsChecked}");
+            }
         }
     }
+
+
 }

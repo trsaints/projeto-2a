@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:data="clr-namespace:Agendai.Data"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.HomeSidebar.HomeSidebar"
@@ -71,6 +72,7 @@
                                 <CheckBox 
                                     IsCheckedChanged="OnCheckBoxChecked" 
                                     VerticalAlignment="Center"
+                                    DataContext="{Binding}"
                                     />
                                 <TextBlock Text="{Binding ListName}" VerticalAlignment="Center"/>
                             </StackPanel>
