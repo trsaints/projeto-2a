@@ -2,6 +2,6 @@
 
 namespace Agendai.Data.Repositories.Interfaces;
 
-interface IShiftRepository : IRepository<Shift>
+public interface IShiftRepository : IRepository<Shift>
 {
 }

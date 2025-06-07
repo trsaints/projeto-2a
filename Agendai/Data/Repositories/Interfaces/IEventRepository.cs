@@ -2,6 +2,6 @@
 
 namespace Agendai.Data.Repositories.Interfaces;
 
-interface IEventRepository : IRepository<Event>
+public interface IEventRepository : IRepository<Event>
 {
 }
