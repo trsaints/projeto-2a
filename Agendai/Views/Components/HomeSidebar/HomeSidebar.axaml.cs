@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
-using Agendai.Messages;
-using Agendai.ViewModels;
+using Agendai.Navigators;
 using Avalonia.Controls;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.Views.Components.HomeSidebar;

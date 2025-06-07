@@ -1,8 +1,6 @@
 ﻿using System;
-using Agendai.Messages;
-using Avalonia;
+using Agendai.Navigators;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
 
 
