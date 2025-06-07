@@ -8,6 +8,8 @@ using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using Agendai.Data.Dtos;
 using Agendai.Data.Repositories.Interfaces;
+using Agendai.Utils;
+using System.Threading.Tasks;
 
 
 namespace Agendai.ViewModels;
@@ -17,7 +19,7 @@ public class TodoWindowViewModel : ViewModelBase
     private bool _isPopupOpen;
     private bool _openAddTask;
     private Action? OnTaskAdded { get; set; }
-    private ObservableCollection<Todo>? _todos;
+    private ObservableCollection<Todo>? _todos = [];
     private ObservableCollection<Todo>? _incompleteTodos;
     private ObservableCollection<Todo>? _todoHistory;
     private ObservableCollection<Todo>? _incompleteResume;
@@ -42,7 +44,7 @@ public class TodoWindowViewModel : ViewModelBase
                 IsPopupOpen = false;
             }
         );
-        AddTodoCommand = new RelayCommand(AddTodo);
+        AddTodoCommand = new AsyncRelayCommand(AddTodoAsync);
         CancelCommand = new RelayCommand(
             () =>
             {
@@ -51,7 +53,7 @@ public class TodoWindowViewModel : ViewModelBase
             }
         );
 
-        _todos = [];
+        DatabaseUtils.MapToObservable(_todoRepository, _todos).Wait();
 
         foreach (var todo in _todos)
         {
@@ -221,7 +223,7 @@ public class TodoWindowViewModel : ViewModelBase
         return todo.Status == TodoStatus.Complete;
     }
 
-    public void AddTodo()
+    public async Task AddTodoAsync()
     {
         if (string.IsNullOrWhiteSpace(NewTaskName)) return;
 
@@ -233,9 +235,13 @@ public class TodoWindowViewModel : ViewModelBase
             ListName = ListName
         };
 
+        var created = await _todoRepository.Create(newTodo);
+
+        if (created is null) return;
+
         newTodo.OnStatusChanged += HandleStatusChanged;
 
-        Todos.Add(newTodo);
+        Todos.Add(created);
 
         NewTaskName = string.Empty;
         NewDescription = string.Empty;
