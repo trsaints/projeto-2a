@@ -12,15 +12,19 @@ namespace Agendai.ViewModels.Agenda;
 
 public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
+    private readonly IEventRepository _eventRepository;
     private readonly ITodoRepository _todoRepository;
     private int _selectedIndex;
 
-    public AgendaWindowViewModel(ITodoRepository todoRepository) {
+    public AgendaWindowViewModel(IEventRepository eventRepository,
+        ITodoRepository todoRepository)
+    {
+        _eventRepository = eventRepository;
         _todoRepository = todoRepository;
         TodoViewModel = new TodoWindowViewModel(todoRepository);
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
     public string Title { get; set; } = "Agenda";
 
@@ -102,7 +106,7 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         get => _currentDay;
         set => SetProperty(ref _currentDay, value);
     }
-    
+
     private bool _showData = true;
     public bool ShowData
     {
@@ -122,7 +126,7 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         ShowData = !ShowData;
     }
-    
+
     public void GoToPreviousMonth() => MonthController.GoToPreviousMonth();
     public void GoToNextMonth() => MonthController.GoToNextMonth();
 
@@ -134,8 +138,13 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     public void GoToDay(int date) => DayController.GoToDay(date);
 
 
-    public AgendaWindowViewModel(DateTime? specificDay = null, int selectedIndex = 0)
+    public AgendaWindowViewModel(IEventRepository eventRepository,
+        ITodoRepository todoRepository,
+        DateTime? specificDay = null, 
+        int selectedIndex = 0)
     {
+        _eventRepository = eventRepository;
+        _todoRepository = todoRepository;
         MonthController = new AgendaMonthController(this);
         WeekController = new AgendaWeekController(this);
         DayController = new AgendaDayController(this);

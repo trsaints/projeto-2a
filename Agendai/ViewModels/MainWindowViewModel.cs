@@ -12,8 +12,8 @@ public class MainWindowViewModel : ViewModelBase
     protected readonly ITodoRepository TodoRepository;
     protected readonly IShiftRepository ShiftRepository;
 
-    public MainWindowViewModel(IEventRepository eventRepository, 
-        ITodoRepository todoRepository, 
+    public MainWindowViewModel(IEventRepository eventRepository,
+        ITodoRepository todoRepository,
         IShiftRepository shiftRepository)
     {
         EventRepository = eventRepository;
@@ -27,7 +27,7 @@ public class MainWindowViewModel : ViewModelBase
         {
             homeViewModel.MainViewModel = this;
         }
-        
+
         WeakReferenceMessenger.Default.Register<NavigateToDateMessenger>(this, (r, message) =>
         {
             NavigateToSpecificDay(message.SelectedDate);
@@ -54,7 +54,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void NavigateToAgenda()
     {
-        var agendaViewModel = new AgendaWindowViewModel
+        var agendaViewModel = new AgendaWindowViewModel(EventRepository, TodoRepository)
         {
             MainViewModel = this
         };
@@ -79,29 +79,38 @@ public class MainWindowViewModel : ViewModelBase
 
         CurrentViewModel = pomodoroViewModel;
     }
-    
+
     public void NavigateToSpecificDay(DateTime selectedDate)
     {
         switch (CurrentViewModel)
         {
             case AgendaWindowViewModel agendaViewModel:
-                agendaViewModel.CurrentDay = selectedDate;
-                agendaViewModel.SelectedIndex = 2;
-                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
-                break;
-            default:
-            {
-                CurrentViewModel = new AgendaWindowViewModel(selectedDate, 2);
-                if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
                 {
-                    agendaViewModel.MainViewModel = this;
+                    agendaViewModel.CurrentDay = selectedDate;
+                    agendaViewModel.SelectedIndex = 2;
                     agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+
+                    break;
                 }
-                break;
-            }
+
+            default:
+                {
+                    CurrentViewModel = new AgendaWindowViewModel(EventRepository,
+                        TodoRepository,
+                        selectedDate,
+                        2);
+
+                    if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
+                    {
+                        agendaViewModel.MainViewModel = this;
+                        agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                    }
+
+                    break;
+                }
         }
 
     }
 
-    
+
 }
