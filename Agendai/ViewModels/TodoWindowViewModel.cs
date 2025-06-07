@@ -108,13 +108,9 @@ public class TodoWindowViewModel : ViewModelBase
             IncompleteTodos.Add(todo);
         }
 
-        IncompleteResume = new ObservableCollection<Todo>(
-            IncompleteTodos.Take(7)
-        );
+        IncompleteResume = [.. IncompleteTodos.Take(7)];
 
-        ListNames = new ObservableCollection<string>(
-            Todos.Select(t => t.ListName).OfType<string>().Distinct()
-        );
+        ListNames = [.. Todos.Select(t => t.ListName).OfType<string>().Distinct()];
 
         OnPropertyChanged(nameof(TodosByListName));
     }

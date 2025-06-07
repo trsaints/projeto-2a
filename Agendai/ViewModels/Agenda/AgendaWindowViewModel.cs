@@ -50,9 +50,9 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<MonthRow> MonthViewRows { get; set; } = new();
-    public ObservableCollection<WeekRow> WeekViewRows { get; set; } = new();
-    public ObservableCollection<DayRow> DayViewRows { get; set; } = new();
+    public ObservableCollection<MonthRow> MonthViewRows { get; set; } = [];
+    public ObservableCollection<WeekRow> WeekViewRows { get; set; } = [];
+    public ObservableCollection<DayRow> DayViewRows { get; set; } = [];
 
     public EventListViewModel EventList { get; set; } = new();
     public TodoWindowViewModel TodoViewModel { get; set; }

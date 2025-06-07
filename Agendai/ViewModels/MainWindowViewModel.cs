@@ -45,29 +45,38 @@ public class MainWindowViewModel : ViewModelBase
     // Navigation methods
     public void NavigateToHome()
     {
-        var homeViewModel = new HomeWindowViewModel();
-        homeViewModel.MainViewModel = this;
+        var homeViewModel = new HomeWindowViewModel
+        {
+            MainViewModel = this
+        };
         CurrentViewModel = homeViewModel;
     }
 
     public void NavigateToAgenda()
     {
-        var agendaViewModel = new AgendaWindowViewModel();
-        agendaViewModel.MainViewModel = this;
+        var agendaViewModel = new AgendaWindowViewModel
+        {
+            MainViewModel = this
+        };
         CurrentViewModel = agendaViewModel;
     }
 
     public void NavigateToTodo()
     {
-        var todoViewModel = new TodoWindowViewModel(TodoRepository);
-        todoViewModel.MainViewModel = this;
+        var todoViewModel = new TodoWindowViewModel(TodoRepository)
+        {
+            MainViewModel = this
+        };
         CurrentViewModel = todoViewModel;
     }
 
     public void NavigateToPomodoro()
     {
-        var pomodoroViewModel = new PomodoroWindowViewModel();
-        pomodoroViewModel.MainViewModel = this;
+        var pomodoroViewModel = new PomodoroWindowViewModel
+        {
+            MainViewModel = this
+        };
+
         CurrentViewModel = pomodoroViewModel;
     }
     
