@@ -24,9 +24,11 @@ namespace Agendai.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AgendaName")
+                        .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Due")
@@ -40,15 +42,12 @@ namespace Agendai.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Reminders")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Repeats")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Agendai.Data.Models.Shift", b =>
@@ -58,6 +57,7 @@ namespace Agendai.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<TimeOnly>("Duration")
+                        .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -75,7 +75,7 @@ namespace Agendai.Migrations
 
                     b.HasIndex("TodoId");
 
-                    b.ToTable("Shifts", (string)null);
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("Agendai.Data.Models.Todo", b =>
@@ -85,6 +85,7 @@ namespace Agendai.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Due")
@@ -100,14 +101,12 @@ namespace Agendai.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ListName")
+                        .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Reminders")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Repeats")
@@ -123,15 +122,14 @@ namespace Agendai.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Todos", (string)null);
+                    b.ToTable("Todos");
                 });
 
             modelBuilder.Entity("Agendai.Data.Models.Shift", b =>
                 {
                     b.HasOne("Agendai.Data.Models.Todo", "Todo")
                         .WithMany("Shifts")
-                        .HasForeignKey("TodoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TodoId");
 
                     b.Navigation("Todo");
                 });
@@ -140,8 +138,7 @@ namespace Agendai.Migrations
                 {
                     b.HasOne("Agendai.Data.Models.Event", "Event")
                         .WithMany("Todos")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Event");
                 });
