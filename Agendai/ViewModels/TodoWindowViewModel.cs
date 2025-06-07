@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Agendai.Data;
 using Agendai.Data.Converters;
 using DynamicData.Binding;
 using Agendai.Data.Models;
+using Agendai.Data.Dtos;
 
 
 namespace Agendai.ViewModels;

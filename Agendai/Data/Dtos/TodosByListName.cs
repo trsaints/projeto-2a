@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Agendai.Data.Models;
 
-namespace Agendai.Data;
+namespace Agendai.Data.Dtos;
 
 public class TodosByListName
 {

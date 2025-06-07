@@ -1,7 +1,7 @@
 ﻿using Agendai.Data.Converters;
 using Agendai.Data.Models;
 
-namespace Agendai.Data;
+namespace Agendai.Data.Dtos;
 
 public class RepeatsOption
 {
