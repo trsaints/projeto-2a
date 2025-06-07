@@ -1,12 +1,9 @@
 ﻿using System;
-using Agendai.Models;
 using Agendai.ViewModels.Agenda;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
-using Agendai.Messages;
+using Agendai.Navigators;
 
 public class MainWindowViewModel : ViewModelBase
 {
