@@ -1,4 +1,6 @@
 ﻿using Agendai.Data.Database;
+using Agendai.Data.Repositories;
+using Agendai.Data.Repositories.Interfaces;
 using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,6 +18,9 @@ sealed class Program
         ServiceCollection services = new();
 
         services.AddDbContext<AppDbContext>();
+        services.AddScoped<IEventRepository, EventRepository>();
+        services.AddScoped<IShiftRepository, ShiftRepository>();
+        services.AddScoped<ITodoRepository, TodoRepository>();
 
         BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
