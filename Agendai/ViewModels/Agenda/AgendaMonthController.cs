@@ -32,7 +32,7 @@ namespace Agendai.ViewModels.Agenda
             MonthViewService.GenerateMonthView(
                 _viewModel.MonthViewRows,
                 _viewModel.EventList.Events,
-                _viewModel.TodoList.Todos,
+                _viewModel.TodoViewModel.Todos,
                 _viewModel.CurrentMonth,
                 _viewModel.ShowData
             );

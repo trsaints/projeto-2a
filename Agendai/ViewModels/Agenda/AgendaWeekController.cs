@@ -32,7 +32,7 @@ namespace Agendai.ViewModels.Agenda
                 _viewModel.WeekViewRows,
                 _viewModel.Hours,
                 _viewModel.EventList.Events,
-                _viewModel.TodoList.Todos,
+                _viewModel.TodoViewModel.Todos,
                 _viewModel.CurrentWeek,
                 _viewModel.ShowData
             );

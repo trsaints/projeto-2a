@@ -32,7 +32,7 @@ namespace Agendai.ViewModels.Agenda
             
             var mappedItems = DayViewService.MapDayItemsFrom(
                 _viewModel.EventList.Events,
-                _viewModel.TodoList.Todos,
+                _viewModel.TodoViewModel.Todos,
                 selectedDate
             );
             
