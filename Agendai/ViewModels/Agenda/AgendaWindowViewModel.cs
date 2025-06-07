@@ -17,17 +17,17 @@ namespace Agendai.ViewModels.Agenda
 
         public string Title { get; set; } = "Agenda";
 
-        public string[] Days { get; set; } = new[]
-        {
+        public string[] Days { get; set; } =
+        [
             "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
-        };
+        ];
 
-        public string[] Hours { get; set; } = new[]
-        {
+        public string[] Hours { get; set; } =
+        [
             "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
             "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
             "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"
-        };
+        ];
 
         private int _selectedIndex;
         public int SelectedIndex
@@ -183,12 +183,12 @@ namespace Agendai.ViewModels.Agenda
         }
 
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        protected new void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
