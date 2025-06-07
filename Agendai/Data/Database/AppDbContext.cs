@@ -28,31 +28,10 @@ public class AppDbContext : DbContext
             Directory.CreateDirectory(DataPath);
         }
 
-        optionsBuilder.UseSqlite($"Data Source={Path.Combine(DatabasePath, "Agendai", "Dados", "agendai.db")}");
+        optionsBuilder.UseSqlite($"Data Source={Path.Combine(DataPath, "agendai.db")}");
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.Entity<Event>().ToTable("Events");
-        builder.Entity<Todo>().ToTable("Todos");
-        builder.Entity<Shift>().ToTable("Shifts");
-
-        builder.Entity<Event>()
-               .HasMany(e => e.Todos)
-               .WithOne(t => t.Event)
-               .HasForeignKey(t => t.EventId)
-               .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Todo>()
-                .HasMany(t => t.Shifts)
-                .WithOne(s => s.Todo)
-                .HasForeignKey(s => s.TodoId)
-                .OnDelete(DeleteBehavior.Cascade);
-    }
-
-    private string DataPath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-        "Agendai", "Dados");
+    private string DataPath => Path.Combine(DatabasePath, "Agendai", "Dados");
 
     private string DatabasePath
     {

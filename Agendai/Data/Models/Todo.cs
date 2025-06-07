@@ -1,13 +1,18 @@
 using System.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agendai.Data.Models;
 
-
+[Table("Todos")]
 public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
 {
+    [StringLength(64)]
     public string? ListName { get; set; }
+
+    [DefaultValue(0)]
     public uint FinishedShifts { get; set; }
     public uint TotalShifts { get; set; }
 
@@ -26,13 +31,14 @@ public class Todo(ulong id, string name) : Recurrence(id, name), INotifyProperty
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     public event Action<Todo, TodoStatus>? OnStatusChanged;
 
+    [ForeignKey(nameof(Event))]
     public ulong? EventId { get; set; }
-    public Event? Event { get; set; }
+    public virtual Event? Event { get; set; }
 
-    public ICollection<Shift>? Shifts { get; set; } = [];
+    public virtual ICollection<Shift>? Shifts { get; set; } = [];
 
     protected virtual void OnPropertyChanged(string propertyName)
     {
