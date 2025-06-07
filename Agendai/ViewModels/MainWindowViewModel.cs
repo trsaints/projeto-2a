@@ -4,11 +4,22 @@ using Agendai.ViewModels.Agenda;
 namespace Agendai.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Agendai.Navigators;
+using Agendai.Data.Repositories.Interfaces;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public MainWindowViewModel()
+    protected readonly IEventRepository EventRepository;
+    protected readonly ITodoRepository TodoRepository;
+    protected readonly IShiftRepository ShiftRepository;
+
+    public MainWindowViewModel(IEventRepository eventRepository, 
+        ITodoRepository todoRepository, 
+        IShiftRepository shiftRepository)
     {
+        EventRepository = eventRepository;
+        TodoRepository = todoRepository;
+        ShiftRepository = shiftRepository;
+
         // Initialize with HomeViewModel
         CurrentViewModel = new HomeWindowViewModel();
         // Pass reference to main view model after construction
