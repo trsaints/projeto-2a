@@ -1,6 +1,8 @@
 ﻿using Agendai.Data.Database;
 using Agendai.Data.Repositories;
 using Agendai.Data.Repositories.Interfaces;
+using Agendai.ViewModels;
+using Agendai.ViewModels.Agenda;
 using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -21,6 +23,14 @@ sealed class Program
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<IShiftRepository, ShiftRepository>();
         services.AddScoped<ITodoRepository, TodoRepository>();
+
+        services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<HomeWindowViewModel>();
+        services.AddTransient<AgendaWindowViewModel>();
+        services.AddTransient<TodoWindowViewModel>();
+        services.AddTransient<PomodoroWindowViewModel>();
+
+        App.ServiceProvider = services.BuildServiceProvider();
 
         BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
