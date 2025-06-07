@@ -59,7 +59,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void NavigateToTodo()
     {
-        var todoViewModel = new TodoWindowViewModel();
+        var todoViewModel = new TodoWindowViewModel(TodoRepository);
         todoViewModel.MainViewModel = this;
         CurrentViewModel = todoViewModel;
     }
