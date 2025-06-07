@@ -30,6 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.16" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="ReactiveUI" Version="20.2.45" />
   </ItemGroup>
 
@@ -57,5 +58,9 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
