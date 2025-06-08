@@ -7,7 +7,7 @@ public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropert
 {
 	public string? AgendaName { get; set; }
 	
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 	
 	protected virtual void OnPropertyChanged(string propertyName)
 	{
