@@ -7,21 +7,38 @@
     
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type models:Event}">
-            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="4" Margin="4">
+            <Button Click="ForwardClickToParent"
+                    Margin="2"
+                    Padding="1"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="Transparent"
+                    Tag="{Binding}">
                 <StackPanel>
-                    <TextBlock Text="{Binding Name}" Foreground="Black"/>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
                 </StackPanel>
-            </Border>
+            </Button>
         </DataTemplate>
-        
+
+
         <DataTemplate DataType="{x:Type models:Todo}">
-            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="4" Margin="4">
+            <Button Click="ForwardClickToParent" 
+                    Margin="2"
+                    Padding="1"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="Transparent"
+                    Tag="{Binding}">
                 <StackPanel>
-                    <TextBlock Text="{Binding Name}" Foreground="Black"/>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
                 </StackPanel>
-            </Border>
+            </Button>
         </DataTemplate>
+
     </UserControl.DataTemplates>
+
     
     <StackPanel>
         <Grid Margin="0 0 0 20">

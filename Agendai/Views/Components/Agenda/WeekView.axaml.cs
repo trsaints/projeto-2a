@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 
 namespace Agendai.Views.Components.Agenda;
 
@@ -24,6 +25,12 @@ public partial class WeekView : UserControl
     {
         if (DataContext is AgendaWindowViewModel vm)
             vm.GoToNextWeek();
+    }
+    
+    private void ForwardClickToParent(object? sender, RoutedEventArgs e)
+    {
+        var parentAgenda = this.FindAncestorOfType<Agenda>();
+        parentAgenda?.OnEventOrTodoCLicked(sender, e);
     }
 
 }
