@@ -11,7 +11,5 @@ public partial class TodoForm : UserControl
     public TodoForm()
     {
         InitializeComponent();
-        var todoRepository = App.ServiceProvider.GetRequiredService<ITodoRepository>();
-        DataContext = new TodoWindowViewModel(todoRepository);
     }
 }
