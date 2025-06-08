@@ -13,7 +13,8 @@ namespace Agendai.Services.Views
             IEnumerable<Event> events,
             IEnumerable<Todo> todos,
             DateTime referenceDate,
-            bool showData)
+            bool showData,
+            string? selectedListName)
         {
             rows.Clear();
 
@@ -26,7 +27,11 @@ namespace Agendai.Services.Views
                 .GroupBy(e => e.Due.Day)
                 .ToDictionary(g => g.Key, g => g.Select(e => e.Name).ToList());
 
-            var todoMap = todos
+            var filteredTodos = string.IsNullOrEmpty(selectedListName)
+                ? todos
+                : todos.Where(t => t.ListName == selectedListName);
+
+            var todoMap = filteredTodos
                 .Where(t => t.Due.Month == referenceDate.Month && t.Due.Year == referenceDate.Year)
                 .GroupBy(t => t.Due.Day)
                 .ToDictionary(g => g.Key, g => g.Select(t => t.Name).ToList());
@@ -68,6 +73,5 @@ namespace Agendai.Services.Views
                 rows.Add(row);
             }
         }
-
     }
 }

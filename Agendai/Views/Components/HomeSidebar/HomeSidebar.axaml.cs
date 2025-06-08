@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Agendai.Messages;
 using Avalonia;
 using Avalonia.Controls;
@@ -28,21 +29,20 @@ public partial class HomeSidebar : UserControl
     {
         if (sender is CheckBox checkBox)
         {
-            var dataContext = checkBox.DataContext;
-
-            if (dataContext is TodosByListName todoList)
+            if (checkBox.DataContext is TodosByListName todoList)
             {
                 if (checkBox.IsChecked == true)
                 {
-                    todoList.AddSelectedListName(todoList.ListName);
+                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(new[] { todoList.ListName }));
                 }
                 else
                 {
-                    todoList.RemoveSelectedListName(todoList.ListName);
+                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(Array.Empty<string>()));
                 }
             }
         }
     }
+
 
 
 }
