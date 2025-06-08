@@ -24,6 +24,7 @@ namespace Agendai.ViewModels
         {
             SelectTarefaCommand = new RelayCommand(() => OpenAddEvent = true);
             AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
+            OnEventAddedOrUpdated      = () => { OpenAddEvent = false; };
             CancelCommand = new RelayCommand(() =>
             {
                 OpenAddEvent = false;

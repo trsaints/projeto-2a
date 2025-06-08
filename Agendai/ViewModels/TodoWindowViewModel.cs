@@ -20,6 +20,7 @@ public class TodoWindowViewModel : ViewModelBase
     public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
     {
         OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
+        OnTaskAdded      = () => { OpenAddTask = false; };
         SelectTarefaCommand = new RelayCommand(
             () =>
             {
