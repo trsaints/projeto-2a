@@ -32,7 +32,14 @@ public partial class HomeSidebar : UserControl
 
             if (dataContext is TodosByListName todoList)
             {
-                Console.WriteLine($"Item: {todoList.ListName}, IsChecked: {checkBox.IsChecked}");
+                if (checkBox.IsChecked == true)
+                {
+                    todoList.AddSelectedListName(todoList.ListName);
+                }
+                else
+                {
+                    todoList.RemoveSelectedListName(todoList.ListName);
+                }
             }
         }
     }

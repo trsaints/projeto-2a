@@ -65,6 +65,7 @@
                 CornerRadius="10"
                 IsVisible="{Binding IsAgendaWindow}">
             <StackPanel Spacing="8">
+                <TextBlock Text="Filtrar por Listas:" FontWeight="Bold" FontSize="18"/>
                 <ItemsControl ItemsSource="{Binding TodoWindowVm.TodosByListName}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
