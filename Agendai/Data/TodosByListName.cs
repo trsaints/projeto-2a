@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agendai.Models;
+using Agendai.Data.Models;
 using Agendai.ViewModels;
 
 

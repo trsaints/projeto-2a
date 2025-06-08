@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 public class DayRow
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Agendai.Models;
+using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;

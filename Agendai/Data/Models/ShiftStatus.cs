@@ -1,4 +1,4 @@
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 
 public enum ShiftStatus

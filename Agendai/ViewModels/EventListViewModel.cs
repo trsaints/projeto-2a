@@ -1,6 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using Agendai.Models;
+using Agendai.Data.Models;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 

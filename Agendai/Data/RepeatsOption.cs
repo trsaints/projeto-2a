@@ -1,5 +1,5 @@
 ﻿using Agendai.Data.Converters;
-using Agendai.Models;
+using Agendai.Data.Models;
 
 
 namespace Agendai.Data;

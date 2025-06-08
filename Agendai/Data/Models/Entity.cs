@@ -1,4 +1,4 @@
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 
 public abstract class Entity(ulong id, string name)
