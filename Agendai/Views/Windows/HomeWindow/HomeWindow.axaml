@@ -62,7 +62,7 @@
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <TextBlock FontSize="18" Margin="0 16 0 24" FontWeight="Bold">Minhas Tarefas</TextBlock>
 
-                    <todoList:TodoList />
+                    <todoList:TodoList ItemsSource="{Binding RecentTodos}" />
 
                     <Button Command="{Binding OpenTodoCommand}"
                             Margin="0,0,0,0"
