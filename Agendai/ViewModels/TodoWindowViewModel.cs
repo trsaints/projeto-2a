@@ -10,6 +10,7 @@ using Agendai.Data.Dtos;
 using Agendai.Data.Repositories.Interfaces;
 using Agendai.Utils;
 using System.Threading.Tasks;
+using Agendai.Data.Repositories.DesignTime;
 
 
 namespace Agendai.ViewModels;
@@ -29,7 +30,7 @@ public class TodoWindowViewModel : ViewModelBase
     private string _newDescription = string.Empty;
     private RepeatsOption? _selectedRepeats;
     private string _listName = "Minhas Tarefas";
-    private readonly ITodoRepository _todoRepository;
+    private readonly ITodoRepository? _todoRepository;
 
     public TodoWindowViewModel(ITodoRepository todoRepository)
     {
@@ -66,6 +67,14 @@ public class TodoWindowViewModel : ViewModelBase
         _listNames = [.. Todos.Select(t => t.ListName).OfType<string>().Distinct()];
 
         _incompleteResume = [.. _incompleteTodos.Take(7)];
+    }
+
+    public TodoWindowViewModel() : this(new TodoDesignTimeRepository())
+    {
+    }
+
+    public TodoWindowViewModel(TodoDesignTimeRepository todoDesignTimeRepository)
+    {
     }
 
     public string Title { get; set; } = "Tarefas";
