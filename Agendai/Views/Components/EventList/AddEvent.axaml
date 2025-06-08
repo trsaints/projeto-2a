@@ -38,7 +38,7 @@
             <StackPanel Spacing="4">
                 <Label Target="EventDue" FontWeight="Medium">Data e hora</Label>
                 <DatePicker x:Name="EventDue"
-                            SelectedDate="{Binding NewDue, Converter={StaticResource DateConverter}}"
+                            SelectedDate="{Binding NewDue, Converter={StaticResource DateTimeOffsetConverter}}"
                             FontSize="14"
                             BorderBrush="Transparent"
                             Background="#EBE6E7" />

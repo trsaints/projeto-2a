@@ -267,5 +267,14 @@ namespace Agendai.ViewModels.Agenda
             }
         }
 
+        public void EditEvent(Event ev)
+        {
+            EventList.OpenAddEvent = true;
+            EventList.NewEventName = ev.Name;
+            EventList.NewDescription = ev.Description;
+            EventList.NewDue = ev.Due.Date;
+            EventList.Repeat = ev.Repeats;
+        }
+
     }
 }
