@@ -53,12 +53,17 @@
 
                 <ComboBox ItemsSource="{Binding RepeatOptions}"
                           SelectedItem="{Binding SelectedRepeats}"
-                          SelectedIndex="0"
                           FontSize="14"
                           CornerRadius="8"
                           BorderBrush="Transparent"
                           Background="#EBE6E7"
-                          x:Name="TodoRepeats" />
+                          x:Name="TodoRepeats" >
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding DisplayText}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
             </StackPanel>
 
             <StackPanel Spacing="4">
