@@ -18,8 +18,8 @@ namespace Agendai.ViewModels;
 public class TodoWindowViewModel : ViewModelBase
 {
     private bool _isPopupOpen;
-    private bool _openAddTask;
-    private Action? OnTaskAdded { get; set; }
+    private bool _openAddTodo;
+    private Action? OnTodoAdded { get; set; }
     private ObservableCollection<Todo>? _todos = [];
     private ObservableCollection<Todo>? _incompleteTodos;
     private ObservableCollection<Todo>? _todoHistory;
@@ -28,7 +28,7 @@ public class TodoWindowViewModel : ViewModelBase
     private string _newTaskName = string.Empty;
     private DateTime? _newDue;
     private string _newDescription = string.Empty;
-    private RepeatsOption? _selectedRepeats;
+    private RepeatsOption _selectedRepeats;
     private string? _listName;
     private readonly ITodoRepository? _todoRepository;
 
@@ -37,8 +37,8 @@ public class TodoWindowViewModel : ViewModelBase
         _todoRepository = todoRepository;
 
         OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
-        OnTaskAdded = () => { OpenAddTask = false; };
-        SelectTarefaCommand = new RelayCommand(
+        OnTodoAdded = () => { OpenAddTask = false; };
+        SelectTodoCommand = new RelayCommand(
             () =>
             {
                 OpenAddTask = true;
@@ -63,10 +63,9 @@ public class TodoWindowViewModel : ViewModelBase
 
         _incompleteTodos = [.. Todos.Where(t => !IsComplete(t))];
         _todoHistory = [.. Todos.Where(IsComplete)];
-
         _listNames = [.. Todos.Select(t => t.ListName).OfType<string>().Distinct()];
-
         _incompleteResume = [.. _incompleteTodos.Take(7)];
+        _selectedRepeats = RepeatOptions.FirstOrDefault(o => o.Repeats is Repeats.None)!;
     }
 
     #region Designer Only
@@ -91,19 +90,15 @@ public class TodoWindowViewModel : ViewModelBase
 
     public bool OpenAddTask
     {
-        get => _openAddTask;
+        get => _openAddTodo;
 
-        set => SetProperty(ref _openAddTask, value);
+        set => SetProperty(ref _openAddTodo, value);
     }
 
     public ICommand OpenPopupCommand { get; }
-    public ICommand SelectTarefaCommand { get; }
-
-
+    public ICommand SelectTodoCommand { get; }
     public RepeatsConverter RepeatsConverter { get; } = new();
-
     public ICommand AddTodoCommand { get; }
-
     public ICommand CancelCommand { get; }
 
     private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
@@ -133,14 +128,12 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _todos, value);
     }
 
-
     public ObservableCollection<Todo> IncompleteTodos
     {
         get => _incompleteTodos ?? [];
 
         set => SetProperty(ref _incompleteTodos, value);
     }
-
 
     public ObservableCollection<Todo> IncompleteResume
     {
@@ -155,7 +148,6 @@ public class TodoWindowViewModel : ViewModelBase
 
         set => SetProperty(ref _todoHistory, value);
     }
-
 
     public ObservableCollection<string> ListNames
     {
@@ -184,6 +176,7 @@ public class TodoWindowViewModel : ViewModelBase
 
         set => SetProperty(ref _newDescription, value);
     }
+
     public RepeatsOption SelectedRepeats
     {
         get => _selectedRepeats;
@@ -258,7 +251,7 @@ public class TodoWindowViewModel : ViewModelBase
 
         IncompleteResume = [.. IncompleteTodos.Take(7)];
 
-        OnTaskAdded?.Invoke();
+        OnTodoAdded?.Invoke();
     }
 
     private void ResetTodoForm()
@@ -266,10 +259,7 @@ public class TodoWindowViewModel : ViewModelBase
         NewTaskName = string.Empty;
         NewDescription = string.Empty;
         NewDue = DateTime.Today;
-        SelectedRepeats = new RepeatsOption
-        {
-            Repeats = Repeats.None
-        };
+        SelectedRepeats = RepeatOptions.FirstOrDefault(o => o.Repeats is Repeats.None)!;
         ListName = string.Empty;
     }
 }
