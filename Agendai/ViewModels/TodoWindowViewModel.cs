@@ -29,7 +29,7 @@ public class TodoWindowViewModel : ViewModelBase
     private DateTime? _newDue;
     private string _newDescription = string.Empty;
     private RepeatsOption? _selectedRepeats;
-    private string _listName = "Minhas Tarefas";
+    private string? _listName;
     private readonly ITodoRepository? _todoRepository;
 
     public TodoWindowViewModel(ITodoRepository todoRepository)
@@ -69,6 +69,7 @@ public class TodoWindowViewModel : ViewModelBase
         _incompleteResume = [.. _incompleteTodos.Take(7)];
     }
 
+    #region Designer Only
     public TodoWindowViewModel() : this(new TodoDesignTimeRepository())
     {
     }
@@ -76,6 +77,7 @@ public class TodoWindowViewModel : ViewModelBase
     public TodoWindowViewModel(TodoDesignTimeRepository todoDesignTimeRepository)
     {
     }
+    #endregion
 
     public string Title { get; set; } = "Tarefas";
 
@@ -191,7 +193,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     public string ListName
     {
-        get => _listName;
+        get => _listName ?? "Minhas Tarefas";
 
         set => SetProperty(ref _listName, value);
     }
@@ -217,7 +219,8 @@ public class TodoWindowViewModel : ViewModelBase
 
     public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
     [
-        new() { Repeats = Repeats.None }, new() { Repeats = Repeats.Daily },
+        new() { Repeats = Repeats.None },
+        new() { Repeats = Repeats.Daily },
         new() { Repeats = Repeats.Weekly },
         new() { Repeats = Repeats.Monthly },
         new() { Repeats = Repeats.Anually }
@@ -225,7 +228,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     private bool IsComplete(Todo todo)
     {
-        return todo.Status == TodoStatus.Complete;
+        return todo.Status is TodoStatus.Complete;
     }
 
     public async Task AddTodoAsync()
