@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Agendai.Messages;
 using Avalonia;
@@ -8,41 +9,42 @@ using Agendai.ViewModels;
 using Avalonia.Interactivity;
 using Agendai.Data;
 
-namespace Agendai.Views.Components.HomeSidebar;
-
-public partial class HomeSidebar : UserControl
+namespace Agendai.Views.Components.HomeSidebar
 {
-    public HomeSidebar()
+    public partial class HomeSidebar : UserControl
     {
-        InitializeComponent();
-    }
-    
-    private void OnCalendarDateChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (e.AddedItems.Count > 0 && e.AddedItems[0] is DateTime selectedDate)
-        {
-            WeakReferenceMessenger.Default.Send(new NavigateToDateMessenger(selectedDate));
-        }
-    }
+        private readonly List<string> _selectedItems = new();
 
-    private void OnCheckBoxChecked(object? sender, RoutedEventArgs e)
-    {
-        if (sender is CheckBox checkBox)
+        public HomeSidebar()
         {
-            if (checkBox.DataContext is TodosByListName todoList)
+            InitializeComponent();
+        }
+
+        private void OnCalendarDateChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is DateTime selectedDate)
+            {
+                WeakReferenceMessenger.Default.Send(new NavigateToDateMessenger(selectedDate));
+            }
+        }
+
+        private void OnCheckBoxChecked(object? sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is TodosByListName todoList)
             {
                 if (checkBox.IsChecked == true)
                 {
-                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(new[] { todoList.ListName }));
+                    if (!_selectedItems.Contains(todoList.ListName))
+                    {
+                        _selectedItems.Add(todoList.ListName);
+                    }
                 }
                 else
                 {
-                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(Array.Empty<string>()));
+                    _selectedItems.Remove(todoList.ListName);
                 }
+                WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(_selectedItems.ToArray()));
             }
         }
     }
-
-
-
 }

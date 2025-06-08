@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Agendai.Messages;
 using Agendai.Services.Views;
@@ -98,19 +99,22 @@ namespace Agendai.ViewModels.Agenda
             set => SetProperty(ref _currentDay, value);
         }
         
-        public string? SelectedListName
+        private string[] _selectedListNames = Array.Empty<string>();
+
+        public string[] SelectedListNames
         {
-            get => _selectedListName;
+            get => _selectedListNames;
             set
             {
-                if (_selectedListName != value)
+                if (!_selectedListNames.SequenceEqual(value))
                 {
-                    _selectedListName = string.IsNullOrEmpty(value) ? null : value;
+                    _selectedListNames = value;
                     OnPropertyChanged();
                     UpdateDataGridItems();
                 }
             }
         }
+
 
         
         private bool _showData = true;
@@ -144,8 +148,6 @@ namespace Agendai.ViewModels.Agenda
         public void GoToDay(int date) => DayController.GoToDay(date);
         
         public HomeWindowViewModel HomeWindowVm { get; set; }
-
-        private string? _selectedListName;
         
         public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
         {
@@ -205,11 +207,9 @@ namespace Agendai.ViewModels.Agenda
             
             WeakReferenceMessenger.Default.Register<GetListsNamesMessenger>(this, (r, m) =>
             {
-                if (m.SelectedItemsName != null && m.SelectedItemsName.Length > 0)
-                {
-                    SelectedListName = m.SelectedItemsName[0];
-                    UpdateDataGridItems();
-                }
+                SelectedListNames = m.SelectedItemsName;
+                UpdateDataGridItems();
+
             });
 
         }
@@ -220,7 +220,7 @@ namespace Agendai.ViewModels.Agenda
             switch (_selectedIndex)
             {
                 case 0:
-                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, _showData, SelectedListName);
+                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, _showData, SelectedListNames);
                     break;
                 case 1:
                     WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, _showData);

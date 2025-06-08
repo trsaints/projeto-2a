@@ -14,7 +14,7 @@ namespace Agendai.Services.Views
             IEnumerable<Todo> todos,
             DateTime referenceDate,
             bool showData,
-            string? selectedListName)
+            string[]? selectedListNames)
         {
             rows.Clear();
 
@@ -27,9 +27,9 @@ namespace Agendai.Services.Views
                 .GroupBy(e => e.Due.Day)
                 .ToDictionary(g => g.Key, g => g.Select(e => e.Name).ToList());
 
-            var filteredTodos = string.IsNullOrEmpty(selectedListName)
+            var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
                 ? todos
-                : todos.Where(t => t.ListName == selectedListName);
+                : todos.Where(t => selectedListNames.Contains(t.ListName));
 
             var todoMap = filteredTodos
                 .Where(t => t.Due.Month == referenceDate.Month && t.Due.Year == referenceDate.Year)
