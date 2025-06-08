@@ -24,7 +24,7 @@ public partial class Agenda : UserControl
             } 
             else if (button.Tag is Todo todo)
             {
-                Console.WriteLine($"Todo clicado: {todo.Name}");
+                viewModel.EditTodo(todo);
             }
         }
     }

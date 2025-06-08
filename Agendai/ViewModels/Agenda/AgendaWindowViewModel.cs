@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Agendai.Data.Converters;
 using Agendai.Messages;
 using Agendai.Services.Views;
 using CommunityToolkit.Mvvm.Messaging;
@@ -216,7 +217,11 @@ namespace Agendai.ViewModels.Agenda
                 UpdateDataGridItems();
             };
 
-
+            TodoList.OnTaskAdded = () =>
+            {
+                TodoList.OpenAddTask = false;
+                UpdateDataGridItems();
+            };
         }
 
 
@@ -282,5 +287,21 @@ namespace Agendai.ViewModels.Agenda
             EventList.LoadEvent(ev);
         }
 
+        public void EditTodo(Todo todo)
+        {
+            var originalTodo = TodoList.Todos.FirstOrDefault(t => t.Id == todo.Id);
+
+            if (originalTodo != null)
+            {
+                TodoList.OpenAddTask = true;
+                TodoList.NewTaskName = todo.Name;
+                TodoList.NewDescription = todo.Description;
+                TodoList.NewDue = todo.Due.Date;
+                TodoList.SelectedRepeats = TodoList.RepeatOptions
+                    .FirstOrDefault(o => o.Repeats == todo.Repeats);
+                TodoList.ListName = todo.ListName;
+                TodoList.EditingTodo = originalTodo;
+            }
+        }
     }
 }
