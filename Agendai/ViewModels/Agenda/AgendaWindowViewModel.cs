@@ -233,7 +233,7 @@ namespace Agendai.ViewModels.Agenda
                     MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, _showData, SelectedListNames);
                     break;
                 case 1:
-                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, _showData);
+                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, _showData, SelectedListNames);
                     break;
                 case 2:
                     var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay);
