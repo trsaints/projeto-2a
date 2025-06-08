@@ -2,7 +2,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Agendai.Views.Components.Agenda.MonthView"
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
+             xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
+    
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="{x:Type models:Event}">
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="2">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type models:Todo}">
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="2">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
     <StackPanel>
         <Grid Margin="0 0 0 20">
             <Grid.ColumnDefinitions>
@@ -46,7 +66,6 @@
                 </Border>
             </StackPanel>
 
-
             <Button Grid.Column="1"
                     Command="{Binding ToggleShowData}"
                     Margin="0,0,0,0"
@@ -76,7 +95,6 @@
                     ColumnWidth="*" RowHeight="100">
                     <DataGrid.Columns>
 
-                        <!-- Um exemplo pronto para cada dia da semana -->
                         <DataGridTemplateColumn Header="Dom">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -87,15 +105,7 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Sunday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Sunday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -111,15 +121,7 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Monday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Monday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -135,21 +137,13 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Tuesday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn Header="Qua">
+                        
+                        <DataGridTemplateColumn Header="Quar">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -159,20 +153,12 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Wednesday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
+                        
                         <DataGridTemplateColumn Header="Qui">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -183,20 +169,12 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Thursday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Thursday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
+                        
                         <DataGridTemplateColumn Header="Sex">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -207,20 +185,12 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Friday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Friday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
+                        
                         <DataGridTemplateColumn Header="Sáb">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -231,15 +201,7 @@
                                                 Background="Transparent" BorderThickness="0" 
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Saturday.Items}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                        <TextBlock Text="{Binding}" Foreground="Black" /> 
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding Saturday.Items}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
