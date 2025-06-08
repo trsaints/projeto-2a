@@ -26,7 +26,7 @@ namespace Agendai.Services.Views
                     var day = startOfWeek.AddDays(i);
                     var cell = new DayCell
                     {
-                        Items = new ObservableCollection<string>()
+                        Items = new ObservableCollection<object>()
                     };
 
                     if (showData)
@@ -34,13 +34,13 @@ namespace Agendai.Services.Views
                         foreach (var e in events)
                         {
                             if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
-                                cell.Items.Add(e.Description);
+                                cell.Items.Add(e);
                         }
 
                         foreach (var t in todos)
                         {
                             if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
-                                cell.Items.Add(t.Description);
+                                cell.Items.Add(t);
                         }
                     }
 

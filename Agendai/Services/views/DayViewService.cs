@@ -10,7 +10,7 @@ namespace Agendai.Services.Views
         public static void GenerateDayView(
             ObservableCollection<DayRow> rows,
             string[] hours,
-            Dictionary<string, ObservableCollection<string>> dayMap,
+            Dictionary<string, ObservableCollection<object>> dayMap,
             bool showData)
         {
             rows.Clear();
@@ -22,20 +22,19 @@ namespace Agendai.Services.Views
                     Hour = hour,
                     Items = showData && dayMap.TryGetValue(hour, out var items)
                         ? items
-                        : new ObservableCollection<string>()
-
+                        : new ObservableCollection<object>()
                 };
 
                 rows.Add(row);
             }
         }
 
-        public static Dictionary<string, ObservableCollection<string>> MapDayItemsFrom(
+        public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
             DateTime selectedDay)
         {
-            var map = new Dictionary<string, ObservableCollection<string>>();
+            var map = new Dictionary<string, ObservableCollection<object>>();
 
             foreach (var ev in events)
             {
@@ -43,9 +42,9 @@ namespace Agendai.Services.Views
                 {
                     var hourKey = ev.Due.ToString("HH:mm");
                     if (!map.ContainsKey(hourKey))
-                        map[hourKey] = new ObservableCollection<string>();
+                        map[hourKey] = new ObservableCollection<object>();
 
-                    map[hourKey].Add(ev.Name);
+                    map[hourKey].Add(ev);
                 }
             }
 
@@ -55,9 +54,9 @@ namespace Agendai.Services.Views
                 {
                     var hourKey = todo.Due.ToString("HH:mm");
                     if (!map.ContainsKey(hourKey))
-                        map[hourKey] = new ObservableCollection<string>();
+                        map[hourKey] = new ObservableCollection<object>();
 
-                    map[hourKey].Add(todo.Name);
+                    map[hourKey].Add(todo);
                 }
             }
 
