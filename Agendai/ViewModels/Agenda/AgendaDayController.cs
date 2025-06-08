@@ -33,7 +33,8 @@ namespace Agendai.ViewModels.Agenda
             var mappedItems = DayViewService.MapDayItemsFrom(
                 _viewModel.EventList.Events,
                 _viewModel.TodoList.Todos,
-                selectedDate
+                selectedDate,
+                _viewModel.SelectedListNames
             );
             
             _viewModel.UpdateDataGridItems();

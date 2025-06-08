@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Agendai.Services.Views
 {
@@ -32,9 +33,14 @@ namespace Agendai.Services.Views
         public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
-            DateTime selectedDay)
+            DateTime selectedDay,
+            string[]? selectedListNames)
         {
             var map = new Dictionary<string, ObservableCollection<object>>();
+            
+            var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
+                ? todos
+                : todos.Where(t => selectedListNames.Contains(t.ListName));
 
             foreach (var ev in events)
             {
@@ -48,7 +54,7 @@ namespace Agendai.Services.Views
                 }
             }
 
-            foreach (var todo in todos)
+            foreach (var todo in filteredTodos)
             {
                 if (todo.Due.Date == selectedDay.Date)
                 {
