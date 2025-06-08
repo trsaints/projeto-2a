@@ -21,7 +21,7 @@ public class MainWindowViewModel : ViewModelBase
         ShiftRepository = shiftRepository;
 
         // Initialize with HomeViewModel
-        CurrentViewModel = new HomeWindowViewModel();
+        CurrentViewModel = new HomeWindowViewModel(TodoRepository);
         // Pass reference to main view model after construction
         if (CurrentViewModel is HomeWindowViewModel homeViewModel)
         {
@@ -45,10 +45,11 @@ public class MainWindowViewModel : ViewModelBase
     // Navigation methods
     public void NavigateToHome()
     {
-        var homeViewModel = new HomeWindowViewModel
+        var homeViewModel = new HomeWindowViewModel(TodoRepository)
         {
             MainViewModel = this
         };
+
         CurrentViewModel = homeViewModel;
     }
 

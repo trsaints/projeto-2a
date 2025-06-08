@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using Agendai.Data.Repositories.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 
 
@@ -6,7 +7,14 @@ namespace Agendai.ViewModels;
 
 public class HomeWindowViewModel : ViewModelBase
 {
-	private bool _isPopupOpen;
+	private readonly ITodoRepository _todoRepository;
+
+	public HomeWindowViewModel(ITodoRepository todoRepository)
+	{
+        _todoRepository = todoRepository;
+    }
+	
+    private bool _isPopupOpen;
 
 	public bool IsPopupOpen
 	{

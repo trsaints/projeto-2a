@@ -1,4 +1,3 @@
-using Agendai.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +6,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using Agendai.Services.Views;
 using Agendai.Data.Repositories.Interfaces;
+using Agendai.Data;
 
 namespace Agendai.ViewModels.Agenda;
 
