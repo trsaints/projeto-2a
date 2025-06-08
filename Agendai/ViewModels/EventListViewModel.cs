@@ -1,148 +1,201 @@
 using System;
 using System.Collections.ObjectModel;
-using Agendai.Data.Models;
 using System.Windows.Input;
+using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;
 
-
-namespace Agendai.ViewModels;
-
-
-public class EventListViewModel : ViewModelBase
+namespace Agendai.ViewModels
 {
-	public Action? OnEventAdded { get; set; }
-	public EventListViewModel()
-	{
-		OnEventAdded = () => { OpenAddEvent = false; };
-		SelectTarefaCommand = new RelayCommand(
-			() =>
-			{
-				OpenAddEvent = true;
-			}
-		);
-		AddEventCommand = new RelayCommand(AddEvent);
-		CancelCommand = new RelayCommand(
-			() =>
-			{
-				OpenAddEvent = false;
-			}
-		);
-		
-		Events =
-		[
-			new Event(1, "Conferência da Pamonha")
-			{
-				Description = "Conferência de pamonhas",
-				Due = new DateTime(2025, 4, 6, 8, 0, 0),
-				Repeats = Repeats.Anually
-			},
-			new Event(2, "Feira da Foda")
-			{
-				Description = "Conferência do Agro",
-				Due = new DateTime(2025, 4, 5, 14, 0, 0),
-				Repeats = Repeats.None
-			},
-			new Event(3, "Festa do Peão")
-			{
-				Description = "Festa do Peão de Barretos",
-				Due = new DateTime(2025, 8, 20, 12, 0, 0),
-				Repeats = Repeats.Monthly
-			},
-			new Event(4, "Feriado")
-			{
-				Description = "Feriado de alguma coisa",
-				Due = new DateTime(2025, 4, 18, 22, 0, 0),
-				Repeats = Repeats.Monthly
-			}
-		];
-	}
-	
-	public ObservableCollection<Event> Events { get; set; }
-	public ObservableCollection<Repeats> RepeatOptions { get; } = new ObservableCollection<Repeats>
-	{
+    public class EventListViewModel : ViewModelBase
+    {
+        public Action? OnEventAddedOrUpdated { get; set; }
+
+        private Event? _currentEvent;
+
+        private bool _canSave;
+        public bool CanSave
+        {
+            get => _canSave;
+            private set => SetProperty(ref _canSave, value);
+        }
+        
+
+        public EventListViewModel()
+        {
+            SelectTarefaCommand = new RelayCommand(() => OpenAddEvent = true);
+            AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
+            CancelCommand = new RelayCommand(() =>
+            {
+                OpenAddEvent = false;
+                NewEventName = string.Empty;
+                NewDescription = string.Empty;
+                NewDue = DateTime.Today;
+                Repeat = Repeats.None;
+                _currentEvent = null;
+                UpdateCanSave();
+            });
+
+
+            Events = new ObservableCollection<Event>
+            {
+                new Event(1, "Conferência da Pamonha")
+                {
+                    Description = "Conferência de pamonhas",
+                    Due = new DateTime(2025, 4, 6, 8, 0, 0),
+                    Repeats = Repeats.Anually
+                },
+                new Event(2, "Feira da Foda")
+                {
+                    Description = "Conferência do Agro",
+                    Due = new DateTime(2025, 4, 5, 14, 0, 0),
+                    Repeats = Repeats.None
+                },
+                new Event(3, "Festa do Peão")
+                {
+                    Description = "Festa do Peão de Barretos",
+                    Due = new DateTime(2025, 8, 20, 12, 0, 0),
+                    Repeats = Repeats.Monthly
+                },
+                new Event(4, "Feriado")
+                {
+                    Description = "Feriado de alguma coisa",
+                    Due = new DateTime(2025, 4, 18, 22, 0, 0),
+                    Repeats = Repeats.Monthly
+                }
+            };
+
+            NewDue = DateTime.Today;
+            NewEventName = "";
+            NewDescription = "";
+            Repeat = Repeats.None;
+
+            UpdateCanSave();
+        }
+
+        public ObservableCollection<Event> Events { get; set; }
+        public ObservableCollection<Repeats> RepeatOptions { get; } = new ObservableCollection<Repeats>
+        {
             Repeats.None,
             Repeats.Daily,
             Repeats.Weekly,
             Repeats.Monthly,
             Repeats.Anually
-	};
-	
-	private bool _openAddEvent;
+        };
 
-	public bool OpenAddEvent
-	{
-		get => _openAddEvent;
+        private bool _openAddEvent;
+        public bool OpenAddEvent
+        {
+            get => _openAddEvent;
+            set => SetProperty(ref _openAddEvent, value);
+        }
 
-		set => SetProperty(ref _openAddEvent, value);
-	}
-	
-	public  ICommand AddEventCommand { get; }
+        public ICommand AddEventCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand SelectTarefaCommand { get; }
 
-	public ICommand CancelCommand { get; }
-	
-	public ICommand SelectTarefaCommand { get; }
-	
-	private string _newEventName;
-	public string NewEventName
-	{
-		get => _newEventName;
-		set
-		{
-			_newEventName = value;
-			OnPropertyChanged();
-		}
-	}
+        private string _newEventName;
+        public string NewEventName
+        {
+            get => _newEventName;
+            set
+            {
+                if (SetProperty(ref _newEventName, value))
+                    UpdateCanSave();
+            }
+        }
 
-	private DateTime _newDue;
+        private DateTime _newDue;
+        public DateTime NewDue
+        {
+            get => _newDue;
+            set
+            {
+                if (SetProperty(ref _newDue, value))
+                    UpdateCanSave();
+            }
+        }
 
-	public DateTime NewDue
-	{
-		get => _newDue;
-		set
-		{
-			_newDue = value;
-			OnPropertyChanged();
-		}
-	}
+        private string _newDescription;
+        public string NewDescription
+        {
+            get => _newDescription;
+            set
+            {
+                if (SetProperty(ref _newDescription, value))
+                    UpdateCanSave();
+            }
+        }
 
-	private string _newDescription;
-	public string NewDescription
-	{
-		get => _newDescription;
-		set
-		{
-			_newDescription = value;
-			OnPropertyChanged();
-		}
-	}
-	private Repeats _repeat = Repeats.None;
-	public Repeats Repeat
-	{
-		get => _repeat;
-		set
-		{
-			_repeat = value;
-			OnPropertyChanged();
-		}
-	}
-	
-	public void AddEvent()
-	{
-		if (String.IsNullOrWhiteSpace(NewEventName)) return;
-        
-		var newEvent = new Event(Convert.ToUInt32(Events.Count + 1), NewEventName)
-		{
-			Description = NewDescription,
-			Due = NewDue,
-			Repeats = Repeat,
-		};
-		Events.Add(newEvent);
-        
-		NewEventName = string.Empty;
-		NewDescription = String.Empty;
-		NewDue = DateTime.Today;
-		Repeat = Repeats.None;
-		
-		OnEventAdded?.Invoke();
-	}
+        private Repeats _repeat = Repeats.None;
+        public Repeats Repeat
+        {
+            get => _repeat;
+            set
+            {
+                if (SetProperty(ref _repeat, value))
+                    UpdateCanSave();
+            }
+        }
+
+        public void LoadEvent(Event? ev)
+        {
+            _currentEvent = ev;
+
+            NewEventName = ev?.Name ?? "";
+            NewDescription = ev?.Description ?? "";
+            NewDue = ev?.Due ?? DateTime.Today;
+            Repeat = ev?.Repeats ?? Repeats.None;
+
+            UpdateCanSave();
+        }
+
+        private void UpdateCanSave()
+        {
+            CanSave =
+                !string.IsNullOrWhiteSpace(NewEventName) &&
+                (
+                    _currentEvent == null ||
+                    NewEventName != _currentEvent.Name ||
+                    NewDescription != _currentEvent.Description ||
+                    NewDue != _currentEvent.Due ||
+                    Repeat != _currentEvent.Repeats
+                );
+
+            ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
+        }
+
+        public void AddOrUpdateEvent()
+        {
+            if (!CanSave) return;
+
+            if (_currentEvent == null)
+            {
+                var newEvent = new Event(Convert.ToUInt32(Events.Count + 1), NewEventName)
+                {
+                    Description = NewDescription,
+                    Due = NewDue,
+                    Repeats = Repeat,
+                };
+                Events.Add(newEvent);
+            }
+            else
+            {
+                _currentEvent.Name = NewEventName;
+                _currentEvent.Description = NewDescription;
+                _currentEvent.Due = NewDue;
+                _currentEvent.Repeats = Repeat;
+            }
+
+            NewEventName = string.Empty;
+            NewDescription = string.Empty;
+            NewDue = DateTime.Today;
+            Repeat = Repeats.None;
+            _currentEvent = null;
+
+            OnEventAddedOrUpdated?.Invoke();
+
+            UpdateCanSave();
+        }
+
+    }
 }

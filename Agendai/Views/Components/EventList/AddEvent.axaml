@@ -79,7 +79,8 @@
                     Foreground="White"
                     BorderBrush="#0078D7"
                     BorderThickness="2"
-                    Command="{Binding AddEventCommand}" />
+                    Command="{Binding AddEventCommand}" 
+                    IsEnabled="{Binding CanSave}"/>
         </StackPanel>
 
     </StackPanel>

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Agendai.Messages;
 using Agendai.Services.Views;
-using Agendai.Views.Components.EventList;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.ViewModels.Agenda
@@ -204,13 +203,19 @@ namespace Agendai.ViewModels.Agenda
 
             foreach (INotifyPropertyChanged item in TodoList.Todos)
                 item.PropertyChanged += (s2, e2) => UpdateDataGridItems();
-            
+
             WeakReferenceMessenger.Default.Register<GetListsNamesMessenger>(this, (r, m) =>
             {
                 SelectedListNames = m.SelectedItemsName;
                 UpdateDataGridItems();
-
             });
+            
+            EventList.OnEventAddedOrUpdated = () =>
+            {
+                EventList.OpenAddEvent = false;
+                UpdateDataGridItems();
+            };
+
 
         }
 
@@ -274,6 +279,7 @@ namespace Agendai.ViewModels.Agenda
             EventList.NewDescription = ev.Description;
             EventList.NewDue = ev.Due.Date;
             EventList.Repeat = ev.Repeats;
+            EventList.LoadEvent(ev);
         }
 
     }
