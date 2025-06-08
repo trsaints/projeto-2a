@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Agendai.Data.Models;
 
 [Table("Events")]
-public class Event(ulong id, string name) : Recurrence(id, name)
+public class Event() : Recurrence
 {
 	[StringLength(64)]
 	public string? AgendaName { get; set; }

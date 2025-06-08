@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Agendai.Data.Models;
 
 [Table("Todos")]
-public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
+public class Todo() : Recurrence, INotifyPropertyChanged
 {
     [StringLength(64)]
     public string? ListName { get; set; }

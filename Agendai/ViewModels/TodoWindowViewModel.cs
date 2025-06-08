@@ -232,15 +232,16 @@ public class TodoWindowViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(NewTaskName)) return;
 
-        var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+        Todo newTodo = new()
         {
+            Name = NewTaskName,
             Description = NewDescription,
             Due = NewDue,
             Repeats = RepeatsConverter.ConvertBack(SelectedRepeats.ToString()),
             ListName = ListName
         };
 
-        var created = await _todoRepository.Create(newTodo);
+        var created = await _todoRepository!.Create(newTodo);
 
         if (created is null) return;
 
@@ -248,6 +249,17 @@ public class TodoWindowViewModel : ViewModelBase
 
         Todos.Add(created);
 
+        ResetTodoForm();
+
+        IncompleteTodos = [.. Todos.Where(t => !IsComplete(t)).ToList()];
+
+        IncompleteResume = [.. IncompleteTodos.Take(7)];
+
+        OnTaskAdded?.Invoke();
+    }
+
+    private void ResetTodoForm()
+    {
         NewTaskName = string.Empty;
         NewDescription = string.Empty;
         NewDue = DateTime.Today;
@@ -256,11 +268,5 @@ public class TodoWindowViewModel : ViewModelBase
             Repeats = Repeats.None
         };
         ListName = string.Empty;
-
-        IncompleteTodos = [.. Todos.Where(t => !IsComplete(t)).ToList()];
-
-        IncompleteResume = [.. IncompleteTodos.Take(7)];
-
-        OnTaskAdded?.Invoke();
     }
 }

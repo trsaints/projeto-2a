@@ -11,13 +11,17 @@ public class TodoDesignTimeRepository : DesignTimeRepository<Todo>
 {
     private readonly List<Todo> _mockTodos =
         [
-            new Todo(1, "Tarefa de exemplo 1") 
+            new Todo() 
             {
+                Id = 1,
+                Name = "Tarefa de exemplo 1", 
                 Description = "Descrição 1",
                 Status = TodoStatus.Incomplete, ListName = "Pessoal" 
             },
-            new Todo(2, "Tarefa de exemplo 2") 
-            { 
+            new Todo() 
+            {
+                Id = 2,
+                Name = "Tarefa de exemplo 2",
                 Description = "Descrição 2", 
                 Status = TodoStatus.Complete, ListName = "Trabalho" 
             }

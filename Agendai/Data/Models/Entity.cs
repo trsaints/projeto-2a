@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 namespace Agendai.Data.Models;
 
 
-public abstract class Entity(ulong id, string name)
+public abstract class Entity()
 {
-	[Key]
-	public ulong  Id   { get; set; } = id;
+    [Key]
+    public ulong Id { get; set; }
 
-	[Required]
-	[StringLength(128)]
-	public string Name { get; set; } = name;
+    [Required]
+    [StringLength(128)]
+    public string? Name { get; set; }
 }

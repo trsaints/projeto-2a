@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Agendai.Data.Models;
 
 
-public class Recurrence(ulong id, string name) : Entity(id, name)
+public class Recurrence() : Entity
 {
 	[Required]
 	public Repeats                Repeats    { get; set; }
