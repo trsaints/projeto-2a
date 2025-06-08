@@ -1,4 +1,4 @@
-﻿namespace Agendai.Data;
+﻿namespace Agendai.Data.Dtos;
 
 public class WeekRow
 {

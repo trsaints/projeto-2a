@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Agendai.Data;
+namespace Agendai.Data.Dtos;
 
-public class DayCell
+public class DayRow
 {
-    public int? DayNumber { get; set; }
+    public string Hour { get; set; }
     public ObservableCollection<string> Items { get; set; } = new();
 }

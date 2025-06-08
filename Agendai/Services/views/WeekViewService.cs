@@ -1,4 +1,4 @@
-﻿using Agendai.Data;
+﻿using Agendai.Data.Dtos;
 using Agendai.Data.Models;
 using System;
 using System.Collections.ObjectModel;

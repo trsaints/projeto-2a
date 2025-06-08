@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using Agendai.Services.Views;
 using Agendai.Data.Repositories.Interfaces;
-using Agendai.Data;
+using Agendai.Data.Dtos;
 
 namespace Agendai.ViewModels.Agenda;
 
