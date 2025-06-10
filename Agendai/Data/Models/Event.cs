@@ -8,7 +8,7 @@ public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropert
 {
 	public string? AgendaName { get; set; }
 	
-	public ICollection<Todo>? Todos { get; set; }
+	public virtual ICollection<Todo>? Todos { get; set; }
 	
 	public event PropertyChangedEventHandler? PropertyChanged;
 	

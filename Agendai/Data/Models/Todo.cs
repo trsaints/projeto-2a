@@ -9,7 +9,7 @@ public class Todo(ulong id, string name) : Recurrence(id, name), INotifyProperty
 	public string?    ListName       { get; set; }
 	public uint       FinishedShifts { get; set; }
 	public uint       TotalShifts    { get; set; }
-	public Event? Event { get; set; }
+	public virtual Event? Event { get; set; }
 	
 	private TodoStatus _status;
 	public TodoStatus Status
