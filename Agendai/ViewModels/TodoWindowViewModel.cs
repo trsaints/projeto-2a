@@ -35,6 +35,14 @@ public class TodoWindowViewModel : ViewModelBase
             {
                 OpenAddTask = false;
                 IsPopupOpen = false;
+                NewTaskName = string.Empty;
+                NewDescription = string.Empty;
+                NewDue = DateTime.Today;
+                SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
+                ListName = string.Empty;
+                EditingTodo = null;
+
+                HasChanges = false;
             }
         );
 
