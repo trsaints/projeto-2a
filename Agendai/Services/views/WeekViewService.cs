@@ -23,6 +23,10 @@ namespace Agendai.Services.Views
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
             
+            var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+                ? events
+                : events.Where(e => selectedListNames.Contains(e.AgendaName));
+            
             foreach (var hour in hours)
             {
                 var row = new WeekRow { Hour = hour };
@@ -37,7 +41,7 @@ namespace Agendai.Services.Views
 
                     if (showData)
                     {
-                        foreach (var e in events)
+                        foreach (var e in filteredEvents)
                         {
                             if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(e);

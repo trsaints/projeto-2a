@@ -41,8 +41,12 @@ namespace Agendai.Services.Views
             var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
+            
+            var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+                ? events
+                : events.Where(e => selectedListNames.Contains(e.AgendaName));
 
-            foreach (var ev in events)
+            foreach (var ev in filteredEvents)
             {
                 if (ev.Due.Date == selectedDay.Date)
                 {

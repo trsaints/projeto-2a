@@ -22,7 +22,11 @@ namespace Agendai.Services.Views
             DateTime firstDay = new DateTime(referenceDate.Year, referenceDate.Month, 1);
             int startOffset = (int)firstDay.DayOfWeek;
 
-            var eventMap = events
+            var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+                ? events
+                : events.Where(e => selectedListNames.Contains(e.AgendaName));
+            
+            var eventMap = filteredEvents
                 .Where(e => e.Due.Month == referenceDate.Month && e.Due.Year == referenceDate.Year)
                 .GroupBy(e => e.Due.Day)
                 .ToDictionary(g => g.Key, g => g.ToList()); 

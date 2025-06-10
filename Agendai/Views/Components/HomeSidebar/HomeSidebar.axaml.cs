@@ -30,21 +30,36 @@ namespace Agendai.Views.Components.HomeSidebar
 
         private void OnCheckBoxChecked(object? sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox && checkBox.DataContext is TodosByListName todoList)
+            if (sender is CheckBox checkBox)
             {
-                if (checkBox.IsChecked == true)
+                string? name = null;
+                if (checkBox.DataContext is TodosByListName todoList)
                 {
-                    if (!_selectedItems.Contains(todoList.ListName))
+                    name = todoList.ListName;
+                }
+                else if (checkBox.DataContext is EventsByAgenda eventAgenda)
+                {
+                    name = eventAgenda.AgendaName;
+                }
+
+                if (name != null)
+                {
+                    if (checkBox.IsChecked == true)
                     {
-                        _selectedItems.Add(todoList.ListName);
+                        if (!_selectedItems.Contains(name))
+                        {
+                            _selectedItems.Add(name);
+                        }
                     }
+                    else
+                    {
+                        _selectedItems.Remove(name);
+                    }
+
+                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(_selectedItems.ToArray()));
                 }
-                else
-                {
-                    _selectedItems.Remove(todoList.ListName);
-                }
-                WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(_selectedItems.ToArray()));
             }
         }
+
     }
 }
