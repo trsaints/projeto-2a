@@ -101,14 +101,14 @@
         </Grid>
 
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="500">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="800">
                 <DataGrid 
                     HeadersVisibility="Column" 
                     AutoGenerateColumns="False" 
                     ItemsSource="{Binding MonthViewRows}" 
                     GridLinesVisibility="All"
                     IsReadOnly="True"
-                    ColumnWidth="*" RowHeight="100">
+                    ColumnWidth="*" RowHeight="130">
                     <DataGrid.Columns>
 
                         <DataGridTemplateColumn Header="Dom">
