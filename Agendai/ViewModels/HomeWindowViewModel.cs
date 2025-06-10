@@ -65,7 +65,7 @@ public class HomeWindowViewModel : ViewModelBase
 		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
 		_openEventFormCommand = new RelayCommand(OpenEventForm);
 		TodoWindowVm = new TodoWindowViewModel(this);
-		EventListVm = new EventListViewModel();
+		EventListVm = new EventListViewModel(TodoWindowVm);
 	}
 
 	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
