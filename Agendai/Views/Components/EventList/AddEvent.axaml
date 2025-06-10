@@ -45,15 +45,30 @@
             </StackPanel>
         </Border>
         
-        <StackPanel Spacing="4">
-            <Label Target="EventRepeats" FontWeight="Medium">Repetição</Label>
-            <ComboBox x:Name="EventRepeats"
-                      ItemsSource="{Binding RepeatOptions}"
-                      SelectedItem="{Binding Repeat}"
-                      FontSize="14"
-                      CornerRadius="8"
-                      BorderBrush="Transparent"
-                      Background="#EBE6E7" />
+        <StackPanel Spacing="16" Orientation="Horizontal">
+            <StackPanel Spacing="4">
+                <Label Target="EventRepeats" FontWeight="Medium">Repetição</Label>
+                <ComboBox x:Name="EventRepeats"
+                          ItemsSource="{Binding RepeatOptions}"
+                          SelectedItem="{Binding Repeat}"
+                          FontSize="14"
+                          CornerRadius="8"
+                          BorderBrush="Transparent"
+                          Background="#EBE6E7" />
+            </StackPanel>
+        
+            <StackPanel Spacing="4">
+                <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
+
+                <ComboBox ItemsSource="{Binding AgendaNames}"
+                          SelectedItem="{Binding AgendaNames}"
+                          SelectedIndex="0"
+                          FontSize="14"
+                          CornerRadius="8"
+                          BorderBrush="Transparent"
+                          Background="#EBE6E7"
+                          x:Name="TodoListName" />
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"

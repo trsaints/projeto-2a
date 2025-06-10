@@ -45,6 +45,7 @@
       <DependentUpon>AddTask.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Remove="Data\EventsByAgendaName.cs" />
   </ItemGroup>
 
   <ItemGroup>

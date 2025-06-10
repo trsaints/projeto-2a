@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
+using Agendai.Data;
 using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;
 
@@ -43,25 +46,29 @@ namespace Agendai.ViewModels
                 {
                     Description = "Conferência de pamonhas",
                     Due = new DateTime(2025, 4, 6, 8, 0, 0),
-                    Repeats = Repeats.Anually
+                    Repeats = Repeats.Anually,
+                    AgendaName = "Conferências"
                 },
                 new Event(2, "Feira da Foda")
                 {
                     Description = "Conferência do Agro",
                     Due = new DateTime(2025, 4, 5, 14, 0, 0),
-                    Repeats = Repeats.None
+                    Repeats = Repeats.None,
+                    AgendaName = "Conferências"
                 },
                 new Event(3, "Festa do Peão")
                 {
                     Description = "Festa do Peão de Barretos",
                     Due = new DateTime(2025, 8, 20, 12, 0, 0),
-                    Repeats = Repeats.Monthly
+                    Repeats = Repeats.Monthly,
+                    AgendaName = "Festas"
                 },
                 new Event(4, "Feriado")
                 {
                     Description = "Feriado de alguma coisa",
                     Due = new DateTime(2025, 4, 18, 22, 0, 0),
-                    Repeats = Repeats.Monthly
+                    Repeats = Repeats.Monthly,
+                    AgendaName = "Feriados"
                 }
             };
 
@@ -69,6 +76,12 @@ namespace Agendai.ViewModels
             NewEventName = "";
             NewDescription = "";
             Repeat = Repeats.None;
+
+            _agendaNames = new ObservableCollection<string>(
+                Events
+                    .Select(e => e.AgendaName)
+                    .OfType<string>()
+                    .Distinct());
 
             UpdateCanSave();
         }
@@ -82,6 +95,14 @@ namespace Agendai.ViewModels
             Repeats.Monthly,
             Repeats.Anually
         };
+        
+        private ObservableCollection<string> _agendaNames;
+
+        public ObservableCollection<string> AgendaNames
+        {
+            get => _agendaNames;
+            set => SetProperty(ref _agendaNames, value);
+        }
 
         private bool _openAddEvent;
         public bool OpenAddEvent
