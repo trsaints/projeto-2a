@@ -148,6 +148,18 @@ namespace Agendai.ViewModels
             }
         }
 
+        private string _agendaName;
+
+        public string AgendaName
+        {
+            get => _newDescription;
+            set
+            {
+                if (SetProperty(ref _newDescription, value))
+                    UpdateCanSave();
+            }
+        }
+
         private Repeats _repeat = Repeats.None;
         public Repeats Repeat
         {
@@ -167,6 +179,7 @@ namespace Agendai.ViewModels
             NewDescription = ev?.Description ?? "";
             NewDue = ev?.Due ?? DateTime.Today;
             Repeat = ev?.Repeats ?? Repeats.None;
+            AgendaName = ev?.AgendaName ?? "";
 
             UpdateCanSave();
         }
@@ -180,7 +193,8 @@ namespace Agendai.ViewModels
                     NewEventName != _currentEvent.Name ||
                     NewDescription != _currentEvent.Description ||
                     NewDue != _currentEvent.Due ||
-                    Repeat != _currentEvent.Repeats
+                    Repeat != _currentEvent.Repeats ||
+                    AgendaName != _currentEvent.AgendaName
                 );
 
             ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
@@ -197,6 +211,7 @@ namespace Agendai.ViewModels
                     Description = NewDescription,
                     Due = NewDue,
                     Repeats = Repeat,
+                    AgendaName = AgendaName
                 };
                 Events.Add(newEvent);
             }
@@ -206,12 +221,14 @@ namespace Agendai.ViewModels
                 _currentEvent.Description = NewDescription;
                 _currentEvent.Due = NewDue;
                 _currentEvent.Repeats = Repeat;
+                _currentEvent.AgendaName = AgendaName;
             }
 
             NewEventName = string.Empty;
             NewDescription = string.Empty;
             NewDue = DateTime.Today;
             Repeat = Repeats.None;
+            AgendaName = string.Empty;
             _currentEvent = null;
 
             OnEventAddedOrUpdated?.Invoke();

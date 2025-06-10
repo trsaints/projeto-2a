@@ -61,7 +61,7 @@
                 <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
 
                 <ComboBox ItemsSource="{Binding AgendaNames}"
-                          SelectedItem="{Binding AgendaNames}"
+                          SelectedItem="{Binding AgendaName}"
                           SelectedIndex="0"
                           FontSize="14"
                           CornerRadius="8"
