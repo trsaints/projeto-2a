@@ -171,6 +171,20 @@ namespace Agendai.ViewModels
             }
         }
 
+        public IEnumerable<EventsByAgenda> EventsByAgendaName
+        {
+            get
+            {
+                return AgendaNames.Select(
+                    name => new EventsByAgenda
+                    {
+                        AgendaName = name,
+                        Events = new ObservableCollection<Event>(
+                            Events.Where(e => e.AgendaName == name))
+                    });
+            }
+        }
+
         public void LoadEvent(Event? ev)
         {
             _currentEvent = ev;
