@@ -29,7 +29,7 @@ public class TodoWindowViewModel : ViewModelBase
             }
         );
 
-        AddTodoCommand = new RelayCommand(AddTodo, () => HasChanges);
+        AddTodoCommand = new RelayCommand<Event?>(ev => { AddTodo(ev); }, _ => HasChanges);
         CancelCommand = new RelayCommand(
             () =>
             {
@@ -293,6 +293,43 @@ public class TodoWindowViewModel : ViewModelBase
             );
         }
     }
+    
+    public ObservableCollection<Todo> FreeTodos =>
+        new(Todos.Where(t => t.RelatedEvent == null));
+    
+    public IEnumerable<string> FreeTodosNames =>
+        FreeTodos.Select(t => t.Name);
+
+    private Todo? _selectedTodo;
+    public Todo? SelectedTodo
+    {
+        get => _selectedTodo;
+        set
+        {
+            if (_selectedTodo != value)
+            {
+                _selectedTodo = value;
+                OnPropertyChanged(nameof(SelectedTodo));
+            }
+        }
+    }
+    
+    private string _selectedTodoName;
+    public string SelectedTodoName
+    {
+        get => _selectedTodoName;
+        set
+        {
+            if (_selectedTodoName != value)
+            {
+                _selectedTodoName = value;
+                OnPropertyChanged();
+
+                SelectedTodo = FreeTodos.FirstOrDefault(t => t.Name == value);
+            }
+        }
+    }
+
 
     public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
     [
@@ -332,9 +369,12 @@ public class TodoWindowViewModel : ViewModelBase
         }
     }
 
-    public void AddTodo()
+    public Todo? AddTodo(Event? relatedEv)
     {
-        if (string.IsNullOrWhiteSpace(NewTaskName)) return;
+        if (string.IsNullOrWhiteSpace(NewTaskName)) 
+            return null;
+
+        Todo todo;
 
         if (EditingTodo != null)
         {
@@ -343,36 +383,41 @@ public class TodoWindowViewModel : ViewModelBase
             EditingTodo.Due = NewDue;
             EditingTodo.Repeats = SelectedRepeats.Repeats;
             EditingTodo.ListName = ListName;
+            EditingTodo.RelatedEvent = relatedEv;
+            todo = EditingTodo;
 
             OnPropertyChanged(nameof(Todos));
             OnPropertyChanged(nameof(TodosByListName));
         }
         else
         {
-            var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+            todo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
             {
                 Description = NewDescription,
                 Due = NewDue,
                 Repeats = SelectedRepeats.Repeats,
-                ListName = ListName
+                ListName = ListName,
+                RelatedEvent = relatedEv
             };
 
-            newTodo.OnStatusChanged += HandleStatusChanged;
-            Todos.Add(newTodo);
+            todo.OnStatusChanged += HandleStatusChanged;
+            Todos.Add(todo);
         }
-
+        
         NewTaskName = string.Empty;
         NewDescription = string.Empty;
         NewDue = DateTime.Today;
         SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
         ListName = string.Empty;
         EditingTodo = null;
-
         HasChanges = false;
 
         IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)).ToList());
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
         OnTaskAdded?.Invoke();
+
+        return todo;
     }
+
 }

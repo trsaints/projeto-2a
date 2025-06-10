@@ -21,9 +21,11 @@ namespace Agendai.ViewModels
             get => _canSave;
             private set => SetProperty(ref _canSave, value);
         }
+
+        public TodoWindowViewModel TodoWindowVm { get; }
         
 
-        public EventListViewModel()
+        public EventListViewModel(TodoWindowViewModel todoWindowVm = null)
         {
             SelectTarefaCommand = new RelayCommand(() => OpenAddEvent = true);
             AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
@@ -83,6 +85,11 @@ namespace Agendai.ViewModels
                     .OfType<string>()
                     .Distinct());
 
+            if (todoWindowVm != null)
+            {
+                TodoWindowVm = todoWindowVm;
+            }
+            
             UpdateCanSave();
         }
 
@@ -184,6 +191,40 @@ namespace Agendai.ViewModels
                     });
             }
         }
+        
+        private Event? _selectedEvent;
+        public Event? SelectedEvent
+        {
+            get => _selectedEvent;
+            set
+            {
+                if (_selectedEvent != value)
+                {
+                    _selectedEvent = value;
+                    OnPropertyChanged(nameof(SelectedEvent));
+                    UpdateTodosForSelectedEvent();
+                }
+            }
+        }
+        
+        private ObservableCollection<Todo> _todosForSelectedEvent = new();
+        public ObservableCollection<Todo> TodosForSelectedEvent
+        {
+            get => _todosForSelectedEvent;
+            set
+            {
+                _todosForSelectedEvent = value;
+                OnPropertyChanged(nameof(TodosForSelectedEvent));
+            }
+        }
+
+        private void UpdateTodosForSelectedEvent()
+        {
+            if (SelectedEvent != null)
+                TodosForSelectedEvent = new ObservableCollection<Todo>(SelectedEvent.Todos ?? Enumerable.Empty<Todo>());
+            else
+                TodosForSelectedEvent = new ObservableCollection<Todo>();
+        }
 
         public void LoadEvent(Event? ev)
         {
@@ -225,8 +266,23 @@ namespace Agendai.ViewModels
                     Description = NewDescription,
                     Due = NewDue,
                     Repeats = Repeat,
-                    AgendaName = AgendaName
+                    AgendaName = AgendaName,
+                    Todos = new List<Todo>()
                 };
+
+                if (TodoWindowVm.SelectedTodo != null)
+                {
+                    newEvent.Todos.Add(TodoWindowVm.SelectedTodo);
+                }
+                else if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
+                {
+                    var newTodo = TodoWindowVm.AddTodo(newEvent);
+                    if (newTodo != null)
+                    {
+                        newEvent.Todos.Add(newTodo);
+                    }
+                }
+
                 Events.Add(newEvent);
             }
             else
@@ -236,6 +292,25 @@ namespace Agendai.ViewModels
                 _currentEvent.Due = NewDue;
                 _currentEvent.Repeats = Repeat;
                 _currentEvent.AgendaName = AgendaName;
+
+                if (_currentEvent.Todos == null)
+                    _currentEvent.Todos = new List<Todo>();
+
+                if (TodoWindowVm.SelectedTodo != null)
+                {
+                    if (!_currentEvent.Todos.Contains(TodoWindowVm.SelectedTodo))
+                    {
+                        _currentEvent.Todos.Add(TodoWindowVm.SelectedTodo);
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
+                {
+                    var newTodo = TodoWindowVm.AddTodo(_currentEvent);
+                    if (newTodo != null && !_currentEvent.Todos.Contains(newTodo))
+                    {
+                        _currentEvent.Todos.Add(newTodo);
+                    }
+                }
             }
 
             NewEventName = string.Empty;
@@ -243,12 +318,14 @@ namespace Agendai.ViewModels
             NewDue = DateTime.Today;
             Repeat = Repeats.None;
             AgendaName = string.Empty;
+            TodoWindowVm.SelectedTodo = null;
             _currentEvent = null;
 
             OnEventAddedOrUpdated?.Invoke();
-
             UpdateCanSave();
         }
+
+
 
     }
 }
