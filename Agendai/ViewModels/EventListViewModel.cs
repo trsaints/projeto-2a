@@ -152,7 +152,7 @@ namespace Agendai.ViewModels
 
         public string AgendaName
         {
-            get => _newDescription;
+            get => _agendaName;
             set
             {
                 if (SetProperty(ref _newDescription, value))
