@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Input;
 using Agendai.Data;
 using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;
+using ReactiveUI;
 
 namespace Agendai.ViewModels
 {
@@ -27,17 +29,16 @@ namespace Agendai.ViewModels
 
         public EventListViewModel(TodoWindowViewModel todoWindowVm = null)
         {
+            OpenPopupCommand = new RelayCommand(() => IsAddTodoPopupOpen = true);
+            ClosePopupCommand = new RelayCommand(() => IsAddTodoPopupOpen = false);
             SelectTarefaCommand = new RelayCommand(() => OpenAddEvent = true);
             AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
             OnEventAddedOrUpdated      = () => { OpenAddEvent = false; };
             CancelCommand = new RelayCommand(() =>
             {
                 OpenAddEvent = false;
-                NewEventName = string.Empty;
-                NewDescription = string.Empty;
-                NewDue = DateTime.Today;
-                Repeat = Repeats.None;
-                _currentEvent = null;
+                ClearEventForm();
+                TodoWindowVm.ClearTodoForm();
                 UpdateCanSave();
             });
 
@@ -121,6 +122,17 @@ namespace Agendai.ViewModels
         public ICommand AddEventCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand SelectTarefaCommand { get; }
+        
+        public ICommand OpenPopupCommand { get; }
+        
+        public ICommand ClosePopupCommand { get; }
+        
+        private bool _isAddTodoPopupOpen;
+        public bool IsAddTodoPopupOpen
+        {
+            get => _isAddTodoPopupOpen;
+            set => SetProperty(ref _isAddTodoPopupOpen, value);
+        }
 
         private string _newEventName;
         public string NewEventName
@@ -235,6 +247,7 @@ namespace Agendai.ViewModels
             NewDue = ev?.Due ?? DateTime.Today;
             Repeat = ev?.Repeats ?? Repeats.None;
             AgendaName = ev?.AgendaName ?? "";
+            SelectedEvent = _currentEvent;
 
             UpdateCanSave();
         }
@@ -247,10 +260,13 @@ namespace Agendai.ViewModels
                     _currentEvent == null ||
                     NewEventName != _currentEvent.Name ||
                     NewDescription != _currentEvent.Description ||
-                    NewDue != _currentEvent.Due ||
+                    NewDue.Date != _currentEvent.Due.Date || 
                     Repeat != _currentEvent.Repeats ||
-                    AgendaName != _currentEvent.AgendaName
+                    AgendaName != _currentEvent.AgendaName ||
+                    !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
+                    !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim())
                 );
+
 
             ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
         }
@@ -274,7 +290,7 @@ namespace Agendai.ViewModels
                 {
                     newEvent.Todos.Add(TodoWindowVm.SelectedTodo);
                 }
-                else if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
+                if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
                 {
                     var newTodo = TodoWindowVm.AddTodo(newEvent);
                     if (newTodo != null)
@@ -300,10 +316,12 @@ namespace Agendai.ViewModels
                 {
                     if (!_currentEvent.Todos.Contains(TodoWindowVm.SelectedTodo))
                     {
+                        TodoWindowVm.AddTodo(_currentEvent);
                         _currentEvent.Todos.Add(TodoWindowVm.SelectedTodo);
                     }
                 }
-                else if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
+                
+                if (!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName))
                 {
                     var newTodo = TodoWindowVm.AddTodo(_currentEvent);
                     if (newTodo != null && !_currentEvent.Todos.Contains(newTodo))
@@ -313,18 +331,23 @@ namespace Agendai.ViewModels
                 }
             }
 
-            NewEventName = string.Empty;
-            NewDescription = string.Empty;
-            NewDue = DateTime.Today;
-            Repeat = Repeats.None;
-            AgendaName = string.Empty;
-            TodoWindowVm.SelectedTodo = null;
-            _currentEvent = null;
+            ClearEventForm();
 
             OnEventAddedOrUpdated?.Invoke();
             UpdateCanSave();
         }
 
+        public void ClearEventForm()
+        {
+            NewEventName = string.Empty;
+            NewDescription = string.Empty;
+            NewDue = DateTime.Today;
+            Repeat = Repeats.None;
+            AgendaName = string.Empty;
+            TodoWindowVm.SelectedTodoName = null;
+            _currentEvent = null;
+            SelectedEvent = null;
+        }
 
 
     }

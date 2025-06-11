@@ -35,14 +35,7 @@ public class TodoWindowViewModel : ViewModelBase
             {
                 OpenAddTask = false;
                 IsPopupOpen = false;
-                NewTaskName = string.Empty;
-                NewDescription = string.Empty;
-                NewDue = DateTime.Today;
-                SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
-                ListName = string.Empty;
-                EditingTodo = null;
-
-                HasChanges = false;
+                ClearTodoForm();
             }
         );
 
@@ -122,6 +115,8 @@ public class TodoWindowViewModel : ViewModelBase
                 (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
             }
         };
+        
+        RefreshFreeTodos();
 
     }
 
@@ -294,11 +289,26 @@ public class TodoWindowViewModel : ViewModelBase
         }
     }
     
-    public ObservableCollection<Todo> FreeTodos =>
-        new(Todos.Where(t => t.RelatedEvent == null));
+    private ObservableCollection<Todo> _freeTodos = new();
+
+    public ObservableCollection<Todo> FreeTodos
+    {
+        get => _freeTodos;
+        private set
+        {
+            _freeTodos = value;
+            OnPropertyChanged(nameof(FreeTodos));
+        }
+    }
+
+    private void RefreshFreeTodos()
+    {
+        FreeTodos = new ObservableCollection<Todo>(Todos.Where(t => t.RelatedEvent == null));
+    }
     
     public IEnumerable<string> FreeTodosNames =>
-        FreeTodos.Select(t => t.Name);
+        FreeTodos
+            .Select(t => t.Name);
 
     private Todo? _selectedTodo;
     public Todo? SelectedTodo
@@ -403,14 +413,8 @@ public class TodoWindowViewModel : ViewModelBase
             todo.OnStatusChanged += HandleStatusChanged;
             Todos.Add(todo);
         }
-        
-        NewTaskName = string.Empty;
-        NewDescription = string.Empty;
-        NewDue = DateTime.Today;
-        SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
-        ListName = string.Empty;
-        EditingTodo = null;
-        HasChanges = false;
+        RefreshFreeTodos();
+        ClearTodoForm();
 
         IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)).ToList());
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
@@ -418,6 +422,19 @@ public class TodoWindowViewModel : ViewModelBase
         OnTaskAdded?.Invoke();
 
         return todo;
+    }
+
+    public void ClearTodoForm()
+    {
+        NewTaskName = string.Empty;
+        NewDescription = string.Empty;
+        NewDue = DateTime.Today;
+        SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
+        ListName = string.Empty;
+        EditingTodo = null;
+        SelectedTodo = null;
+        SelectedTodoName = null;
+        HasChanges = false;
     }
 
 }

@@ -6,8 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
              x:Class="Agendai.Views.Components.EventList.AddEvent"
              x:DataType="vm:EventListViewModel">
-    <StackPanel Spacing="16">
-
+    
+    <StackPanel Spacing="12">
         <StackPanel Spacing="4">
             <Label Target="EventName" FontWeight="Medium">Nome do evento</Label>
             <TextBox x:Name="EventName"
@@ -46,7 +46,7 @@
                             Background="#EBE6E7" />
             </StackPanel>
         </Border>
-        
+
         <StackPanel Spacing="16" Orientation="Horizontal">
             <StackPanel Spacing="4">
                 <Label Target="EventRepeats" FontWeight="Medium">Repetição</Label>
@@ -58,7 +58,7 @@
                           BorderBrush="Transparent"
                           Background="#EBE6E7" />
             </StackPanel>
-        
+
             <StackPanel Spacing="4">
                 <Label Target="AgendaNames" FontWeight="Medium">Adicionar à</Label>
                 <ComboBox ItemsSource="{Binding AgendaNames}"
@@ -72,101 +72,121 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Spacing="8" Margin="0,8,0,0">
+        <StackPanel Spacing="4" Margin="0,8,0,0">
             <TextBlock Text="Tarefas relacionadas" FontWeight="SemiBold" FontSize="16" />
-            <Border Background="#F5F5F5" CornerRadius="12" Padding="8" BorderBrush="#DDD" BorderThickness="1">
-                <ListBox ItemsSource="{Binding TodosForSelectedEvent}" Height="100" SelectionMode="Single"
-                         SelectedItem="{Binding TodoWindowVm.SelectedTodo, Mode=TwoWay}"
-                         Background="Transparent"
-                         BorderThickness="0">
-                    <ListBox.ItemTemplate>
+            <Border Background="#F5F5F5" CornerRadius="8" Padding="8" BorderBrush="#DDD" BorderThickness="1">
+                <ItemsControl ItemsSource="{Binding TodosForSelectedEvent}">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" FontSize="14" Padding="4,2" />
+                            <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#555" />
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Border>
         </StackPanel>
 
-        <StackPanel Spacing="8" Margin="0,8,0,0">
-            <TextBlock Text="Selecionar tarefa para adicionar" FontWeight="SemiBold" FontSize="16" />
-            <ComboBox ItemsSource="{Binding TodoWindowVm.FreeTodosNames}" SelectedItem="{Binding TodoWindowVm.SelectedTodoName}" 
-                      FontSize="14"
-                      CornerRadius="8"
-                      BorderBrush="#DDD"
-                      Background="#F9F9F9"
-                      Padding="4" />
-        </StackPanel>
+        <Grid Width="350">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Spacing="8" Margin="0,8,0,0" Background="#F0F4F8">
-            <StackPanel Spacing="4" Margin="0,0,0,8">
-            <Label Target="TodoTitle" FontWeight="Medium">Título</Label>
-
-            <TextBox Text="{Binding TodoWindowVm.NewTaskName}"
-                     FontSize="14" Watermark="Ex.: Comprar café"
-                     BorderThickness="1"
-                     BorderBrush="#DDDDDD"
-                     x:Name="TodoTitle" />
-        </StackPanel>
-
-        <StackPanel Spacing="4" Margin="0,0,0,8">
-            <Label Target="TodoDesc" FontWeight="Medium">Descrição</Label>
-
-            <TextBox Text="{Binding TodoWindowVm.NewDescription}"
-                     FontSize="14" Watermark="Adicione uma descrição"
-                     Padding="14,10"
-                     AcceptsReturn="True"
-                     Height="90"
-                     BorderThickness="1"
-                     BorderBrush="#DDDDDD"
-                     x:Name="TodoDesc" />
-        </StackPanel>
-
-        <Border CornerRadius="16"
-                Margin="0,0,0,8"
-                BorderBrush="Transparent"
-                Background="#EBE6E7"
-                Padding="16 8">
-            <StackPanel Spacing="4">
-                <Label Target="TodoDue" FontWeight="Medium">Prazo</Label>
-
-                <DatePicker SelectedDate="{Binding TodoWindowVm.NewDue, Converter={StaticResource DateTimeOffsetConverter}}"
-                            FontSize="14"
-                            BorderBrush="Transparent"
-                            Background="#EBE6E7"
-                            x:Name="TodoDue" />
-            </StackPanel>
-        </Border>
-
-        <StackPanel Orientation="Horizontal" Spacing="16">
-            <StackPanel Spacing="4">
-                <Label Target="TodoRepeats" FontWeight="Medium">Frequência</Label>
-
-                <ComboBox ItemsSource="{Binding TodoWindowVm.RepeatOptions}"
-                          SelectedItem="{Binding TodoWindowVm.SelectedRepeats}"
-                          SelectedIndex="0"
+            <StackPanel Grid.Column="0" Spacing="4">
+                <Label Target="SelectTodo" FontWeight="Medium">Selecionar Tarefa</Label>
+                <ComboBox ItemsSource="{Binding TodoWindowVm.FreeTodosNames}" 
+                          SelectedItem="{Binding TodoWindowVm.SelectedTodoName}"
                           FontSize="14"
                           CornerRadius="8"
-                          BorderBrush="Transparent"
+                          BorderBrush="#DDD"
                           Background="#EBE6E7"
-                          x:Name="TodoRepeats" />
+                          Padding="4" 
+                          x:Name="SelectTodo"/>
             </StackPanel>
 
-            <StackPanel Spacing="4">
-                <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
+            <Button Grid.Column="1" 
+                    Content="Adicionar nova tarefa"
+                    FontSize="14"
+                    Padding="12,6"
+                    CornerRadius="24"
+                    Background="#0078D7"
+                    Foreground="White"
+                    Command="{Binding OpenPopupCommand}" 
+                    Margin="8,0,0,0" />
+        </Grid>
 
-                <ComboBox ItemsSource="{Binding TodoWindowVm.ListNames}"
-                          SelectedItem="{Binding TodoWindowVm.ListName}"
-                          SelectedIndex="0"
-                          FontSize="14"
-                          CornerRadius="8"
-                          BorderBrush="Transparent"
-                          Background="#EBE6E7"
-                          x:Name="TodoListName" />
-            </StackPanel>
-        </StackPanel>
-            
-        </StackPanel>
+        <Popup IsOpen="{Binding IsAddTodoPopupOpen}" Placement="Center">
+            <Border Background="White" CornerRadius="12" Padding="16" BorderBrush="#DDD" BorderThickness="1">
+                <StackPanel Spacing="8">
+                    <StackPanel Spacing="4">
+                        <Label Target="TodoTitle" FontWeight="Medium">Título</Label>
+                        <TextBox Text="{Binding TodoWindowVm.NewTaskName}"
+                                 FontSize="14"
+                                 Watermark="Ex.: Comprar café"
+                                 BorderThickness="1"
+                                 BorderBrush="#DDDDDD"
+                                 x:Name="TodoTitle" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4">
+                        <Label Target="TodoDesc" FontWeight="Medium">Descrição</Label>
+                        <TextBox Text="{Binding TodoWindowVm.NewDescription}"
+                                 FontSize="14"
+                                 Watermark="Adicione uma descrição"
+                                 AcceptsReturn="True"
+                                 Height="90"
+                                 BorderThickness="1"
+                                 BorderBrush="#DDDDDD"
+                                 x:Name="TodoDesc" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4">
+                        <Label Target="TodoDue" FontWeight="Medium">Prazo</Label>
+                        <DatePicker SelectedDate="{Binding TodoWindowVm.NewDue, Converter={StaticResource DateTimeOffsetConverter}}"
+                                    FontSize="14"
+                                    BorderBrush="Transparent"
+                                    Background="#EBE6E7"
+                                    x:Name="TodoDue" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="16" Orientation="Horizontal">
+                        <StackPanel Spacing="4">
+                            <Label Target="TodoRepeats" FontWeight="Medium">Frequência</Label>
+                            <ComboBox ItemsSource="{Binding TodoWindowVm.RepeatOptions}"
+                                      SelectedItem="{Binding TodoWindowVm.SelectedRepeats}"
+                                      FontSize="14"
+                                      CornerRadius="8"
+                                      BorderBrush="Transparent"
+                                      Background="#EBE6E7"
+                                      x:Name="TodoRepeats" />
+                        </StackPanel>
+                    
+                        <StackPanel Spacing="4">
+                            <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
+
+                            <ComboBox ItemsSource="{Binding TodoWindowVm.ListNames}"
+                                      SelectedItem="{Binding TodoWindowVm.ListName}"
+                                      SelectedIndex="0"
+                                      FontSize="14"
+                                      CornerRadius="8"
+                                      BorderBrush="Transparent"
+                                      Background="#EBE6E7"
+                                      x:Name="TodoListName" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                        <Button Content="Minimizar"
+                                Padding="12,6"
+                                Background="White"
+                                Foreground="#0078D7"
+                                BorderBrush="#0078D7"
+                                BorderThickness="2"
+                                CornerRadius="24"
+                                Command="{Binding ClosePopupCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -182,7 +202,6 @@
                     BorderBrush="#0078D7"
                     BorderThickness="2"
                     Command="{Binding CancelCommand}" />
-
             <Button Content="Salvar"
                     CornerRadius="24"
                     Padding="16,8"
@@ -195,6 +214,5 @@
                     Command="{Binding AddEventCommand}" 
                     IsEnabled="{Binding CanSave}"/>
         </StackPanel>
-
     </StackPanel>
 </UserControl>
