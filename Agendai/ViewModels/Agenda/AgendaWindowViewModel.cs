@@ -114,8 +114,6 @@ namespace Agendai.ViewModels.Agenda
                 }
             }
         }
-
-
         
         private bool _showData = true;
         public bool ShowData
@@ -261,8 +259,7 @@ namespace Agendai.ViewModels.Agenda
             CurrentMonth = CurrentDay;
             CurrentWeek = CurrentDay;
         }
-
-
+        
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
