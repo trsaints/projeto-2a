@@ -9,6 +9,7 @@ using Agendai.Data;
 using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using DynamicData.Binding;
+using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
 namespace Agendai.ViewModels;
 
@@ -94,6 +95,8 @@ public class TodoWindowViewModel : ViewModelBase
         _incompleteResume =
                 new ObservableCollection<Todo>(_incompleteTodos.Take(7));
 
+        _newDue = DateTime.Today;
+
         if (homeWindowVm != null)
         {
             HomeWindowVm = homeWindowVm;
@@ -115,9 +118,9 @@ public class TodoWindowViewModel : ViewModelBase
                 (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
             }
         };
-        
-        RefreshFreeTodos();
 
+        RefreshFreeTodos();
+        
     }
 
     public string Title { get; set; } = "Tarefas";
@@ -294,7 +297,7 @@ public class TodoWindowViewModel : ViewModelBase
     public ObservableCollection<Todo> FreeTodos
     {
         get => _freeTodos;
-        private set
+        set
         {
             _freeTodos = value;
             OnPropertyChanged(nameof(FreeTodos));

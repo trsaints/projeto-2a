@@ -73,17 +73,30 @@
         </StackPanel>
 
         <StackPanel Spacing="4" Margin="0,8,0,0">
-            <TextBlock Text="Tarefas relacionadas" FontWeight="SemiBold" FontSize="16" />
-            <Border Background="#F5F5F5" CornerRadius="8" Padding="8" BorderBrush="#DDD" BorderThickness="1">
-                <ItemsControl ItemsSource="{Binding TodosForSelectedEvent}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#555" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+            <TextBlock Text="Tarefas relacionadas" FontWeight="SemiBold" FontSize="16" IsVisible="{Binding HasRelatedTodos}"/>
+            <ItemsControl ItemsSource="{Binding TodosForSelectedEvent}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button 
+                            Content="{Binding Name}" 
+                            FontSize="14" 
+                            Foreground="#555" 
+                            Background="#F5F5F5" 
+                            BorderBrush="#DDD" 
+                            BorderThickness="1" 
+                            Padding="8"
+                            Margin="0,0,8,8"
+                            />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
+
 
         <Grid Width="350">
             <Grid.ColumnDefinitions>

@@ -89,9 +89,15 @@ namespace Agendai.ViewModels
             if (todoWindowVm != null)
             {
                 TodoWindowVm = todoWindowVm;
+                TodoWindowVm.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(TodoWindowVm.NewTaskName) ||
+                        e.PropertyName == nameof(TodoWindowVm.SelectedTodoName))
+                    {
+                        UpdateCanSave();
+                    }
+                };
             }
-            
-            UpdateCanSave();
         }
 
         public ObservableCollection<Event> Events { get; set; }
@@ -174,7 +180,7 @@ namespace Agendai.ViewModels
             get => _agendaName;
             set
             {
-                if (SetProperty(ref _newDescription, value))
+                if (SetProperty(ref _agendaName, value))
                     UpdateCanSave();
             }
         }
@@ -214,6 +220,7 @@ namespace Agendai.ViewModels
                 {
                     _selectedEvent = value;
                     OnPropertyChanged(nameof(SelectedEvent));
+                    OnPropertyChanged(nameof(HasRelatedTodos));
                     UpdateTodosForSelectedEvent();
                 }
             }
@@ -229,6 +236,8 @@ namespace Agendai.ViewModels
                 OnPropertyChanged(nameof(TodosForSelectedEvent));
             }
         }
+
+        public bool HasRelatedTodos => SelectedEvent?.Todos?.Any() == true;
 
         private void UpdateTodosForSelectedEvent()
         {
@@ -252,8 +261,14 @@ namespace Agendai.ViewModels
             UpdateCanSave();
         }
 
-        private void UpdateCanSave()
+        public void UpdateCanSave()
         {
+            if (TodoWindowVm == null) return;
+            
+            bool hasTaskChanges = 
+                !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
+                !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim());
+
             CanSave =
                 !string.IsNullOrWhiteSpace(NewEventName) &&
                 (
@@ -263,9 +278,9 @@ namespace Agendai.ViewModels
                     NewDue.Date != _currentEvent.Due.Date || 
                     Repeat != _currentEvent.Repeats ||
                     AgendaName != _currentEvent.AgendaName ||
-                    !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
-                    !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim())
+                    hasTaskChanges
                 );
+
 
 
             ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
