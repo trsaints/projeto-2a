@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Agendai.Models;
+using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 

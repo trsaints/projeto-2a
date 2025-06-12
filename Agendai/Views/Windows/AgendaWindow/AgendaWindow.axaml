@@ -4,12 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:agenda="clr-namespace:Agendai.Views.Components.Agenda"
+             xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
+             xmlns:addEvent="clr-namespace:Agendai.Views.Components.EventList"
              xmlns:homeSidebar="clr-namespace:Agendai.Views.Components.HomeSidebar"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Windows.AgendaWindow.AgendaWindow"
              x:DataType="vm:AgendaWindowViewModel">
     <Grid ColumnDefinitions="0.25*,0.75*">
-        <homeSidebar:HomeSidebar Grid.Column="0" />
+        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}"/>
 
         <StackPanel Grid.Column="1">
             <StackPanel Spacing="10" Orientation="Horizontal" VerticalAlignment="Top"
@@ -25,7 +27,55 @@
             </StackPanel>
             
             <agenda:Agenda />
-            
         </StackPanel>
+        
+        <Panel IsVisible="{Binding TodoList.OpenAddTask}"
+               ZIndex="100"
+               Grid.ColumnSpan="2">
+            <Border Width="{Binding $parent[Window].Bounds.Width}"
+                    Height="{Binding $parent[Window].Bounds.Height}"
+                    Background="#80202020"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Background="WhiteSmoke"
+                            CornerRadius="10"
+                            Padding="20"
+                            BoxShadow="0 4 20 0 #66000000">
+                        <todoForm:TodoForm DataContext="{Binding TodoList}" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Panel>
+        <Panel 
+            Grid.ColumnSpan="2"
+            IsVisible="{Binding EventList.OpenAddEvent}"
+            ZIndex="100">
+            <Border Width="{Binding $parent[Window].Bounds.Width}"
+                    Height="{Binding $parent[Window].Bounds.Height}"
+                    Background="#80202020"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Background="WhiteSmoke"
+                            CornerRadius="10"
+                            Padding="20"
+                            BoxShadow="0 4 20 0 #66000000">
+                        <addEvent:AddEvent DataContext="{Binding EventList}" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Panel>
     </Grid>
 </UserControl>

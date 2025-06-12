@@ -1,5 +1,5 @@
 ﻿using System;
-using Agendai.Models;
+using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -26,6 +26,7 @@ public class MainWindowViewModel : ViewModelBase
         });
     }
 
+
     private ViewModelBase? _currentViewModel;
 
     public ViewModelBase? CurrentViewModel
@@ -44,47 +45,113 @@ public class MainWindowViewModel : ViewModelBase
 
     public void NavigateToAgenda()
     {
-        var agendaViewModel = new AgendaWindowViewModel();
-        agendaViewModel.MainViewModel = this;
-        CurrentViewModel = agendaViewModel;
+        if (CurrentViewModel is HomeWindowViewModel homeVm)
+        {
+            ResetFlags(homeVm);
+            homeVm.IsAgendaWindow = true;
+            var agendaViewModel = new AgendaWindowViewModel(homeVm, null, 0);
+            agendaViewModel.MainViewModel = this;
+            CurrentViewModel = agendaViewModel;
+        }
+        else
+        {
+            var fallbackHomeVm = new HomeWindowViewModel();
+            fallbackHomeVm.MainViewModel = this;
+            ResetFlags(fallbackHomeVm);
+            fallbackHomeVm.IsAgendaWindow = true;
+            var agendaViewModel = new AgendaWindowViewModel(fallbackHomeVm, null, 0);
+            agendaViewModel.MainViewModel = this;
+            CurrentViewModel = agendaViewModel;
+        }
     }
 
     public void NavigateToTodo()
     {
-        var todoViewModel = new TodoWindowViewModel();
-        todoViewModel.MainViewModel = this;
-        CurrentViewModel = todoViewModel;
+        if (CurrentViewModel is HomeWindowViewModel homeVm)
+        {
+            ResetFlags(homeVm);
+            homeVm.IsTodoWindow = true;
+            var todoViewModel = homeVm.TodoWindowVm;
+            todoViewModel.EventListVm = homeVm.EventListVm;
+            todoViewModel.MainViewModel = this;
+            CurrentViewModel = todoViewModel;
+        }
+        else
+        {
+            var fallbackHomeVm = new HomeWindowViewModel();
+            fallbackHomeVm.MainViewModel = this;
+            ResetFlags(fallbackHomeVm);
+            fallbackHomeVm.IsTodoWindow = true;
+            var todoViewModel = new TodoWindowViewModel();
+            todoViewModel.MainViewModel = this;
+            CurrentViewModel = todoViewModel;
+        }
     }
 
     public void NavigateToPomodoro()
     {
+        if (CurrentViewModel is HomeWindowViewModel homeVm)
+        {
+            ResetFlags(homeVm);
+            homeVm.IsPomodoroWindow = true;
+        }
+        else
+        {
+            var fallbackHomeVm = new HomeWindowViewModel();
+            fallbackHomeVm.MainViewModel = this;
+            ResetFlags(fallbackHomeVm);
+            fallbackHomeVm.IsPomodoroWindow = true;
+        }
+
         var pomodoroViewModel = new PomodoroWindowViewModel();
         pomodoroViewModel.MainViewModel = this;
         CurrentViewModel = pomodoroViewModel;
     }
+
+    private void ResetFlags(HomeWindowViewModel homeVm)
+    {
+        homeVm.IsAgendaWindow = false;
+        homeVm.IsTodoWindow = false;
+        homeVm.IsPomodoroWindow = false;
+    }
+
     
     public void NavigateToSpecificDay(DateTime selectedDate)
     {
         switch (CurrentViewModel)
         {
-            case AgendaWindowViewModel agendaViewModel:
-                agendaViewModel.CurrentDay = selectedDate;
-                agendaViewModel.SelectedIndex = 2;
-                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+            case AgendaWindowViewModel agendaVm:
+                agendaVm.HomeWindowVm.IsAgendaWindow = true;
+                agendaVm.CurrentDay = selectedDate;
+                agendaVm.SelectedIndex = 2;
+                agendaVm.DayController.UpdateDayFromDate(selectedDate);
                 break;
+            case HomeWindowViewModel homeVm:
+            {
+                ResetFlags(homeVm);
+                homeVm.IsAgendaWindow = true;
+                var agendaViewModel = new AgendaWindowViewModel(homeVm, selectedDate, 2);
+                agendaViewModel.MainViewModel = this;
+                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                CurrentViewModel = agendaViewModel;
+                break;
+            }
             default:
             {
-                CurrentViewModel = new AgendaWindowViewModel(selectedDate, 2);
-                if (CurrentViewModel is AgendaWindowViewModel agendaViewModel)
-                {
-                    agendaViewModel.MainViewModel = this;
-                    agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
-                }
+                var fallbackHomeVm = new HomeWindowViewModel();
+                fallbackHomeVm.MainViewModel = this;
+                ResetFlags(fallbackHomeVm);
+                fallbackHomeVm.IsAgendaWindow = true;
+                var agendaViewModel = new AgendaWindowViewModel(fallbackHomeVm, selectedDate, 2);
+                agendaViewModel.MainViewModel = this;
+                agendaViewModel.DayController.UpdateDayFromDate(selectedDate);
+                CurrentViewModel = agendaViewModel;
                 break;
             }
         }
-
     }
+
+
 
     
 }

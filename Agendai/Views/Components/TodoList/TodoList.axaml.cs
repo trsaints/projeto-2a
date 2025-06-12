@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Agendai.Models;
+using Agendai.Data.Models;
 using Avalonia;
 
 

@@ -5,6 +5,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+
 namespace Agendai.Views.Components.Agenda;
 
 public partial class MonthView : UserControl
@@ -35,6 +37,11 @@ public partial class MonthView : UserControl
                 vm.GoToDay(clickedDate);
             }
         }
+    }
+    private void ForwardClickToParent(object? sender, RoutedEventArgs e)
+    {
+        var parentAgenda = this.FindAncestorOfType<Agenda>();
+        parentAgenda?.OnEventOrTodoCLicked(sender, e);
     }
 
 }

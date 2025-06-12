@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using Agendai.Models;
+using Agendai.Data.Models;
 using Avalonia.Data.Converters;
 
 

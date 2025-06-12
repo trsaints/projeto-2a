@@ -24,5 +24,6 @@
         
         <converters:DateConverter x:Key="DateConverter" />
         <converters:StatusConverter x:Key="StatusConverter" />
+        <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeOffsetConverter" />
     </Application.Resources>
 </Application>

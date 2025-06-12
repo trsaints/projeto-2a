@@ -2,8 +2,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Agendai.Views.Components.Agenda.DayView"
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
+             xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
-    <StackPanel>  
+    
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="{x:Type models:Event}">
+            <Button Click="ForwardClickToParent"
+                    Margin="2"
+                    Padding="1"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="Transparent"
+                    Tag="{Binding}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+
+
+        <DataTemplate DataType="{x:Type models:Todo}">
+            <Button Click="ForwardClickToParent" 
+                    Margin="2"
+                    Padding="1"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Background="Transparent"
+                    Tag="{Binding}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="Black" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+
+    </UserControl.DataTemplates>
+
+
+    <StackPanel>
+        
         <Grid Margin="0 0 0 20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -46,7 +84,6 @@
                 </Border>
             </StackPanel>
 
-
             <Button Grid.Column="1"
                     Command="{Binding ToggleShowData}"
                     Margin="0,0,0,0"
@@ -62,7 +99,9 @@
                     VerticalAlignment="Center">
                 <TextBlock Text="Ocultar/Exibir Eventos e Tarefas" VerticalAlignment="Center" TextAlignment="Center"/>
             </Button>
+
         </Grid>
+
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <DataGrid 
                 AutoGenerateColumns="False"
@@ -74,16 +113,14 @@
                 VerticalScrollBarVisibility="Hidden">
                 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Hour}" />
+                    <DataGridTextColumn Binding="{Binding Hour}" Width="80" />
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ItemsControl ItemsSource="{Binding Items}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="6" Padding="1" Margin="8 4 8 2">
-                                                <TextBlock Text="{Binding}" Foreground="Black" Padding="4"/> 
-                                            </Border>
+                                            <ContentControl Content="{Binding}" />
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>

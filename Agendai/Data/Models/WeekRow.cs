@@ -1,4 +1,4 @@
-﻿using Agendai.Models;
+﻿using Agendai.Data.Models;
 
 public class WeekRow
 {
