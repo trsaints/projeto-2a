@@ -89,6 +89,8 @@ public class TodoWindowViewModel : ViewModelBase
 
 		_incompleteResume =
 				new ObservableCollection<Todo>(_incompleteTodos.Take(7));
+		
+		SelectedRepeats = RepeatOptions.First();
 	}
 
 	public string Title { get; set; } = "Tarefas";
@@ -212,6 +214,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 		set => SetProperty(ref _newDescription, value);
 	}
+
 	private RepeatsOption _selectedRepeats;
 	public RepeatsOption SelectedRepeats
 	{
