@@ -53,7 +53,6 @@
 
                 <ComboBox ItemsSource="{Binding RepeatOptions}"
                           SelectedItem="{Binding SelectedRepeats}"
-                          SelectedIndex="0"
                           FontSize="14"
                           CornerRadius="8"
                           BorderBrush="Transparent"
@@ -63,15 +62,12 @@
 
             <StackPanel Spacing="4">
                 <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
-
-                <ComboBox ItemsSource="{Binding ListNames}"
-                          SelectedItem="{Binding ListName}"
-                          SelectedIndex="0"
-                          FontSize="14"
-                          CornerRadius="8"
-                          BorderBrush="Transparent"
-                          Background="#EBE6E7"
-                          x:Name="TodoListName" />
+                
+                <AutoCompleteBox x:Name="TodoListName"
+                                 ItemsSource="{Binding ListNames}"
+                                 Text="{Binding ListName, Mode=TwoWay}"
+                                 FilterMode="Contains" MinimumPrefixLength="0"
+                                 GotFocus="TodoListName_OnGotFocus" />
             </StackPanel>
         </StackPanel>
 

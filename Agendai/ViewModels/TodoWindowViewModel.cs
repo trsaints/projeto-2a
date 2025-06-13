@@ -22,6 +22,8 @@ public class TodoWindowViewModel : ViewModelBase
 		SelectTarefaCommand = new RelayCommand(
 			() =>
 			{
+				SelectedRepeats = RepeatOptions.First();
+				ListName = ListNames.FirstOrDefault() ?? string.Empty;
 				OpenAddTask = true;
 				IsPopupOpen = false;
 			}
@@ -90,7 +92,6 @@ public class TodoWindowViewModel : ViewModelBase
 		_incompleteResume =
 				new ObservableCollection<Todo>(_incompleteTodos.Take(7));
 		
-		SelectedRepeats = RepeatOptions.First();
 	}
 
 	public string Title { get; set; } = "Tarefas";
@@ -215,7 +216,7 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _newDescription, value);
 	}
 
-	private RepeatsOption _selectedRepeats;
+	private RepeatsOption _selectedRepeats; 
 	public RepeatsOption SelectedRepeats
 	{
 		get => _selectedRepeats;
@@ -223,7 +224,7 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _selectedRepeats, value);
 	}
 
-	private string _listName = "Minhas Tarefas";
+	private string _listName = "";
 	public string ListName
 	{
 		get => _listName;
@@ -266,6 +267,7 @@ public class TodoWindowViewModel : ViewModelBase
 	public void AddTodo()
 	{
 		if (string.IsNullOrWhiteSpace(NewTaskName)) return;
+		if (string.IsNullOrWhiteSpace(ListName)) return;
 
 		var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
 		{
@@ -288,12 +290,17 @@ public class TodoWindowViewModel : ViewModelBase
 		};
 		ListName = string.Empty;
 
-		IncompleteTodos = new ObservableCollection<Todo>(
+		IncompleteTodos = new ObservableCollection<Todo>( 
 			Todos.Where(t => !IsComplete(t)).ToList()
 		);
 
 		IncompleteResume =
 				new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+		ListNames = new ObservableCollection<string>(
+			Todos.Select(t => t.ListName).OfType<string>().Distinct()
+		);
+		
+		OnPropertyChanged(nameof(TodosByListName));
 
 		OnTaskAdded?.Invoke();
 	}
