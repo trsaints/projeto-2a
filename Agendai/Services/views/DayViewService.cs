@@ -1,7 +1,8 @@
-﻿using Agendai.Models;
+﻿using Agendai.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Agendai.Services.Views
 {
@@ -10,7 +11,7 @@ namespace Agendai.Services.Views
         public static void GenerateDayView(
             ObservableCollection<DayRow> rows,
             string[] hours,
-            Dictionary<string, ObservableCollection<string>> dayMap,
+            Dictionary<string, ObservableCollection<object>> dayMap,
             bool showData)
         {
             rows.Clear();
@@ -22,42 +23,50 @@ namespace Agendai.Services.Views
                     Hour = hour,
                     Items = showData && dayMap.TryGetValue(hour, out var items)
                         ? items
-                        : new ObservableCollection<string>()
-
+                        : new ObservableCollection<object>()
                 };
 
                 rows.Add(row);
             }
         }
 
-        public static Dictionary<string, ObservableCollection<string>> MapDayItemsFrom(
+        public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
-            DateTime selectedDay)
+            DateTime selectedDay,
+            string[]? selectedListNames)
         {
-            var map = new Dictionary<string, ObservableCollection<string>>();
+            var map = new Dictionary<string, ObservableCollection<object>>();
+            
+            var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
+                ? todos
+                : todos.Where(t => selectedListNames.Contains(t.ListName));
+            
+            var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+                ? events
+                : events.Where(e => selectedListNames.Contains(e.AgendaName));
 
-            foreach (var ev in events)
+            foreach (var ev in filteredEvents)
             {
                 if (ev.Due.Date == selectedDay.Date)
                 {
                     var hourKey = ev.Due.ToString("HH:mm");
                     if (!map.ContainsKey(hourKey))
-                        map[hourKey] = new ObservableCollection<string>();
+                        map[hourKey] = new ObservableCollection<object>();
 
-                    map[hourKey].Add(ev.Name);
+                    map[hourKey].Add(ev);
                 }
             }
 
-            foreach (var todo in todos)
+            foreach (var todo in filteredTodos)
             {
                 if (todo.Due.Date == selectedDay.Date)
                 {
                     var hourKey = todo.Due.ToString("HH:mm");
                     if (!map.ContainsKey(hourKey))
-                        map[hourKey] = new ObservableCollection<string>();
+                        map[hourKey] = new ObservableCollection<object>();
 
-                    map[hourKey].Add(todo.Name);
+                    map[hourKey].Add(todo);
                 }
             }
 
