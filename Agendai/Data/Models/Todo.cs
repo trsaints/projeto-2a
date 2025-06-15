@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Agendai.Data.Models;
 
@@ -45,6 +47,8 @@ public class Todo : Recurrence, INotifyPropertyChanged
 			}
 		}
 	}
+
+	public virtual ICollection<Shift> Shifts { get; set; } = [];
 	
 	public new event PropertyChangedEventHandler? PropertyChanged;
 	public event Action<Todo, TodoStatus>? OnStatusChanged;
