@@ -20,19 +20,19 @@ namespace Agendai.ViewModels
         private bool _canSave;
         private bool _isAddTodoPopupOpen;
         private bool _openAddEvent;
-        private string _newEventName = string.Empty;
+        private string? _newEventName;
         private DateTime _newDue = DateTime.Today;
-        private string _newDescription = string.Empty;
-        private string _agendaName = string.Empty;
+        private string? _newDescription = string.Empty;
+        private string? _agendaName = string.Empty;
         private Repeats _repeat = Repeats.None;
-        private ObservableCollection<Todo> _todosForSelectedEvent = new();
-        private ObservableCollection<string> _agendaNames;
+        private ObservableCollection<Todo>? _todosForSelectedEvent = [];
+        private ObservableCollection<string>? _agendaNames;
 
         #endregion
 
         #region Constructor
 
-        public EventListViewModel(TodoWindowViewModel todoWindowVm = null)
+        public EventListViewModel(TodoWindowViewModel? todoWindowVm = null)
         {
             TodoWindowVm = todoWindowVm;
 
@@ -44,17 +44,17 @@ namespace Agendai.ViewModels
 
             OnEventAddedOrUpdated = () => { OpenAddEvent = false; };
 
-            Events = new ObservableCollection<Event>(GenerateSampleEvents());
-            _agendaNames = new ObservableCollection<string>(Events.Select(e => e.AgendaName).Distinct());
+            Events = [.. GenerateSampleEvents()];
+            _agendaNames = [.. Events.Select(e => e.AgendaName).Distinct()];
 
-            if (TodoWindowVm != null)
+            if (TodoWindowVm is not null)
             {
                 TodoWindowVm.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == nameof(TodoWindowVm.NewTaskName) ||
                         e.PropertyName == nameof(TodoWindowVm.SelectedTodoName))
                     {
-                        UpdateCanSave();
+                        SetCanSave();
                     }
                 };
             }
@@ -73,7 +73,7 @@ namespace Agendai.ViewModels
 
         public ObservableCollection<string> AgendaNames
         {
-            get => _agendaNames;
+            get => _agendaNames ?? [];
             set => SetProperty(ref _agendaNames, value);
         }
 
@@ -104,31 +104,31 @@ namespace Agendai.ViewModels
         public string NewEventName
         {
             get => _newEventName;
-            set { if (SetProperty(ref _newEventName, value)) UpdateCanSave(); }
+            set { if (SetProperty(ref _newEventName, value)) SetCanSave(); }
         }
 
         public DateTime NewDue
         {
             get => _newDue;
-            set { if (SetProperty(ref _newDue, value)) UpdateCanSave(); }
+            set { if (SetProperty(ref _newDue, value)) SetCanSave(); }
         }
 
         public string NewDescription
         {
             get => _newDescription;
-            set { if (SetProperty(ref _newDescription, value)) UpdateCanSave(); }
+            set { if (SetProperty(ref _newDescription, value)) SetCanSave(); }
         }
 
         public string AgendaName
         {
             get => _agendaName;
-            set { if (SetProperty(ref _agendaName, value)) UpdateCanSave(); }
+            set { if (SetProperty(ref _agendaName, value)) SetCanSave(); }
         }
 
         public Repeats Repeat
         {
             get => _repeat;
-            set { if (SetProperty(ref _repeat, value)) UpdateCanSave(); }
+            set { if (SetProperty(ref _repeat, value)) SetCanSave(); }
         }
 
         public Event? SelectedEvent
@@ -161,7 +161,7 @@ namespace Agendai.ViewModels
                 Events = new ObservableCollection<Event>(Events.Where(e => e.AgendaName == name))
             });
 
-        public TodoWindowViewModel TodoWindowVm { get; }
+        public TodoWindowViewModel? TodoWindowVm { get; set; }
 
         public Action? OnEventAddedOrUpdated { get; set; }
 
@@ -169,34 +169,35 @@ namespace Agendai.ViewModels
 
         #region Public Methods
 
-        public void LoadEvent(Event? ev)
+        public void LoadEvent(Event? evt)
         {
-            _currentEvent = ev;
-            NewEventName = ev?.Name ?? "";
-            NewDescription = ev?.Description ?? "";
-            NewDue = ev?.Due ?? DateTime.Today;
-            Repeat = ev?.Repeats ?? Repeats.None;
-            AgendaName = ev?.AgendaName ?? "";
+            _currentEvent = evt;
+            NewEventName = evt?.Name ?? "";
+            NewDescription = evt?.Description ?? "";
+            NewDue = evt?.Due ?? DateTime.Today;
+            Repeat = evt?.Repeats ?? Repeats.None;
+            AgendaName = evt?.AgendaName ?? "";
             SelectedEvent = _currentEvent;
-            UpdateCanSave();
+
+            SetCanSave();
         }
 
-        public void UpdateCanSave()
+        public void SetCanSave()
         {
-            if (TodoWindowVm == null) return;
+            if (TodoWindowVm is null) return;
 
             bool hasTaskChanges = 
                 !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
                 !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim());
 
             CanSave = !string.IsNullOrWhiteSpace(NewEventName) && (
-                _currentEvent == null ||
-                NewEventName != _currentEvent.Name ||
-                NewDescription != _currentEvent.Description ||
-                NewDue.Date != _currentEvent.Due.Date ||
-                Repeat != _currentEvent.Repeats ||
-                AgendaName != _currentEvent.AgendaName ||
-                hasTaskChanges
+                _currentEvent is null 
+                || NewEventName != _currentEvent.Name 
+                || NewDescription != _currentEvent.Description 
+                || NewDue.Date != _currentEvent.Due.Date 
+                || Repeat != _currentEvent.Repeats 
+                || AgendaName != _currentEvent.AgendaName 
+                || hasTaskChanges
             );
 
             ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
@@ -214,7 +215,7 @@ namespace Agendai.ViewModels
                     Due = NewDue,
                     Repeats = Repeat,
                     AgendaName = AgendaName,
-                    Todos = new List<Todo>()
+                    Todos = []
                 };
 
                 AddTodosToEvent(newEvent);
@@ -228,7 +229,7 @@ namespace Agendai.ViewModels
 
             ClearEventForm();
             OnEventAddedOrUpdated?.Invoke();
-            UpdateCanSave();
+            SetCanSave();
         }
 
         public void ClearEventForm()
@@ -252,7 +253,7 @@ namespace Agendai.ViewModels
             OpenAddEvent = false;
             ClearEventForm();
             TodoWindowVm.ClearTodoForm();
-            UpdateCanSave();
+            SetCanSave();
         }
 
         private void UpdateTodosForSelectedEvent()

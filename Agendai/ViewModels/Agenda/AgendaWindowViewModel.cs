@@ -18,17 +18,17 @@ namespace Agendai.ViewModels.Agenda
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string[] Days { get; } = new[]
-        {
+        public string[] Days { get; } =
+        [
             "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
-        };
+        ];
 
-        public string[] Hours { get; } = new[]
-        {
+        public string[] Hours { get; } =
+        [
             "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
             "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
             "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"
-        };
+        ];
 
         public string Title { get; set; } = "Agenda";
 
@@ -47,7 +47,7 @@ namespace Agendai.ViewModels.Agenda
             }
         }
 
-        private string[] _selectedListNames = Array.Empty<string>();
+        private string[] _selectedListNames = [];
         public string[] SelectedListNames
         {
             get => _selectedListNames;
@@ -119,9 +119,9 @@ namespace Agendai.ViewModels.Agenda
             set => SetProperty(ref _currentDay, value);
         }
 
-        public ObservableCollection<MonthRow> MonthViewRows { get; } = new();
-        public ObservableCollection<WeekRow> WeekViewRows { get; } = new();
-        public ObservableCollection<DayRow> DayViewRows { get; } = new();
+        public ObservableCollection<MonthRow> MonthViewRows { get; } = [];
+        public ObservableCollection<WeekRow> WeekViewRows { get; } = [];
+        public ObservableCollection<DayRow> DayViewRows { get; } = [];
 
         public EventListViewModel EventList { get; set; } = new();
         public TodoWindowViewModel TodoList { get; set; } = new();
@@ -181,27 +181,28 @@ namespace Agendai.ViewModels.Agenda
 
         public void ToggleShowData() => ShowData = !ShowData;
 
-        public void EditEvent(Event ev)
+        public void EditEvent(Event evt)
         {
             EventList.OpenAddEvent = true;
-            EventList.NewEventName = ev.Name;
-            EventList.NewDescription = ev.Description;
-            EventList.NewDue = ev.Due.Date;
-            EventList.Repeat = ev.Repeats;
-            EventList.LoadEvent(ev);
+            EventList.NewEventName = evt.Name;
+            EventList.NewDescription = evt?.Description ?? string.Empty;
+            EventList.NewDue = evt!.Due.Date;
+            EventList.Repeat = evt.Repeats;
+            EventList.LoadEvent(evt);
         }
 
         public void EditTodo(Todo todo)
         {
             var originalTodo = TodoList.Todos.FirstOrDefault(t => t.Id == todo.Id);
-            if (originalTodo == null) return;
+
+            if (originalTodo is null) return;
 
             TodoList.OpenAddTask = true;
             TodoList.NewTaskName = todo.Name;
-            TodoList.NewDescription = todo.Description;
-            TodoList.NewDue = todo.Due.Date;
-            TodoList.SelectedRepeats = TodoList.RepeatOptions.FirstOrDefault(o => o.Repeats == todo.Repeats);
-            TodoList.ListName = todo.ListName;
+            TodoList.NewDescription = todo?.Description ?? string.Empty;
+            TodoList.NewDue = todo!.Due.Date;
+            TodoList.SelectedRepeats = TodoList.RepeatOptions.FirstOrDefault(o => o.Repeats == todo.Repeats)!;
+            TodoList!.ListName = todo?.ListName ?? string.Empty;
             TodoList.EditingTodo = originalTodo;
         }
 
@@ -210,30 +211,57 @@ namespace Agendai.ViewModels.Agenda
             switch (SelectedIndex)
             {
                 case 0:
-                    MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, ShowData, SelectedListNames);
+                    MonthViewService.GenerateMonthView(MonthViewRows,
+                        EventList.Events,
+                        TodoList.Todos,
+                        CurrentMonth,
+                        ShowData,
+                        SelectedListNames);
+
                     break;
+
                 case 1:
-                    WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, ShowData, SelectedListNames);
+                    WeekViewService.GenerateWeekView(WeekViewRows,
+                        Hours,
+                        EventList.Events,
+                        TodoList.Todos,
+                        CurrentWeek,
+                        ShowData,
+                        SelectedListNames);
+
                     break;
+
                 case 2:
-                    var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay, SelectedListNames);
-                    DayViewService.GenerateDayView(DayViewRows, Hours, map, ShowData);
+                    var map = DayViewService.MapDayItemsFrom(EventList.Events,
+                        TodoList.Todos,
+                        CurrentDay,
+                        SelectedListNames);
+
+                    DayViewService.GenerateDayView(DayViewRows,
+                        Hours,
+                        map,
+                        ShowData);
+
                     break;
+
                 default:
                     MonthViewRows.Clear();
                     WeekViewRows.Clear();
                     DayViewRows.Clear();
+
                     break;
             }
         }
 
         public void UpdateDateSelectors()
         {
-            var culture = new CultureInfo("pt-BR");
+            CultureInfo culture = new("pt-BR");
 
-            SelectedMonth = culture.TextInfo.ToTitleCase(CurrentDay.ToString("MMMM", culture));
+            SelectedMonth = culture.TextInfo
+                .ToTitleCase(CurrentDay.ToString("MMMM", culture));
 
             var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(CurrentDay);
+
             SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
 
             SelectedDay = culture.TextInfo.ToTitleCase(CurrentDay.ToString("dddd, dd 'de' MMMM", culture));
@@ -263,26 +291,31 @@ namespace Agendai.ViewModels.Agenda
 
             EventList.Events.CollectionChanged += (s, e) =>
             {
-                if (e.NewItems != null)
+                if (e.NewItems is not null)
                     foreach (INotifyPropertyChanged item in e.NewItems) Subscribe(item);
-                if (e.OldItems != null)
+
+                if (e.OldItems is not null)
                     foreach (INotifyPropertyChanged item in e.OldItems)
                         item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+
                 UpdateDataGridItems();
             };
 
             TodoList.Todos.CollectionChanged += (s, e) =>
             {
-                if (e.NewItems != null)
+                if (e.NewItems is not null)
                     foreach (INotifyPropertyChanged item in e.NewItems) Subscribe(item);
-                if (e.OldItems != null)
+
+                if (e.OldItems is not null)
                     foreach (INotifyPropertyChanged item in e.OldItems)
                         item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+
                 UpdateDataGridItems();
             };
 
             foreach (var item in EventList.Events)
                 Subscribe(item);
+
             foreach (var item in TodoList.Todos)
                 Subscribe(item);
         }

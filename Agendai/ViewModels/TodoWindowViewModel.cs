@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Agendai.Data.Abstractions;
 using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData.Binding;
 using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
 namespace Agendai.ViewModels;
 
 public class TodoWindowViewModel : ViewModelBase
 {
-    public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
+    public TodoWindowViewModel(HomeWindowViewModel? homeWindowVm = null)
     {
         InitializeCommands();
         InitializeSampleTodos();
