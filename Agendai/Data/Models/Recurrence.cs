@@ -1,48 +1,72 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Agendai.Data.Models;
 
 
-public abstract class Recurrence : Entity
+public class Recurrence : Entity
 {
-	private Repeats _repeats;
-	public Repeats Repeats
-	{
-		get => _repeats;
-		set => SetProperty(ref _repeats, value);
-	}
+    #region State-tracking Properties
+    [NotMapped]
+    private Repeats _repeats;
 
-	private IEnumerable<DateTime>? _reminders;
-	public IEnumerable<DateTime>? Reminders
-	{
-		get => _reminders;
-		set => SetProperty(ref _reminders, value);
-	}
+    [NotMapped]
+    private IEnumerable<DateTime>? _reminders;
 
-	private DateTime _initialDue = DateTime.Now;
-	public DateTime InitialDue
-	{
-		get => _initialDue;
-		set => SetProperty(ref _initialDue, value);
-	}
+    [NotMapped]
+    private DateTime _initialDue = DateTime.Now;
 
-	private DateTime _due = DateTime.Now;
-	public DateTime Due
-	{
-		get => _due;
-		set => SetProperty(ref _due, value);
-	}
+    [NotMapped]
+    private DateTime _due = DateTime.Now;
 
-	private string? _description;
-	public string? Description
-	{
-		get => _description;
-		set => SetProperty(ref _description, value);
-	}
+    [NotMapped]
+    private string? _description;
+    #endregion
 
-	protected Recurrence(ulong id, string name) : base(id, name)
-	{
-	}
+    public Recurrence(ulong id, string name) : base(id, name)
+    {
+    }
+
+    public Recurrence() { }
+
+    [Required]
+    [DefaultValue(Repeats.None)]
+    public Repeats Repeats
+    {
+        get => _repeats;
+        set => SetProperty(ref _repeats, value);
+    }
+
+    public IEnumerable<DateTime>? Reminders
+    {
+        get => _reminders;
+        set => SetProperty(ref _reminders, value);
+    }
+
+    [Required]
+    public DateTime InitialDue
+    {
+        get => _initialDue;
+        set => SetProperty(ref _initialDue, value);
+    }
+
+
+    [Required]
+    public DateTime Due
+    {
+        get => _due;
+        set => SetProperty(ref _due, value);
+    }
+
+
+    [MaxLength(256)]
+    public string? Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
 }
