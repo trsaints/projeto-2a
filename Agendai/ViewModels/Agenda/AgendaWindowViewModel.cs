@@ -16,7 +16,19 @@ namespace Agendai.ViewModels.Agenda;
 
 public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
-    public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
+    private int _selectedIndex;
+    private string[] _selectedListNames = [];
+    private bool _showData = true;
+    private string _selectedMonth;
+    private string _selectedWeek;
+    private string _selectedDay;
+    private DateTime _currentMonth = DateTime.Today;
+    private DateTime _currentWeek = DateTime.Today;
+    private DateTime _currentDay = DateTime.Today;
+
+    public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm,
+        DateTime? specificDay = null,
+        int selectedIndex = 0)
     {
         MonthController = new AgendaMonthController(this);
         WeekController = new AgendaWeekController(this);
@@ -24,13 +36,13 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
         SelectedIndex = selectedIndex;
 
-        if (specificDay != null)
+        if (specificDay is not null)
             CurrentDay = specificDay.Value;
 
         UpdateDateSelectors();
         UpdateDataGridItems();
 
-        if (homeWindowVm != null)
+        if (homeWindowVm is not null)
         {
             HomeWindowVm = homeWindowVm;
             TodoList = HomeWindowVm.TodoWindowVm;
@@ -52,7 +64,8 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
             UpdateDataGridItems();
         };
     }
-    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
     public string[] Days { get; } =
     [
@@ -68,8 +81,8 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     public string Title { get; set; } = "Agenda";
 
-    private int _selectedIndex;
     public int SelectedIndex
+
     {
         get => _selectedIndex;
         set
@@ -83,7 +96,6 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private string[] _selectedListNames = [];
     public string[] SelectedListNames
     {
         get => _selectedListNames;
@@ -98,7 +110,6 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private bool _showData = true;
     public bool ShowData
     {
         get => _showData;
@@ -113,42 +124,36 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         }
     }
 
-    private string _selectedMonth;
     public string SelectedMonth
     {
         get => _selectedMonth;
         set => SetProperty(ref _selectedMonth, value);
     }
 
-    private string _selectedWeek;
     public string SelectedWeek
     {
         get => _selectedWeek;
         set => SetProperty(ref _selectedWeek, value);
     }
 
-    private string _selectedDay;
     public string SelectedDay
     {
         get => _selectedDay;
         set => SetProperty(ref _selectedDay, value);
     }
 
-    private DateTime _currentMonth = DateTime.Today;
     public DateTime CurrentMonth
     {
         get => _currentMonth;
         set => SetProperty(ref _currentMonth, value);
     }
 
-    private DateTime _currentWeek = DateTime.Today;
     public DateTime CurrentWeek
     {
         get => _currentWeek;
         set => SetProperty(ref _currentWeek, value);
     }
 
-    private DateTime _currentDay = DateTime.Today;
     public DateTime CurrentDay
     {
         get => _currentDay;
@@ -201,7 +206,8 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         TodoList.NewTaskName = todo.Name;
         TodoList.NewDescription = todo?.Description ?? string.Empty;
         TodoList.NewDue = todo!.Due.Date;
-        TodoList.SelectedRepeats = TodoList.RepeatOptions.FirstOrDefault(o => o.Repeats == todo.Repeats)!;
+        TodoList.SelectedRepeats = TodoList.RepeatOptions
+            .FirstOrDefault(o => o.Repeats == todo.Repeats)!;
         TodoList!.ListName = todo?.ListName ?? string.Empty;
         TodoList.EditingTodo = originalTodo;
     }
@@ -270,10 +276,10 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         CurrentWeek = CurrentDay;
     }
 
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    protected new void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    protected new void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (!EqualityComparer<T>.Default.Equals(field, value))
         {
@@ -322,10 +328,12 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     private void RegisterMessages()
     {
-        WeakReferenceMessenger.Default.Register<GetListsNamesMessenger>(this, (r, m) =>
-        {
-            SelectedListNames = m.SelectedItemsName;
-            UpdateDataGridItems();
-        });
+        WeakReferenceMessenger.Default
+            .Register<GetListsNamesMessenger>(this, (r, m) =>
+            {
+                SelectedListNames = m.SelectedItemsName;
+
+                UpdateDataGridItems();
+            });
     }
 }
