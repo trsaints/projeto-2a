@@ -36,9 +36,26 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public virtual Task<T?> DeleteAsync(T entity)
+    public virtual async Task<T?> DeleteAsync(T entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var existingEntity = await _data.FindAsync(entity.Id);
+
+            if (existingEntity is null) return entity;
+
+            _data.Remove(entity);
+
+            await _db.SaveChangesAsync();
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error deleting entity: {ex.Message}");
+
+            return entity;
+        }
     }
 
     public virtual Task<bool> ExistsAsync(T entity)
