@@ -4,9 +4,15 @@ using System.ComponentModel;
 namespace Agendai.Data.Models;
 
 
-public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
+public class Event : Recurrence, INotifyPropertyChanged
 {
-	public string? AgendaName { get; set; }
+	public Event(ulong id, string name) : base(id, name)
+    {
+    }
+
+    public Event() { }
+
+    public string? AgendaName { get; set; }
 	
 	public virtual ICollection<Todo>? Todos { get; set; }
 	
