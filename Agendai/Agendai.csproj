@@ -59,7 +59,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Database\Context\" />
     <Folder Include="Data\Database\Repositories\" />
   </ItemGroup>
 </Project>
