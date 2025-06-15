@@ -58,9 +58,18 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public virtual Task<bool> ExistsAsync(T entity)
+    public virtual async Task<bool> ExistsAsync(T entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _data.AnyAsync(e => e.Id == entity.Id);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error checking existence of entity: {ex.Message}");
+
+            return false;
+        }
     }
 
     public Task<IEnumerable<T>?> FindAsync(Predicate<Func<T, bool>> predicate)
