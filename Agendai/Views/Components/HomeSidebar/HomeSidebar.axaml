@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Agendai.Views.Components.HomeSidebar.HomeSidebar"
              x:DataType="vm:HomeWindowViewModel">
@@ -26,17 +27,16 @@
                     CornerRadius="3"
                     BorderBrush="#CCCCCC"
                     BorderThickness="1">
-
                 <StackPanel Margin="0 0 0 5">
                     <Button Content="Evento"
-                            Command="{Binding OpenAgendaCommand}"
+                            Command="{Binding OpenEventFormCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left" />
 
                     <Button Content="Tarefa"
-                            Command="{Binding OpenTodoCommand}"
+                            Command="{Binding OpenTodoFormCommand}"
                             Background="Transparent"
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"
@@ -50,6 +50,67 @@
             <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
         </Border>
-    </Grid>
 
+        <todoList:TodoList 
+            Grid.Row="2" 
+            Margin="0,16,0,0" 
+            ItemsSource="{Binding TodoWindowVm.IncompleteResume}" 
+            IsVisible="{Binding IsTodoWindow}"/>
+
+        <Border Grid.Row="2" 
+                Margin="0,16,0,0"
+                Background="WhiteSmoke"
+                Padding="16"
+                CornerRadius="10"
+                IsVisible="{Binding IsAgendaWindow}">
+            <StackPanel Spacing="16">
+                <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
+                        <ItemsControl ItemsSource="{Binding TodoWindowVm.TodosByListName}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="4 2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox 
+                                            IsCheckedChanged="OnCheckBoxChecked"
+                                            VerticalAlignment="Center"
+                                            DataContext="{Binding}"
+                                            Margin="0 0 8 0"/>
+                                        <TextBlock Text="{Binding ListName}" VerticalAlignment="Center" Grid.Column="1"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Filtrar por Lista de Eventos:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
+                        <ItemsControl ItemsSource="{Binding EventListVm.EventsByAgendaName}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="4 2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox 
+                                            IsCheckedChanged="OnCheckBoxChecked"
+                                            VerticalAlignment="Center"
+                                            DataContext="{Binding}"
+                                            Margin="0 0 8 0"/>
+                                        <TextBlock Text="{Binding AgendaName}" VerticalAlignment="Center" Grid.Column="1"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

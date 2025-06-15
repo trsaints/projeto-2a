@@ -1,6 +1,7 @@
-﻿using Agendai.Models;
+﻿using Agendai.Data.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Agendai.Services.Views
 {
@@ -12,11 +13,20 @@ namespace Agendai.Services.Views
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
             DateTime referenceDate,
-            bool showData)
+            bool showData,
+            string[]? selectedListNames)
         {
             rows.Clear();
             var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
 
+            var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
+                ? todos
+                : todos.Where(t => selectedListNames.Contains(t.ListName));
+            
+            var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+                ? events
+                : events.Where(e => selectedListNames.Contains(e.AgendaName));
+            
             foreach (var hour in hours)
             {
                 var row = new WeekRow { Hour = hour };
@@ -26,21 +36,21 @@ namespace Agendai.Services.Views
                     var day = startOfWeek.AddDays(i);
                     var cell = new DayCell
                     {
-                        Items = new ObservableCollection<string>()
+                        Items = new ObservableCollection<object>()
                     };
 
                     if (showData)
                     {
-                        foreach (var e in events)
+                        foreach (var e in filteredEvents)
                         {
                             if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
-                                cell.Items.Add(e.Description);
+                                cell.Items.Add(e);
                         }
 
-                        foreach (var t in todos)
+                        foreach (var t in filteredTodos)
                         {
                             if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
-                                cell.Items.Add(t.Description);
+                                cell.Items.Add(t);
                         }
                     }
 

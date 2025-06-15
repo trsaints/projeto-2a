@@ -2,14 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
-             xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
+             xmlns:homeSidebar="clr-namespace:Agendai.Views.Components.HomeSidebar"
              xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
+             xmlns:addEvent="clr-namespace:Agendai.Views.Components.EventList"
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel"
              x:Name="Root">
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
-        <todoSidebar:TodoSidebar />
+        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}"/>
 
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
@@ -93,7 +94,31 @@
                             CornerRadius="10"
                             Padding="20"
                             BoxShadow="0 4 20 0 #66000000">
-                        <todoForm:TodoForm DataContext="{Binding}" />
+                        <todoForm:TodoForm DataContext="{Binding }" />
+                    </Border>
+                </Grid>
+            </Border>
+        </Panel>
+        <Panel 
+            Grid.ColumnSpan="2"
+            IsVisible="{Binding EventListVm.OpenAddEvent}"
+            ZIndex="100">
+            <Border Width="{Binding $parent[Window].Bounds.Width}"
+                    Height="{Binding $parent[Window].Bounds.Height}"
+                    Background="#80202020"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Background="WhiteSmoke"
+                            CornerRadius="10"
+                            Padding="20"
+                            BoxShadow="0 4 20 0 #66000000">
+                        <addEvent:AddEvent DataContext="{Binding EventListVm}" />
                     </Border>
                 </Grid>
             </Border>

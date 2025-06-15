@@ -1,7 +1,7 @@
 using System;
 
 
-namespace Agendai.Models;
+namespace Agendai.Data.Models;
 
 
 public class Shift(ulong id, string name) : Entity(id, name)

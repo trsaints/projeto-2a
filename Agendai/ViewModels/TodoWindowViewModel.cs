@@ -1,371 +1,418 @@
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using Agendai.Data;
 using Agendai.Data.Converters;
-using Agendai.Models;
+using Agendai.Data.Models;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
-
+using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
 namespace Agendai.ViewModels;
 
 public class TodoWindowViewModel : ViewModelBase
 {
-	public TodoWindowViewModel()
-	{
-		OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
-		OnTaskAdded      = () => { OpenAddTask = false; };
-		TarefaCommand = new RelayCommand<Todo>((todo) =>
+    public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
+    {
+        InitializeCommands();
+        InitializeSampleTodos();
+        InitializeCollections();
+
+        _newDue = DateTime.Today;
+
+        if (homeWindowVm != null)
         {
-        	if (todo is null) return;
-            
-            IsEditing = true;
-            
-            SelectedTodo = todo;
-            
-            NewTaskName = todo.Name;
-            NewDescription = todo.Description;
-            NewDue = todo.Due;
-            SelectedRepeats = RepeatOptions.First();
-            ListName = todo.ListName;
-            
+            HomeWindowVm = homeWindowVm;
+            EventListVm = homeWindowVm.EventListVm;
+        }
+
+        PropertyChanged += (_, e) =>
+        {
+            if (_suppressPropertyChanged) return;
+
+            if (e.PropertyName is nameof(NewTaskName)
+                or nameof(NewDescription)
+                or nameof(NewDue)
+                or nameof(SelectedRepeats)
+                or nameof(ListName)
+                or nameof(EditingTodo))
+            {
+                UpdateHasChanges();
+                (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
+            }
+        };
+
+        RefreshFreeTodos();
+    }
+
+    #region Dependências
+    public HomeWindowViewModel HomeWindowVm { get; set; }
+    public EventListViewModel EventListVm { get; set; }
+    public RepeatsConverter RepeatsConverter { get; } = new();
+    public Action? OnTaskAdded { get; set; }
+    #endregion
+
+    #region Comandos
+    public ICommand OpenPopupCommand { get; private set; }
+    public ICommand SelectTarefaCommand { get; private set; }
+    public ICommand AddTodoCommand { get; private set; }
+    public ICommand CancelCommand { get; private set; }
+
+    private void InitializeCommands()
+    {
+        OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
+
+        SelectTarefaCommand = new RelayCommand(() =>
+        {
             OpenAddTask = true;
             IsPopupOpen = false;
         });
 
-		SelectTarefaCommand = new RelayCommand(
-			() =>
-			{
-				ClearForm();
-				
-				SelectedRepeats = RepeatOptions.First();
-				ListName = ListNames.First() ?? string.Empty;
-				
-				IsEditing = false;
-				SelectedTodo = null;
+        AddTodoCommand = new RelayCommand<Event?>(ev => AddTodo(ev), _ => HasChanges);
 
-				OpenAddTask = true;
-				IsPopupOpen = false;
-			}
-		);
-		AddTodoCommand = new RelayCommand(AddTodo);
-		CancelCommand = new RelayCommand(
-			() =>
-			{
-				OpenAddTask = false;
-				IsPopupOpen = false;
-			}
-		);
+        CancelCommand = new RelayCommand(() =>
+        {
+            OpenAddTask = false;
+            IsPopupOpen = false;
+            ClearTodoForm();
+        });
+    }
+    #endregion
 
-		_todos =
-		[
-			new Todo(1, "Comprar Pamonha")
-			{
-				Description = "Comprar pamonha na feira",
-				Due         = DateTime.Today,
-				Repeats     = Repeats.None,
-				ListName    = "Compras",
-				Status      = TodoStatus.Complete
-			},
-			new Todo(2, "Treino Fullbody")
-			{
-				Description = "Treino fullbody na feira",
-				Due         = DateTime.Today,
-				Repeats     = Repeats.Daily,
-				ListName    = "Treinos"
-			},
-			new Todo(3, "Lavar o chão")
-			{
-				Description = "Lavar o chão da sala",
-				Due         = DateTime.Today,
-				Repeats     = Repeats.None,
-				ListName    = "Casa"
-			},
-			new Todo(4, "Lavar o banheiro")
-			{
-				Description = "Lavar o banheiro",
-				Due         = DateTime.Today,
-				Repeats     = Repeats.None,
-				ListName    = "Casa",
-				Status      = TodoStatus.Complete
-			}
-		];
+    #region Propriedades de UI
+    public string Title { get; set; } = "Tarefas";
 
-		foreach (var todo in _todos)
-		{
-			todo.OnStatusChanged += HandleStatusChanged;
-		}
+    private bool _isPopupOpen;
+    public bool IsPopupOpen
+    {
+        get => _isPopupOpen;
+        set => SetProperty(ref _isPopupOpen, value);
+    }
 
-		_incompleteTodos =
-				new ObservableCollection<Todo>(
-					Todos.Where(t => !IsComplete(t))
-				);
-		_todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+    private bool _openAddTask;
+    public bool OpenAddTask
+    {
+        get => _openAddTask;
+        set => SetProperty(ref _openAddTask, value);
+    }
+    #endregion
 
-		_listNames = new ObservableCollection<string>(
-			Todos
-					.Select(t => t.ListName)
-					.OfType<string>()
-					.Distinct()
-		);
+    #region Tarefas e Listagens
 
-		_incompleteResume =
-				new ObservableCollection<Todo>(_incompleteTodos.Take(7));
-		
-	}
+    private ObservableCollection<Todo>? _todos;
+    public ObservableCollection<Todo> Todos
+    {
+        get => _todos ?? [];
+        set => SetProperty(ref _todos, value);
+    }
 
-	public string Title { get; set; } = "Tarefas";
-	
-	private Todo? _selectedTodo;
+    private ObservableCollection<Todo>? _incompleteTodos;
+    public ObservableCollection<Todo> IncompleteTodos
+    {
+        get => _incompleteTodos ?? [];
+        set => SetProperty(ref _incompleteTodos, value);
+    }
+
+    private ObservableCollection<Todo>? _todoHistory;
+    public ObservableCollection<Todo> TodoHistory
+    {
+        get => _todoHistory ?? [];
+        set => SetProperty(ref _todoHistory, value);
+    }
+
+    private ObservableCollection<Todo>? _incompleteResume;
+    public ObservableCollection<Todo> IncompleteResume
+    {
+        get => _incompleteResume ?? [];
+        set => SetProperty(ref _incompleteResume, value);
+    }
+
+    private ObservableCollection<string> _listNames = [];
+    public ObservableCollection<string> ListNames
+    {
+        get => _listNames;
+        set => SetProperty(ref _listNames, value);
+    }
+
+    public IEnumerable<TodosByListName> TodosByListName =>
+        ListNames.Select(name => new TodosByListName
+        {
+            ListName = name,
+            Items = new ObservableCollection<Todo>(
+                Todos.Where(t => t.ListName == name && t.Status == TodoStatus.Incomplete)
+            )
+        });
+    #endregion
+
+    #region Nova Tarefa (Formulário)
+
+    private string _newTaskName;
+    public string NewTaskName
+    {
+        get => _newTaskName;
+        set => SetProperty(ref _newTaskName, value);
+    }
+
+    private string _newDescription;
+    public string NewDescription
+    {
+        get => _newDescription;
+        set => SetProperty(ref _newDescription, value);
+    }
+
+    private DateTime _newDue;
+    public DateTime NewDue
+    {
+        get => _newDue;
+        set => SetProperty(ref _newDue, value);
+    }
+
+    private RepeatsOption _selectedRepeats;
+    public RepeatsOption SelectedRepeats
+    {
+        get => _selectedRepeats;
+        set => SetProperty(ref _selectedRepeats, value);
+    }
+
+    private string _listName = "Minhas Tarefas";
+    public string ListName
+    {
+        get => _listName;
+        set => SetProperty(ref _listName, value);
+    }
+
+    public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
+    [
+        new() { Repeats = Repeats.None },
+        new() { Repeats = Repeats.Daily },
+        new() { Repeats = Repeats.Weekly },
+        new() { Repeats = Repeats.Monthly },
+        new() { Repeats = Repeats.Anually }
+    ];
+
+    private Todo? _editingTodo;
+    public Todo? EditingTodo
+    {
+        get => _editingTodo;
+        set
+        {
+            if (SetProperty(ref _editingTodo, value) && value != null)
+            {
+                _suppressPropertyChanged = true;
+
+                NewTaskName = value.Name;
+                NewDescription = value.Description;
+                NewDue = value.Due;
+                SelectedRepeats = RepeatOptions.FirstOrDefault(r => r.Repeats == value.Repeats) ?? RepeatOptions[0];
+                ListName = value.ListName;
+
+                _suppressPropertyChanged = false;
+                UpdateHasChanges();
+                (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
+    private bool _hasChanges;
+    public bool HasChanges
+    {
+        get => _hasChanges;
+        private set => SetProperty(ref _hasChanges, value);
+    }
+
+    private void UpdateHasChanges()
+    {
+        HasChanges = EditingTodo == null
+            ? !string.IsNullOrWhiteSpace(NewTaskName)
+            : EditingTodo.Name != NewTaskName
+              || EditingTodo.Description != NewDescription
+              || EditingTodo.Due != NewDue
+              || EditingTodo.Repeats != SelectedRepeats.Repeats
+              || EditingTodo.ListName != ListName;
+    }
+
+    public void ClearTodoForm()
+    {
+        NewTaskName = string.Empty;
+        NewDescription = string.Empty;
+        NewDue = DateTime.Today;
+        SelectedRepeats = new RepeatsOption { Repeats = Repeats.None };
+        ListName = string.Empty;
+        EditingTodo = null;
+        SelectedTodo = null;
+        SelectedTodoName = null;
+        HasChanges = false;
+    }
+
+    #endregion
+
+    #region Seleção de Tarefa Existente
+
+    private ObservableCollection<Todo> _freeTodos = new();
+    public ObservableCollection<Todo> FreeTodos
+    {
+        get => _freeTodos;
+        set => SetProperty(ref _freeTodos, value);
+    }
+
+    public IEnumerable<string> FreeTodosNames =>
+        FreeTodos.Select(t => t.Name);
+
+    private Todo? _selectedTodo;
     public Todo? SelectedTodo
     {
         get => _selectedTodo;
         set => SetProperty(ref _selectedTodo, value);
     }
-	
-	private bool _isEditing;
-    public bool IsEditing
+
+    private string _selectedTodoName;
+    public string SelectedTodoName
     {
-    	get => _isEditing;
-    	set => SetProperty(ref _isEditing, value);
+        get => _selectedTodoName;
+        set
+        {
+            if (_selectedTodoName != value)
+            {
+                _selectedTodoName = value;
+                OnPropertyChanged();
+                SelectedTodo = FreeTodos.FirstOrDefault(t => t.Name == value);
+            }
+        }
     }
 
-    public ICommand TarefaCommand { get; }
+    private void RefreshFreeTodos()
+    {
+        FreeTodos = new ObservableCollection<Todo>(
+            Todos.Where(t => t.RelatedEvent == null)
+        );
+    }
 
-    private bool _isPopupOpen;
-	public bool IsPopupOpen
-	{
-		get => _isPopupOpen;
+    #endregion
 
-		set => SetProperty(ref _isPopupOpen, value);
-	}
+    #region Métodos principais
 
-	private bool _openAddTask;
+    public Todo? AddTodo(Event? relatedEv)
+    {
+        if (string.IsNullOrWhiteSpace(NewTaskName)) return null;
 
-	public bool OpenAddTask
-	{
-		get => _openAddTask;
+        Todo todo;
 
-		set => SetProperty(ref _openAddTask, value);
-	}
+        if (EditingTodo != null)
+        {
+            EditingTodo.Name = NewTaskName;
+            EditingTodo.Description = NewDescription;
+            EditingTodo.Due = NewDue;
+            EditingTodo.Repeats = SelectedRepeats.Repeats;
+            EditingTodo.ListName = ListName;
+            EditingTodo.RelatedEvent = relatedEv;
+            todo = EditingTodo;
 
-	public ICommand OpenPopupCommand    { get; }
-	public ICommand SelectTarefaCommand { get; }
+            OnPropertyChanged(nameof(Todos));
+            OnPropertyChanged(nameof(TodosByListName));
+        }
+        else
+        {
+            todo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+            {
+                Description = NewDescription,
+                Due = NewDue,
+                Repeats = SelectedRepeats.Repeats,
+                ListName = ListName,
+                RelatedEvent = relatedEv
+            };
 
+            todo.OnStatusChanged += HandleStatusChanged;
+            Todos.Add(todo);
+        }
 
-	public RepeatsConverter RepeatsConverter { get; } = new();
+        RefreshFreeTodos();
+        ClearTodoForm();
 
-	private Action?  OnTaskAdded    { get; set; }
-	public  ICommand AddTodoCommand { get; }
+        IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
+        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
-	public ICommand CancelCommand { get; }
+        OnTaskAdded?.Invoke();
+        return todo;
+    }
 
-	private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
-	{
-		if (newStatus == TodoStatus.Complete)
-		{
-			IncompleteTodos.Remove(todo);
-			TodoHistory.Add(todo);
-		}
-		else
-		{
-			TodoHistory.Remove(todo);
-			IncompleteTodos.Add(todo);
-		}
+    private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
+    {
+        if (newStatus == TodoStatus.Complete)
+        {
+            IncompleteTodos.Remove(todo);
+            TodoHistory.Add(todo);
+        }
+        else
+        {
+            TodoHistory.Remove(todo);
+            IncompleteTodos.Add(todo);
+        }
 
-		IncompleteResume = new ObservableCollection<Todo>(
-			IncompleteTodos.Take(7)
-		);
+        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
-		ListNames = new ObservableCollection<string>(
-			Todos.Select(t => t.ListName).OfType<string>().Distinct()
-		);
+        ListNames = new ObservableCollection<string>(
+            Todos.Select(t => t.ListName).OfType<string>().Distinct()
+        );
 
-		OnPropertyChanged(nameof(TodosByListName));
-	}
+        OnPropertyChanged(nameof(TodosByListName));
+    }
 
-	private ObservableCollection<Todo>? _todos;
-	public ObservableCollection<Todo> Todos
-	{
-		get => _todos ?? [];
+    private void InitializeSampleTodos()
+    {
+        _todos =
+        [
+            new Todo(1, "Comprar Pamonha")
+            {
+                Description = "Comprar pamonha na feira",
+                Due = DateTime.Today,
+                Repeats = Repeats.None,
+                ListName = "Compras",
+                Status = TodoStatus.Complete
+            },
+            new Todo(2, "Treino Fullbody")
+            {
+                Description = "Treino fullbody na feira",
+                Due = DateTime.Today,
+                Repeats = Repeats.Daily,
+                ListName = "Treinos"
+            },
+            new Todo(3, "Lavar o chão")
+            {
+                Description = "Lavar o chão da sala",
+                Due = DateTime.Today,
+                Repeats = Repeats.None,
+                ListName = "Casa"
+            },
+            new Todo(4, "Lavar o banheiro")
+            {
+                Description = "Lavar o banheiro",
+                Due = DateTime.Today,
+                Repeats = Repeats.None,
+                ListName = "Casa",
+                Status = TodoStatus.Complete
+            }
+        ];
 
-		set => SetProperty(ref _todos, value);
-	}
+        foreach (var todo in _todos)
+        {
+            todo.OnStatusChanged += HandleStatusChanged;
+        }
+    }
 
-	private ObservableCollection<Todo>? _incompleteTodos;
+    private void InitializeCollections()
+    {
+        _incompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
+        _todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+        _listNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
+        _incompleteResume = new ObservableCollection<Todo>(_incompleteTodos.Take(7));
+    }
 
-	public ObservableCollection<Todo> IncompleteTodos
-	{
-		get => _incompleteTodos ?? [];
+    #endregion
 
-		set => SetProperty(ref _incompleteTodos, value);
-	}
+    private bool _suppressPropertyChanged = false;
 
-	private ObservableCollection<Todo>? _incompleteResume;
-
-	public ObservableCollection<Todo> IncompleteResume
-	{
-		get => _incompleteResume ?? [];
-
-		set => SetProperty(ref _incompleteResume, value);
-	}
-
-	private ObservableCollection<Todo>? _todoHistory;
-	public ObservableCollection<Todo> TodoHistory
-	{
-		get => _todoHistory ?? [];
-
-		set => SetProperty(ref _todoHistory, value);
-	}
-
-	private ObservableCollection<string> _listNames;
-
-	public ObservableCollection<string> ListNames
-	{
-		get => _listNames;
-
-		set => SetProperty(ref _listNames, value);
-	}
-
-	private string _newTaskName;
-	public string NewTaskName
-	{
-		get => _newTaskName;
-
-		set => SetProperty(ref _newTaskName, value);
-	}
-
-	private DateTime _newDue;
-
-	public DateTime NewDue
-	{
-		get => _newDue;
-
-		set => SetProperty(ref _newDue, value);
-	}
-
-	private string _newDescription;
-	public string NewDescription
-	{
-		get => _newDescription;
-
-		set => SetProperty(ref _newDescription, value);
-	}
-
-	private RepeatsOption _selectedRepeats; 
-	public RepeatsOption SelectedRepeats
-	{
-		get => _selectedRepeats;
-
-		set => SetProperty(ref _selectedRepeats, value);
-	}
-
-	private string _listName = "";
-	public string ListName
-	{
-		get => _listName;
-
-		set => SetProperty(ref _listName, value);
-	}
-
-	public IEnumerable<TodosByListName> TodosByListName
-	{
-		get
-		{
-			return ListNames.Select(
-				name => new TodosByListName
-				{
-					ListName = name,
-					Items = new ObservableCollection<Todo>(
-						Todos.Where(
-							t => t.ListName == name
-							     && t.Status == TodoStatus.Incomplete
-						)
-					)
-				}
-			);
-		}
-	}
-
-	public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
-	[
-		new() { Repeats = Repeats.None }, new() { Repeats = Repeats.Daily },
-		new() { Repeats = Repeats.Weekly },
-		new() { Repeats = Repeats.Monthly },
-		new() { Repeats = Repeats.Anually }
-	];
-
-	private bool IsComplete(Todo todo)
-	{
-		return todo.Status == TodoStatus.Complete;
-	}
-
-	public void AddTodo()
-	{
-		if (string.IsNullOrWhiteSpace(NewTaskName)) return;
-		if (string.IsNullOrWhiteSpace(ListName)) return;
-
-		if (IsEditing && SelectedTodo != null)
-		{
-			
-			SelectedTodo.Name        = NewTaskName;
-			SelectedTodo.Description = NewDescription;
-			SelectedTodo.Due         = NewDue;
-			SelectedTodo.Repeats     = RepeatsConverter.ConvertBack(SelectedRepeats.ToString());
-			SelectedTodo.ListName    = ListName;
-
-			OnPropertyChanged(nameof(Todos));
-			OnPropertyChanged(nameof(TodosByListName));
-		}
-		else
-		{
-			
-			var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
-			{
-				Description   = NewDescription,
-				Due           = NewDue,
-				Repeats       = RepeatsConverter.ConvertBack(SelectedRepeats.ToString()),
-				ListName      = ListName
-			};
-
-			newTodo.OnStatusChanged += HandleStatusChanged;
-			Todos.Add(newTodo);
-		}
-
-		ClearForm();
-		
-		TodoHistory = new ObservableCollection<Todo>(
-			Todos.Where(IsComplete)
-		);
-
-		IncompleteTodos = new ObservableCollection<Todo>( 
-			Todos.Where(t => !IsComplete(t)).ToList()
-		);
-
-		IncompleteResume =
-				new ObservableCollection<Todo>(IncompleteTodos.Take(7));
-		ListNames = new ObservableCollection<string>(
-			Todos.Select(t => t.ListName).OfType<string>().Distinct()
-		);
-		
-		OnPropertyChanged(nameof(TodosByListName));
-
-		OnTaskAdded?.Invoke();
-	}
-
-	public void ClearForm()
-	{
-		NewTaskName    = string.Empty;
-		NewDescription = string.Empty;
-		NewDue         = DateTime.Today;
-		SelectedRepeats = new RepeatsOption
-		{
-			Repeats = Repeats.None
-		};
-		ListName = string.Empty;
-	}
+    private bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
 }

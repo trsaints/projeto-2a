@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using Agendai.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Agendai.Data.Models;
+using Agendai.ViewModels;
 
 
 namespace Agendai.Data;
 
-public class TodosByListName
+public class TodosByListName : ViewModelBase
 {
 	public string ListName { get; set; }
 
 	public IEnumerable<Todo> Items { get; set; }
+	
 }
