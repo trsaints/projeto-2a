@@ -116,9 +116,18 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public Task<T?> GetByNameAsync(string name)
+    public async Task<T?> GetByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _data.FirstOrDefaultAsync(t => t.Name == name);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error getting entity by name: {ex.Message}");
+
+            return null;
+        }
     }
 
     public Task<T?> UpdateAsync(T entity)
