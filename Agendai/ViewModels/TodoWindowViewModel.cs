@@ -286,7 +286,7 @@ public class TodoWindowViewModel : ViewModelBase
     private void RefreshFreeTodos()
     {
         FreeTodos = new ObservableCollection<Todo>(
-            Todos.Where(t => t.RelatedEvent == null)
+            Todos.Where(t => t.Event == null)
         );
     }
 
@@ -307,7 +307,7 @@ public class TodoWindowViewModel : ViewModelBase
             EditingTodo.Due = NewDue;
             EditingTodo.Repeats = SelectedRepeats.Repeats;
             EditingTodo.ListName = ListName;
-            EditingTodo.RelatedEvent = relatedEv;
+            EditingTodo.Event = relatedEv;
             todo = EditingTodo;
 
             OnPropertyChanged(nameof(Todos));
@@ -321,7 +321,7 @@ public class TodoWindowViewModel : ViewModelBase
                 Due = NewDue,
                 Repeats = SelectedRepeats.Repeats,
                 ListName = ListName,
-                RelatedEvent = relatedEv
+                Event = relatedEv
             };
 
             todo.OnStatusChanged += HandleStatusChanged;
