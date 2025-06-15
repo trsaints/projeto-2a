@@ -16,6 +16,42 @@ namespace Agendai.ViewModels.Agenda;
 
 public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 {
+    public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
+    {
+        MonthController = new AgendaMonthController(this);
+        WeekController = new AgendaWeekController(this);
+        DayController = new AgendaDayController(this);
+
+        SelectedIndex = selectedIndex;
+
+        if (specificDay != null)
+            CurrentDay = specificDay.Value;
+
+        UpdateDateSelectors();
+        UpdateDataGridItems();
+
+        if (homeWindowVm != null)
+        {
+            HomeWindowVm = homeWindowVm;
+            TodoList = HomeWindowVm.TodoWindowVm;
+            EventList = HomeWindowVm.EventListVm;
+        }
+
+        SubscribeToCollectionChanges();
+        RegisterMessages();
+
+        EventList.OnEventAddedOrUpdated = () =>
+        {
+            EventList.OpenAddEvent = false;
+            UpdateDataGridItems();
+        };
+
+        TodoList.OnTaskAdded = () =>
+        {
+            TodoList.OpenAddTask = false;
+            UpdateDataGridItems();
+        };
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public string[] Days { get; } =
@@ -132,42 +168,6 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 
     public HomeWindowViewModel HomeWindowVm { get; set; }
 
-    public AgendaWindowViewModel(HomeWindowViewModel? homeWindowVm, DateTime? specificDay = null, int selectedIndex = 0)
-    {
-        MonthController = new AgendaMonthController(this);
-        WeekController = new AgendaWeekController(this);
-        DayController = new AgendaDayController(this);
-
-        SelectedIndex = selectedIndex;
-
-        if (specificDay != null)
-            CurrentDay = specificDay.Value;
-
-        UpdateDateSelectors();
-        UpdateDataGridItems();
-
-        if (homeWindowVm != null)
-        {
-            HomeWindowVm = homeWindowVm;
-            TodoList = HomeWindowVm.TodoWindowVm;
-            EventList = HomeWindowVm.EventListVm;
-        }
-
-        SubscribeToCollectionChanges();
-        RegisterMessages();
-
-        EventList.OnEventAddedOrUpdated = () =>
-        {
-            EventList.OpenAddEvent = false;
-            UpdateDataGridItems();
-        };
-
-        TodoList.OnTaskAdded = () =>
-        {
-            TodoList.OpenAddTask = false;
-            UpdateDataGridItems();
-        };
-    }
 
     public void GoToPreviousMonth() => MonthController.GoToPreviousMonth();
     public void GoToNextMonth() => MonthController.GoToNextMonth();
