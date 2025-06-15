@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Agendai.Data.Database.Context;
 
-class AppDbContext : DbContext
+public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
