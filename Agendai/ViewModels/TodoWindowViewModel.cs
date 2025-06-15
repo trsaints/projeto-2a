@@ -249,7 +249,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     #region Seleção de Tarefa Existente
 
-    private ObservableCollection<Todo> _freeTodos = new();
+    private ObservableCollection<Todo> _freeTodos = [];
     public ObservableCollection<Todo> FreeTodos
     {
         get => _freeTodos;
@@ -283,9 +283,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     private void RefreshFreeTodos()
     {
-        FreeTodos = new ObservableCollection<Todo>(
-            Todos.Where(t => t.Event == null)
-        );
+        FreeTodos = [.. Todos.Where(t => t.Event == null)];
     }
 
     #endregion
@@ -329,8 +327,8 @@ public class TodoWindowViewModel : ViewModelBase
         RefreshFreeTodos();
         ClearTodoForm();
 
-        IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
-        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+        IncompleteTodos = [.. Todos.Where(t => !IsComplete(t))];
+        IncompleteResume = [.. IncompleteTodos.Take(7)];
 
         OnTaskAdded?.Invoke();
         return todo;
@@ -349,11 +347,13 @@ public class TodoWindowViewModel : ViewModelBase
             IncompleteTodos.Add(todo);
         }
 
-        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+        IncompleteResume = [.. IncompleteTodos.Take(7)];
 
-        ListNames = new ObservableCollection<string>(
-            Todos.Select(t => t.ListName).OfType<string>().Distinct()
-        );
+        ListNames = [
+            .. Todos.Select(t => t.ListName)
+            .OfType<string>()
+            .Distinct()
+        ];
 
         OnPropertyChanged(nameof(TodosByListName));
     }
@@ -402,10 +402,10 @@ public class TodoWindowViewModel : ViewModelBase
 
     private void InitializeCollections()
     {
-        _incompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
-        _todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
-        _listNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
-        _incompleteResume = new ObservableCollection<Todo>(_incompleteTodos.Take(7));
+        _incompleteTodos = [.. Todos.Where(t => !IsComplete(t))];
+        _todoHistory = [.. Todos.Where(IsComplete)];
+        _listNames = [.. Todos.Select(t => t.ListName).Distinct()];
+        _incompleteResume = [.. _incompleteTodos.Take(7)];
     }
 
     #endregion
