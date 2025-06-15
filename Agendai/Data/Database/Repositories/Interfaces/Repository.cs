@@ -130,8 +130,25 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public Task<T?> UpdateAsync(T entity)
+    public async Task<T?> UpdateAsync(T entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var entityExists = await ExistsAsync(entity);
+
+            if (!entityExists) return null;
+
+            _data.Update(entity);
+
+            await _db.SaveChangesAsync();
+
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error updating entity: {ex.Message}");
+
+            return null;
+        }
     }
 }
