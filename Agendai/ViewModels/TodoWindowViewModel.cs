@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Agendai.Data;
+using Agendai.Data.Abstractions;
 using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;

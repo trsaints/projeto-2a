@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Windows.Input;
-using Agendai.Data;
+using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
