@@ -17,6 +17,8 @@ class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured) return;
+
         var databasePath = GetDatabasePath();
 
         optionsBuilder.UseSqlite(Path.Combine(databasePath, "agendai.db"),
