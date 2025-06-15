@@ -57,8 +57,4 @@
     <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
     <UpToDateCheckInput Remove="Views\Components\AgendaSidebar\AgendaSidebar.axaml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Database\Repositories\" />
-  </ItemGroup>
 </Project>
