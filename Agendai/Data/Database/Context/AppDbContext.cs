@@ -24,7 +24,7 @@ class AppDbContext : DbContext
         optionsBuilder.UseSqlite(Path.Combine(databasePath, "agendai.db"),
             options =>
             {
-                options.MigrationsAssembly("Agendai.Data.Database.Migrations");
+                options.MigrationsAssembly("Agendai");
             })
             .UseLazyLoadingProxies();
     }
