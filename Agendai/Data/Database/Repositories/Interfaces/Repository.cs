@@ -3,6 +3,8 @@ using Agendai.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Agendai.Data.Database.Repositories.Interfaces;
@@ -72,9 +74,18 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public Task<IEnumerable<T>?> FindAsync(Predicate<Func<T, bool>> predicate)
+    public async Task<IEnumerable<T>?> FindAsync(Expression<Func<T, bool>> callback)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _data.Where(callback).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error finding entities: {ex.Message}");
+
+            return null;
+        }
     }
 
     public virtual Task<IEnumerable<T>?> GetAllAsync()
