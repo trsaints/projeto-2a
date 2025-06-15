@@ -72,7 +72,11 @@ public class TodoWindowViewModel : ViewModelBase
             IsPopupOpen = false;
         });
 
-        AddTodoCommand = new RelayCommand<Event?>(ev => AddTodo(ev), _ => HasChanges);
+        AddTodoCommand = new RelayCommand(
+            () => AddTodo(null),
+            () => HasChanges
+        );
+
 
         CancelCommand = new RelayCommand(() =>
         {
@@ -221,8 +225,15 @@ public class TodoWindowViewModel : ViewModelBase
     public bool HasChanges
     {
         get => _hasChanges;
-        private set => SetProperty(ref _hasChanges, value);
+        private set
+        {
+            if (SetProperty(ref _hasChanges, value))
+            {
+                (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
+            }
+        }
     }
+
 
     private void UpdateHasChanges()
     {
