@@ -65,8 +65,9 @@ public class TodoWindowViewModel : ViewModelBase
     {
         OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
 
-        SelectTarefaCommand = new RelayCommand(() =>
+        SelectTarefaCommand = new RelayCommand<Todo>((todo) =>
         {
+            EditingTodo = todo;
             OpenAddTask = true;
             IsPopupOpen = false;
         });
