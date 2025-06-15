@@ -19,13 +19,15 @@ public class TodoWindowViewModel : ViewModelBase
 	{
 		OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
 		OnTaskAdded      = () => { OpenAddTask = false; };
-		SelectTarefaCommand = new RelayCommand(
-			() =>
+		SelectTarefaCommand = new RelayCommand<Todo>(
+			(todo) =>
 			{
 				SelectedRepeats = RepeatOptions.First();
 				ListName = ListNames.FirstOrDefault() ?? string.Empty;
 				OpenAddTask = true;
 				IsPopupOpen = false;
+				
+				SelectedTodo = todo;
 			}
 		);
 		AddTodoCommand = new RelayCommand(AddTodo);
@@ -95,6 +97,21 @@ public class TodoWindowViewModel : ViewModelBase
 	}
 
 	public string Title { get; set; } = "Tarefas";
+	
+	private Todo? _selectedTodo;
+    public Todo? SelectedTodo
+    {
+        get => _selectedTodo;
+        set => SetProperty(ref _selectedTodo, value);
+    }
+	
+    private bool _isEditPanelOpen;
+    public bool IsEditPanelOpen
+    {
+	    get => _isEditPanelOpen;
+	    set => SetProperty(ref _isEditPanelOpen, value);
+    }
+    
 
 	private bool _isPopupOpen;
 	public bool IsPopupOpen

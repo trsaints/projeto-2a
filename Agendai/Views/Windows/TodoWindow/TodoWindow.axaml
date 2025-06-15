@@ -5,7 +5,8 @@
              xmlns:todoSidebar="clr-namespace:Agendai.Views.Components.TodoSidebar"
              xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
-             x:DataType="vm:TodoWindowViewModel">
+             x:DataType="vm:TodoWindowViewModel"
+             x:Name="Root">
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
         <todoSidebar:TodoSidebar />
@@ -30,7 +31,8 @@
                                VerticalAlignment="Center" Text="Minhas Tarefas" />
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" />
+                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" 
+                                            ItemClickCommand="{Binding SelectTarefaCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -38,7 +40,8 @@
                     <TextBlock FontSize="18" Margin="0 0 0 16" FontWeight="Bold">Histórico</TextBlock>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                        <todoList:TodoList ItemsSource="{Binding TodoHistory}" />
+                        <todoList:TodoList ItemsSource="{Binding TodoHistory}" 
+                                           ItemClickCommand="{Binding SelectTarefaCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -59,7 +62,10 @@
                                 <TextBlock FontSize="18" Margin="0 00 0 16" Text="{Binding ListName}" FontWeight="Bold" />
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                                    <todoList:TodoList ItemsSource="{Binding Items}" />
+                                    <todoList:TodoList ItemsSource="{Binding Items}"
+                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, 
+                                                RelativeSource={RelativeSource AncestorType=UserControl}}" />
+
                                 </ScrollViewer>
                             </StackPanel>
                         </DataTemplate>

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Avalonia.Controls;
 using Agendai.Models;
 using Avalonia;
@@ -13,11 +14,20 @@ public partial class TodoList : UserControl
 			AvaloniaProperty.Register<TodoList, ObservableCollection<Todo>>(
 				nameof(ItemsSource)
 			);
+	
+	public static readonly StyledProperty<ICommand> ItemClickCommandProperty =
+		AvaloniaProperty.Register<TodoList, ICommand>(nameof(ItemClickCommand));
 
 	public ObservableCollection<Todo> ItemsSource
 	{
 		get => GetValue(ItemsSourceProperty);
 		set => SetValue(ItemsSourceProperty, value);
+	}
+	
+	public ICommand ItemClickCommand
+	{
+		get => GetValue(ItemClickCommandProperty);
+		set => SetValue(ItemClickCommandProperty, value);
 	}
 
 	public TodoList()
