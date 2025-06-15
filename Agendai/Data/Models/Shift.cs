@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Agendai.Data.Models;
 
 [Table("Shifts")]
-public class Shift : Entity
+public class Shift : Entity, INotifyPropertyChanged
 {
 	public Shift(ulong id, string name) : base(id, name)
     {
