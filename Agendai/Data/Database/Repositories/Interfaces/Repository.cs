@@ -1,16 +1,39 @@
-﻿using Agendai.Data.Models;
+﻿using Agendai.Data.Database.Context;
+using Agendai.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Agendai.Data.Database.Repositories.Interfaces;
 
-class Repository<T> : IRepository<T>
-    where T : Entity
+public class Repository<T> : IRepository<T> where T : Entity
 {
-    public Task<T?> AddAsync(T entity)
+    private readonly AppDbContext _db;
+    private readonly DbSet<T> _data;
+
+    public Repository(AppDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
+        _data = db.Set<T>();
+    }
+
+    public async Task<T?> AddAsync(T entity)
+    {
+        try
+        {
+            _data.Add(entity);
+
+            await _db.SaveChangesAsync();
+
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error adding entity: {ex.Message}");
+
+            return null;
+        }
     }
 
     public virtual Task<T?> DeleteAsync(T entity)
