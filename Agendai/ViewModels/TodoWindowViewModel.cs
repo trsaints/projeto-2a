@@ -101,7 +101,17 @@ public class TodoWindowViewModel : ViewModelBase
     public bool OpenAddTask
     {
         get => _openAddTask;
-        set => SetProperty(ref _openAddTask, value);
+        set
+        {
+            if (SetProperty(ref _openAddTask, value) && value)
+            {
+                if (EditingTodo == null)
+                {
+                    SelectedRepeats = RepeatOptions.FirstOrDefault() ?? new RepeatsOption { Repeats = Repeats.None };
+                    ListName = ListNames.FirstOrDefault() ?? string.Empty;
+                }
+            }
+        }
     }
     #endregion
 
@@ -182,7 +192,7 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _selectedRepeats, value);
     }
 
-    private string _listName = "Minhas Tarefas";
+    private string _listName;
     public string ListName
     {
         get => _listName;
