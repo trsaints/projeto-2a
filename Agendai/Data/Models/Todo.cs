@@ -1,18 +1,38 @@
 using System.ComponentModel;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agendai.Data.Models;
 
 
-public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
+[Table("Todos")]
+public class Todo : Recurrence, INotifyPropertyChanged
 {
-	public string?    ListName       { get; set; }
+	public Todo(ulong id, string name) : base(id, name)
+    {
+    }
+
+    public Todo() { }
+
+	[StringLength(64)]
+    public string?    ListName       { get; set; }
+
+	[DefaultValue(0)]
 	public uint       FinishedShifts { get; set; }
+
+	[DefaultValue(0)]
 	public uint       TotalShifts    { get; set; }
-	public virtual Event? RelatedEvent { get; set; }
-	
+
+	[ForeignKey(nameof(Event))]
+	public ulong? EventId { get; set; }
+    public virtual Event? Event { get; set; }
+
+	[NotMapped]
 	private TodoStatus _status;
-	public TodoStatus Status
+
+	[DefaultValue(TodoStatus.Incomplete)]
+    public TodoStatus Status
 	{
 		get => _status;
 		set
@@ -26,10 +46,10 @@ public class Todo(ulong id, string name) : Recurrence(id, name), INotifyProperty
 		}
 	}
 	
-	public event PropertyChangedEventHandler PropertyChanged;
+	public new event PropertyChangedEventHandler? PropertyChanged;
 	public event Action<Todo, TodoStatus>? OnStatusChanged;
 
-	protected virtual void OnPropertyChanged(string propertyName)
+	protected new virtual void OnPropertyChanged(string propertyName)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
