@@ -88,9 +88,18 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public virtual Task<IEnumerable<T>?> GetAllAsync()
+    public virtual async Task<IEnumerable<T>?> GetAllAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _data.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error getting all entities: {ex.Message}");
+
+            return null;
+        }
     }
 
     public Task<T?> GetByIdAsync(ulong id)
