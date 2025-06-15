@@ -102,9 +102,18 @@ public class Repository<T> : IRepository<T> where T : Entity
         }
     }
 
-    public Task<T?> GetByIdAsync(ulong id)
+    public async Task<T?> GetByIdAsync(ulong id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _data.FindAsync(id);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error getting entity by ID: {ex.Message}");
+
+            return null;
+        }
     }
 
     public Task<T?> GetByNameAsync(string name)
