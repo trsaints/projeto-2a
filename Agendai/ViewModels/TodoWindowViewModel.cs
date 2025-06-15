@@ -60,6 +60,8 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand SelectTarefaCommand { get; private set; }
     public ICommand AddTodoCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
+    public ICommand DeleteTodoCommand { get; private set; }
+    public ICommand SkippedTodoCommand { get; private set;}
 
     private void InitializeCommands()
     {
@@ -84,6 +86,15 @@ public class TodoWindowViewModel : ViewModelBase
             IsPopupOpen = false;
             ClearTodoForm();
         });
+        
+        DeleteTodoCommand = new RelayCommand<Todo>(
+            todo => DeleteTodo(todo),
+            todo => todo != null
+        );
+        SkippedTodoCommand = new RelayCommand<Todo>(
+            todo => SkippedTodo(todo),
+            todo => todo != null
+        );
     }
     #endregion
 
@@ -244,7 +255,6 @@ public class TodoWindowViewModel : ViewModelBase
         }
     }
 
-
     private void UpdateHasChanges()
     {
         HasChanges = EditingTodo == null
@@ -360,17 +370,69 @@ public class TodoWindowViewModel : ViewModelBase
         return todo;
     }
 
+    private void DeleteTodo(Todo todo)
+    {
+        if (todo == null) return;
+
+        Todos.Remove(todo);
+        IncompleteTodos.Remove(todo);
+        TodoHistory.Remove(todo);
+        RefreshFreeTodos();
+
+        ListNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
+
+        OnPropertyChanged(nameof(TodosByListName));
+        OnPropertyChanged(nameof(Todos));
+        OnPropertyChanged(nameof(IncompleteResume));
+
+        if (EditingTodo == todo)
+        {
+            ClearTodoForm();
+            OpenAddTask = false;
+        }
+    }
+    
+    public void SkippedTodo(Todo todo)
+    {
+        if (todo == null) return;
+
+        todo.Status = TodoStatus.Skipped;
+
+        IncompleteTodos.Remove(todo);
+        if (!TodoHistory.Contains(todo))
+            TodoHistory.Add(todo);
+
+        
+        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+        ListNames = new ObservableCollection<string>(
+            Todos.Select(t => t.ListName).Where(n => !string.IsNullOrEmpty(n)).Distinct()
+        );
+
+        OnPropertyChanged(nameof(TodosByListName));
+        OnPropertyChanged(nameof(IncompleteTodos));
+        OnPropertyChanged(nameof(TodoHistory));
+        OnPropertyChanged(nameof(IncompleteResume));
+        OnPropertyChanged(nameof(ListNames));
+    }
+
+
     private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
     {
-        if (newStatus == TodoStatus.Complete)
+        if (newStatus == TodoStatus.Complete || newStatus == TodoStatus.Skipped)
         {
-            IncompleteTodos.Remove(todo);
-            TodoHistory.Add(todo);
+            if (IncompleteTodos.Contains(todo))
+                IncompleteTodos.Remove(todo);
+
+            if (!TodoHistory.Contains(todo))
+                TodoHistory.Add(todo);
         }
         else
         {
-            TodoHistory.Remove(todo);
-            IncompleteTodos.Add(todo);
+            if (TodoHistory.Contains(todo))
+                TodoHistory.Remove(todo);
+
+            if (!IncompleteTodos.Contains(todo))
+                IncompleteTodos.Add(todo);
         }
 
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
@@ -381,6 +443,7 @@ public class TodoWindowViewModel : ViewModelBase
 
         OnPropertyChanged(nameof(TodosByListName));
     }
+
 
     private void InitializeSampleTodos()
     {
