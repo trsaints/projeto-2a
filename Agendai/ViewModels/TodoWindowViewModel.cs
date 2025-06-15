@@ -19,15 +19,37 @@ public class TodoWindowViewModel : ViewModelBase
 	{
 		OpenPopupCommand = new RelayCommand(() => IsPopupOpen = true);
 		OnTaskAdded      = () => { OpenAddTask = false; };
-		SelectTarefaCommand = new RelayCommand<Todo>(
-			(todo) =>
+		TarefaCommand = new RelayCommand<Todo>((todo) =>
+        {
+        	if (todo is null) return;
+            
+            IsEditing = true;
+            
+            SelectedTodo = todo;
+            
+            NewTaskName = todo.Name;
+            NewDescription = todo.Description;
+            NewDue = todo.Due;
+            SelectedRepeats = RepeatOptions.First();
+            ListName = todo.ListName;
+            
+            OpenAddTask = true;
+            IsPopupOpen = false;
+        });
+
+		SelectTarefaCommand = new RelayCommand(
+			() =>
 			{
+				ClearForm();
+				
 				SelectedRepeats = RepeatOptions.First();
-				ListName = ListNames.FirstOrDefault() ?? string.Empty;
+				ListName = ListNames.First() ?? string.Empty;
+				
+				IsEditing = false;
+				SelectedTodo = null;
+
 				OpenAddTask = true;
 				IsPopupOpen = false;
-				
-				SelectedTodo = todo;
 			}
 		);
 		AddTodoCommand = new RelayCommand(AddTodo);
@@ -105,15 +127,16 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _selectedTodo, value);
     }
 	
-    private bool _isEditPanelOpen;
-    public bool IsEditPanelOpen
+	private bool _isEditing;
+    public bool IsEditing
     {
-	    get => _isEditPanelOpen;
-	    set => SetProperty(ref _isEditPanelOpen, value);
+    	get => _isEditing;
+    	set => SetProperty(ref _isEditing, value);
     }
-    
 
-	private bool _isPopupOpen;
+    public ICommand TarefaCommand { get; }
+
+    private bool _isPopupOpen;
 	public bool IsPopupOpen
 	{
 		get => _isPopupOpen;
@@ -286,26 +309,38 @@ public class TodoWindowViewModel : ViewModelBase
 		if (string.IsNullOrWhiteSpace(NewTaskName)) return;
 		if (string.IsNullOrWhiteSpace(ListName)) return;
 
-		var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+		if (IsEditing && SelectedTodo != null)
 		{
-			Description = NewDescription,
-			Due = NewDue,
-			Repeats = RepeatsConverter.ConvertBack(SelectedRepeats.ToString()),
-			ListName = ListName
-		};
+			
+			SelectedTodo.Name        = NewTaskName;
+			SelectedTodo.Description = NewDescription;
+			SelectedTodo.Due         = NewDue;
+			SelectedTodo.Repeats     = RepeatsConverter.ConvertBack(SelectedRepeats.ToString());
+			SelectedTodo.ListName    = ListName;
 
-		newTodo.OnStatusChanged += HandleStatusChanged;
-
-		Todos.Add(newTodo);
-
-		NewTaskName    = string.Empty;
-		NewDescription = string.Empty;
-		NewDue         = DateTime.Today;
-		SelectedRepeats = new RepeatsOption
+			OnPropertyChanged(nameof(Todos));
+			OnPropertyChanged(nameof(TodosByListName));
+		}
+		else
 		{
-			Repeats = Repeats.None
-		};
-		ListName = string.Empty;
+			
+			var newTodo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+			{
+				Description   = NewDescription,
+				Due           = NewDue,
+				Repeats       = RepeatsConverter.ConvertBack(SelectedRepeats.ToString()),
+				ListName      = ListName
+			};
+
+			newTodo.OnStatusChanged += HandleStatusChanged;
+			Todos.Add(newTodo);
+		}
+
+		ClearForm();
+		
+		TodoHistory = new ObservableCollection<Todo>(
+			Todos.Where(IsComplete)
+		);
 
 		IncompleteTodos = new ObservableCollection<Todo>( 
 			Todos.Where(t => !IsComplete(t)).ToList()
@@ -320,5 +355,17 @@ public class TodoWindowViewModel : ViewModelBase
 		OnPropertyChanged(nameof(TodosByListName));
 
 		OnTaskAdded?.Invoke();
+	}
+
+	public void ClearForm()
+	{
+		NewTaskName    = string.Empty;
+		NewDescription = string.Empty;
+		NewDue         = DateTime.Today;
+		SelectedRepeats = new RepeatsOption
+		{
+			Repeats = Repeats.None
+		};
+		ListName = string.Empty;
 	}
 }

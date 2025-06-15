@@ -32,7 +32,7 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" 
-                                            ItemClickCommand="{Binding SelectTarefaCommand}" />
+                                            ItemClickCommand="{Binding TarefaCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -41,7 +41,7 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding TodoHistory}" 
-                                           ItemClickCommand="{Binding SelectTarefaCommand}" />
+                                           ItemClickCommand="{Binding TarefaCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -63,7 +63,7 @@
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}"
-                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, 
+                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).TarefaCommand, 
                                                 RelativeSource={RelativeSource AncestorType=UserControl}}" />
 
                                 </ScrollViewer>
