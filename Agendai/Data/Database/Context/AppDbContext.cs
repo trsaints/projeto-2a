@@ -29,7 +29,7 @@ class AppDbContext : DbContext
             .UseLazyLoadingProxies();
     }
 
-    private static string GetDatabasePath()
+    internal static string GetDatabasePath()
     {
         var myDocments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
