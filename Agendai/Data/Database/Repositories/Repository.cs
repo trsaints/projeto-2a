@@ -1,4 +1,5 @@
 ﻿using Agendai.Data.Database.Context;
+using Agendai.Data.Database.Repositories.Interfaces;
 using Agendai.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Agendai.Data.Database.Repositories.Interfaces;
+namespace Agendai.Data.Database.Repositories;
 
 public class Repository<T> : IRepository<T> where T : Entity
 {
