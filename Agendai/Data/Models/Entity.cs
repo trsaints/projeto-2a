@@ -1,39 +1,49 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace Agendai.Data.Models;
 
 
-public abstract class Entity : INotifyPropertyChanged
+public class Entity : INotifyPropertyChanged
 {
-	public ulong Id { get; set; }
+    [NotMapped]
+    private string? _name;
 
-	private string _name;
-	public string Name
-	{
-		get => _name;
-		set => SetProperty(ref _name, value);
-	}
+    public Entity(ulong id, string name)
+    {
+        Id = id;
+        _name = name;
+    }
 
-	protected Entity(ulong id, string name)
-	{
-		Id = id;
-		_name = name;
-	}
+    public Entity() { }
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+    [Key]
+    public ulong Id { get; set; }
 
-	protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-	protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
-	{
-		if (EqualityComparer<T>.Default.Equals(storage, value))
-			return false;
+    [Required]
+    [StringLength(128)]
+    public string Name
+    {
+        get => _name ?? string.Empty;
+        set => SetProperty(ref _name, value);
+    }
 
-		storage = value;
-		OnPropertyChanged(propertyName);
-		return true;
-	}
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(storage, value))
+            return false;
+
+        storage = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
 }
