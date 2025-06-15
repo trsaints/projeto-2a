@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using Agendai.Data.Database.Context;
+using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -12,6 +13,10 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        ServiceCollection services = new();
+
+        services.AddDbContext<AppDbContext>();
+
         BuildAvaloniaApp()
        .StartWithClassicDesktopLifetime(args);
     }
