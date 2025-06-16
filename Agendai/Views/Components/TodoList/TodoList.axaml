@@ -19,9 +19,9 @@
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding Name}" FontSize="14"/>
                                 <TextBlock Text="{Binding Description}" FontSize="10"
-                                           MaxWidth="250" 
-                                           TextTrimming="CharacterEllipsis" 
-                                           TextWrapping="NoWrap"/>
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="NoWrap"
+                                           MaxWidth="300" />
                                 <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
                                            FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
                             </StackPanel>
