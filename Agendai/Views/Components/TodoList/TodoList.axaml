@@ -4,19 +4,24 @@
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel"
              x:Name="Root">
-    <Border BorderThickness="0" CornerRadius="10"
-            Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
+         <Border BorderThickness="0" CornerRadius="10"
+                 Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
         <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=Root}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="*, Auto">
+                    <Grid ColumnDefinitions="*, Auto, Auto" Margin="0 0 0 16">
+                        
                         <Button Grid.Column="0" 
                                 Command="{Binding ItemClickCommand, ElementName=Root}"
                                 CommandParameter="{Binding}"
                                 Background="Transparent" BorderThickness="0"
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" FontSize="14" />
+                                <TextBlock Text="{Binding Name}" FontSize="14"/>
+                                <TextBlock Text="{Binding Description}" 
+                                           MaxWidth="250" 
+                                           TextTrimming="CharacterEllipsis" 
+                                           TextWrapping="NoWrap"/>
                                 <TextBlock Text="{Binding Due, Converter={StaticResource DateConverter}}"
                                            FontSize="10" Foreground="Gray" Margin="0 2 0 4" />
                             </StackPanel>
@@ -26,8 +31,25 @@
                                   IsChecked="{Binding Status, Converter={StaticResource StatusConverter}, Mode=TwoWay}"
                                   HorizontalAlignment="Center" VerticalAlignment="Center"
                                   Margin="10 0 10 0" />
+
+                        <Button Grid.Column="2"
+                                Content="⋮"
+                                Padding="4"
+                                FontSize="18"
+                                Background="Transparent"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuItem Header="Excluir"
+                                              Command="{Binding DeleteCommand, ElementName=Root}"
+                                              CommandParameter="{Binding}" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
                     </Grid>
                 </DataTemplate>
+
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Border>
