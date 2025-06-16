@@ -359,7 +359,7 @@ public class TodoWindowViewModel : ViewModelBase
         NomeLista
     }
 
-    private SortType _sortMinhasTarefas = SortType.Nome;
+    private SortType _sortMinhasTarefas = SortType.Prazo;
     public SortType SortMinhasTarefas
     {
         get => _sortMinhasTarefas;
@@ -385,7 +385,7 @@ public class TodoWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IncompleteTodos));
     }
     
-    private SortType _sortHistorico = SortType.Nome;
+    private SortType _sortHistorico = SortType.Prazo;
     public SortType SortHistorico
     {
         get => _sortHistorico;
