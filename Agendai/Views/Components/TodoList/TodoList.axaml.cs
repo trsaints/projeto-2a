@@ -17,6 +17,15 @@ public partial class TodoList : UserControl
 	
 	public static readonly StyledProperty<ICommand> ItemClickCommandProperty =
 		AvaloniaProperty.Register<TodoList, ICommand>(nameof(ItemClickCommand));
+	
+	public static readonly StyledProperty<ICommand> DeleteCommandProperty =
+		AvaloniaProperty.Register<TodoList, ICommand>(nameof(DeleteCommand));
+	
+	public ICommand DeleteCommand
+	{
+		get => GetValue(DeleteCommandProperty);
+		set => SetValue(DeleteCommandProperty, value);
+	}
 
 	public ObservableCollection<Todo> ItemsSource
 	{
