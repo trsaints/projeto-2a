@@ -535,6 +535,8 @@ public class TodoWindowViewModel : ViewModelBase
                 IncompleteTodos.Add(todo);
         }
 
+        OrdenarHistorico();
+
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
         ListNames = new ObservableCollection<string>(
