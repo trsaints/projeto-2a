@@ -329,9 +329,9 @@ public class TodoWindowViewModel : ViewModelBase
     public Todo? AddTodo(Event? relatedEv)
     {
         if (string.IsNullOrWhiteSpace(NewTaskName)) return null;
-
+    
         Todo todo;
-
+    
         if (EditingTodo != null)
         {
             EditingTodo.Name = NewTaskName;
@@ -341,7 +341,7 @@ public class TodoWindowViewModel : ViewModelBase
             EditingTodo.ListName = ListName;
             EditingTodo.RelatedEvent = relatedEv;
             todo = EditingTodo;
-
+    
             OnPropertyChanged(nameof(Todos));
             OnPropertyChanged(nameof(TodosByListName));
         }
@@ -355,21 +355,28 @@ public class TodoWindowViewModel : ViewModelBase
                 ListName = ListName,
                 RelatedEvent = relatedEv
             };
-
+    
             todo.OnStatusChanged += HandleStatusChanged;
             Todos.Add(todo);
         }
-
+    
         RefreshFreeTodos();
         ClearTodoForm();
-
+    
         IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
-
+    
+        OnPropertyChanged(nameof(IncompleteTodos));
+        OnPropertyChanged(nameof(IncompleteResume));
+        OnPropertyChanged(nameof(TodosByListName));
+    
         OpenAddTask = false;
+        OnPropertyChanged(nameof(OpenAddTask));
+    
         OnTaskAdded?.Invoke();
         return todo;
     }
+
 
     private void DeleteTodo(Todo todo)
     {
