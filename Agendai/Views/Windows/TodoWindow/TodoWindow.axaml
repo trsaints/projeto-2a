@@ -28,19 +28,26 @@
 
                 <StackPanel Margin="32 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
                             VerticalAlignment="Top">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 15"
-                                HorizontalAlignment="Stretch">
-                        <TextBlock Text="Minhas Tarefas"
+                    <Grid Margin="0 0 0 15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="Minhas Tarefas"
                                    FontSize="18"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <Button Content="⋮"
+                        <Button Grid.Column="1"
+                                Content="⋮"
                                 Padding="4"
                                 FontSize="18"
                                 Background="Transparent"
                                 Margin="8 0 0 0"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right">
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuItem Header="Nome" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="Nome" />
@@ -49,28 +56,36 @@
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>
-                    </StackPanel>
+                    </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" 
-                                            ItemClickCommand="{Binding SelectTarefaCommand}" 
-                                            DeleteCommand="{Binding SkippedTodoCommand}"/>
+                                           ItemClickCommand="{Binding SelectTarefaCommand}" 
+                                           DeleteCommand="{Binding SkippedTodoCommand}"/>
                     </ScrollViewer>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="32 0 0 48" Width="350" Height="300">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 16">
-                        <TextBlock Text="Histórico"
+                    <Grid Margin="0 0 0 16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="Histórico"
                                    FontSize="18"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <Button Content="⋮"
+                        <Button Grid.Column="1"
+                                Content="⋮"
                                 Padding="4"
                                 FontSize="18"
                                 Background="Transparent"
                                 Margin="8 0 0 0"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right">
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuItem Header="Nome" Command="{Binding SortHistoricoCommand}" CommandParameter="Nome" />
@@ -79,7 +94,7 @@
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>
-                    </StackPanel>
+                    </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding TodoHistory}" 
