@@ -168,7 +168,7 @@ public class TodoWindowViewModel : ViewModelBase
         {
             ListName = name,
             Items = new ObservableCollection<Todo>(
-                Todos.Where(t => t.ListName == name && t.Status == TodoStatus.Incomplete)
+                Todos.Where(t => t.ListName == name && t.Status != TodoStatus.Skipped)
             )
         });
     #endregion
@@ -366,6 +366,7 @@ public class TodoWindowViewModel : ViewModelBase
         IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
+        OpenAddTask = false;
         OnTaskAdded?.Invoke();
         return todo;
     }
