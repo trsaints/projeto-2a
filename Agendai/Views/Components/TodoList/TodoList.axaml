@@ -18,7 +18,7 @@
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding Name}" FontSize="14"/>
-                                <TextBlock Text="{Binding Description}" 
+                                <TextBlock Text="{Binding Description}" FontSize="10"
                                            MaxWidth="250" 
                                            TextTrimming="CharacterEllipsis" 
                                            TextWrapping="NoWrap"/>
