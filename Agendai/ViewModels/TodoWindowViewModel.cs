@@ -63,6 +63,7 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand DeleteTodoCommand { get; private set; }
     public ICommand SkippedTodoCommand { get; private set;}
     public ICommand SortMinhasTarefasCommand { get; private set; }
+    public ICommand SortHistoricoCommand { get; private set; }
 
     private void InitializeCommands()
     {
@@ -109,6 +110,20 @@ public class TodoWindowViewModel : ViewModelBase
                 _ => SortType.Nome
             };
         });
+        
+        SortHistoricoCommand = new RelayCommand<string>(sort =>
+        {
+            if (string.IsNullOrEmpty(sort)) return;
+
+            SortHistorico = sort switch
+            {
+                "Nome" => SortType.Nome,
+                "Prazo" => SortType.Prazo,
+                "NomeLista" => SortType.NomeLista,
+                _ => SortType.Nome
+            };
+        });
+
 
     }
     #endregion
@@ -368,6 +383,32 @@ public class TodoWindowViewModel : ViewModelBase
 
         IncompleteTodos = new ObservableCollection<Todo>(ordenado);
         OnPropertyChanged(nameof(IncompleteTodos));
+    }
+    
+    private SortType _sortHistorico = SortType.Nome;
+    public SortType SortHistorico
+    {
+        get => _sortHistorico;
+        set
+        {
+            _sortHistorico = value;
+            OrdenarHistorico();
+            OnPropertyChanged(nameof(SortHistorico));
+        }
+    }
+    
+    private void OrdenarHistorico()
+    {
+        var ordenado = SortHistorico switch
+        {
+            SortType.Nome => Todos.Where(IsComplete).OrderBy(t => t.Name),
+            SortType.Prazo => Todos.Where(IsComplete).OrderBy(t => t.Due),
+            SortType.NomeLista => Todos.Where(IsComplete).OrderBy(t => t.ListName),
+            _ => Todos.Where(IsComplete)
+        };
+
+        TodoHistory = new ObservableCollection<Todo>(ordenado);
+        OnPropertyChanged(nameof(TodoHistory));
     }
 
 

@@ -59,7 +59,27 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="32 0 0 48" Width="350" Height="300">
-                    <TextBlock FontSize="18" Margin="0 0 0 16" FontWeight="Bold">Histórico</TextBlock>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 16">
+                        <TextBlock Text="Histórico"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center" />
+
+                        <Button Content="⋮"
+                                Padding="4"
+                                FontSize="18"
+                                Background="Transparent"
+                                Margin="8 0 0 0"
+                                VerticalAlignment="Center">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuItem Header="Nome" Command="{Binding SortHistoricoCommand}" CommandParameter="Nome" />
+                                    <MenuItem Header="Prazo" Command="{Binding SortHistoricoCommand}" CommandParameter="Prazo" />
+                                    <MenuItem Header="Nome da Lista" Command="{Binding SortHistoricoCommand}" CommandParameter="NomeLista" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding TodoHistory}" 
