@@ -62,6 +62,7 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand CancelCommand { get; private set; }
     public ICommand DeleteTodoCommand { get; private set; }
     public ICommand SkippedTodoCommand { get; private set;}
+    public ICommand SortMinhasTarefasCommand { get; private set; }
 
     private void InitializeCommands()
     {
@@ -95,6 +96,20 @@ public class TodoWindowViewModel : ViewModelBase
             todo => SkippedTodo(todo),
             todo => todo != null
         );
+        
+        SortMinhasTarefasCommand = new RelayCommand<string>(sort =>
+        {
+            if (string.IsNullOrEmpty(sort)) return;
+
+            SortMinhasTarefas = sort switch
+            {
+                "Nome" => SortType.Nome,
+                "Prazo" => SortType.Prazo,
+                "NomeLista" => SortType.NomeLista,
+                _ => SortType.Nome
+            };
+        });
+
     }
     #endregion
 
@@ -321,6 +336,40 @@ public class TodoWindowViewModel : ViewModelBase
             Todos.Where(t => t.RelatedEvent == null)
         );
     }
+    
+    public enum SortType
+    {
+        Nome,
+        Prazo,
+        NomeLista
+    }
+
+    private SortType _sortMinhasTarefas = SortType.Nome;
+    public SortType SortMinhasTarefas
+    {
+        get => _sortMinhasTarefas;
+        set
+        {
+            _sortMinhasTarefas = value;
+            OrdenarMinhasTarefas();
+            OnPropertyChanged(nameof(SortMinhasTarefas));
+        }
+    }
+    
+    private void OrdenarMinhasTarefas()
+    {
+        var ordenado = SortMinhasTarefas switch
+        {
+            SortType.Nome => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.Name),
+            SortType.Prazo => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.Due),
+            SortType.NomeLista => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.ListName),
+            _ => Todos.Where(t => !IsComplete(t))
+        };
+
+        IncompleteTodos = new ObservableCollection<Todo>(ordenado);
+        OnPropertyChanged(nameof(IncompleteTodos));
+    }
+
 
     #endregion
 
@@ -369,6 +418,8 @@ public class TodoWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IncompleteTodos));
         OnPropertyChanged(nameof(IncompleteResume));
         OnPropertyChanged(nameof(TodosByListName));
+        
+        OrdenarMinhasTarefas();
     
         OpenAddTask = false;
         OnPropertyChanged(nameof(OpenAddTask));

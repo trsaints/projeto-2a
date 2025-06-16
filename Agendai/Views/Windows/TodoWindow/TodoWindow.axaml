@@ -28,8 +28,28 @@
 
                 <StackPanel Margin="32 0 0 48" Grid.Row="1" Grid.Column="0" Width="350" Height="300"
                             VerticalAlignment="Top">
-                    <TextBlock FontSize="18" Margin="0 0 0 15" FontWeight="Bold"
-                               VerticalAlignment="Center" Text="Minhas Tarefas" />
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 15"
+                                HorizontalAlignment="Stretch">
+                        <TextBlock Text="Minhas Tarefas"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center" />
+
+                        <Button Content="⋮"
+                                Padding="4"
+                                FontSize="18"
+                                Background="Transparent"
+                                Margin="8 0 0 0"
+                                VerticalAlignment="Center">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuItem Header="Nome" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="Nome" />
+                                    <MenuItem Header="Prazo" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="Prazo" />
+                                    <MenuItem Header="Nome da Lista" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="NomeLista" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                         <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" 
