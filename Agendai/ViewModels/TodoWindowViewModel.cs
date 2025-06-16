@@ -536,6 +536,7 @@ public class TodoWindowViewModel : ViewModelBase
         }
 
         OrdenarHistorico();
+        OrdenarMinhasTarefas();
 
         IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
