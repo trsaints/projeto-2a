@@ -642,5 +642,6 @@ public class TodoWindowViewModel : ViewModelBase
 
     private bool _suppressPropertyChanged = false;
 
-    private bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
+    private bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete || todo.Status == TodoStatus.Skipped;
+
 }
