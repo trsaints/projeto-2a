@@ -64,6 +64,7 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand SkippedTodoCommand { get; private set;}
     public ICommand SortMinhasTarefasCommand { get; private set; }
     public ICommand SortHistoricoCommand { get; private set; }
+    public ICommand SortListCommand { get; private set; }
 
     private void InitializeCommands()
     {
@@ -122,6 +123,26 @@ public class TodoWindowViewModel : ViewModelBase
                 "NomeLista" => SortType.NomeLista,
                 _ => SortType.Nome
             };
+        });
+        
+        SortListCommand = new RelayCommand<object[]>(paramsArray =>
+        {
+            if (paramsArray is not { Length: 2 }) return;
+
+            var listName = paramsArray[0] as string;
+            var sortTypeName = paramsArray[1] as string;
+
+            if (string.IsNullOrEmpty(listName) || string.IsNullOrEmpty(sortTypeName)) return;
+
+            var newSortType = sortTypeName switch
+            {
+                "Nome" => SortType.Nome,
+                "Prazo" => SortType.Prazo,
+                "NomeLista" => SortType.NomeLista,
+                _ => SortType.Prazo
+            };
+            _listSortTypes[listName] = newSortType;
+            OnPropertyChanged(nameof(TodosByListName));
         });
 
 
@@ -192,14 +213,32 @@ public class TodoWindowViewModel : ViewModelBase
         get => _listNames;
         set => SetProperty(ref _listNames, value);
     }
-
+    
+    private readonly Dictionary<string, SortType> _listSortTypes = new();
+    
     public IEnumerable<TodosByListName> TodosByListName =>
-        ListNames.Select(name => new TodosByListName
+        ListNames.Select(name =>
         {
-            ListName = name,
-            Items = new ObservableCollection<Todo>(
-                Todos.Where(t => t.ListName == name)
-            )
+            if (!_listSortTypes.TryGetValue(name, out var sortType))
+            {
+                sortType = SortType.Prazo;
+            }
+    
+            var itemsQuery = Todos.Where(t => t.ListName == name);
+    
+            var sortedItems = sortType switch
+            {
+                SortType.Nome => itemsQuery.OrderBy(t => t.Name),
+                SortType.Prazo => itemsQuery.OrderBy(t => t.Due),
+                SortType.NomeLista => itemsQuery.OrderBy(t => t.ListName),
+                _ => itemsQuery.OrderBy(t => t.Due)
+            };
+    
+            return new TodosByListName
+            {
+                ListName = name,
+                Items = new ObservableCollection<Todo>(sortedItems)
+            };
         });
     #endregion
 
@@ -410,7 +449,6 @@ public class TodoWindowViewModel : ViewModelBase
         TodoHistory = new ObservableCollection<Todo>(ordenado);
         OnPropertyChanged(nameof(TodoHistory));
     }
-
 
     #endregion
 
