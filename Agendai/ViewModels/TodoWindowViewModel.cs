@@ -535,22 +535,6 @@ public class TodoWindowViewModel : ViewModelBase
         if (todo == null) return;
 
         todo.Status = TodoStatus.Skipped;
-
-        IncompleteTodos.Remove(todo);
-        if (!TodoHistory.Contains(todo))
-            TodoHistory.Add(todo);
-
-        
-        IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
-        ListNames = new ObservableCollection<string>(
-            Todos.Select(t => t.ListName).Where(n => !string.IsNullOrEmpty(n)).Distinct()
-        );
-
-        OnPropertyChanged(nameof(TodosByListName));
-        OnPropertyChanged(nameof(IncompleteTodos));
-        OnPropertyChanged(nameof(TodoHistory));
-        OnPropertyChanged(nameof(IncompleteResume));
-        OnPropertyChanged(nameof(ListNames));
     }
 
 
