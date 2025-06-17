@@ -1,6 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:conv="clr-namespace:Agendai.Data.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              xmlns:homeSidebar="clr-namespace:Agendai.Views.Components.HomeSidebar"
              xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
@@ -8,6 +10,13 @@
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel"
              x:Name="Root">
+             
+    <UserControl.Resources>
+        <conv:SortParameterConverter x:Key="SortParamConverter" />
+        <sys:String x:Key="SortParam_Nome">Nome</sys:String>
+        <sys:String x:Key="SortParam_Prazo">Prazo</sys:String>
+        <sys:String x:Key="SortParam_NomeLista">NomeLista</sys:String>
+    </UserControl.Resources>
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
         <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}"/>
@@ -117,15 +126,59 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="32 0 0 48" Width="350" Height="300">
-                                <TextBlock FontSize="18" Margin="0 00 0 16" Text="{Binding ListName}" FontWeight="Bold" />
+                                <Grid Margin="0 0 0 16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding ListName}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
+
+                                    <Button Grid.Column="1" Content="⋮" Padding="4" FontSize="18" Background="Transparent" Margin="8 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Button.Flyout>
+                                            <MenuFlyout>
+                                                <MenuItem Header="Nome">
+                                                    <MenuItem.Command>
+                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
+                                                    </MenuItem.Command>
+                                                    <MenuItem.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
+                                                            <Binding Path="ListName" />
+                                                            <Binding Source="{StaticResource SortParam_Nome}" />
+                                                        </MultiBinding>
+                                                    </MenuItem.CommandParameter>
+                                                </MenuItem>
+                                                <MenuItem Header="Prazo">
+                                                    <MenuItem.Command>
+                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
+                                                    </MenuItem.Command>
+                                                    <MenuItem.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
+                                                            <Binding Path="ListName" />
+                                                            <Binding Source="{StaticResource SortParam_Prazo}" />
+                                                        </MultiBinding>
+                                                    </MenuItem.CommandParameter>
+                                                </MenuItem>
+                                                <MenuItem Header="Nome da Lista">
+                                                    <MenuItem.Command>
+                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
+                                                    </MenuItem.Command>
+                                                    <MenuItem.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
+                                                            <Binding Path="ListName" />
+                                                            <Binding Source="{StaticResource SortParam_NomeLista}" />
+                                                        </MultiBinding>
+                                                    </MenuItem.CommandParameter>
+                                                </MenuItem>
+                                            </MenuFlyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </Grid>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}"
-                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, 
-                                                RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                       DeleteCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SkippedTodoCommand, 
-                                                RelativeSource={RelativeSource AncestorType=UserControl}}" />
-
+                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                       DeleteCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SkippedTodoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 </ScrollViewer>
                             </StackPanel>
                         </DataTemplate>
