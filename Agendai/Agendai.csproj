@@ -46,6 +46,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Remove="Data\EventsByAgendaName.cs" />
+    <Compile Remove="Data\Converters\StatusIsSkippedConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>

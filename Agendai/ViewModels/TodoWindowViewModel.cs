@@ -198,7 +198,7 @@ public class TodoWindowViewModel : ViewModelBase
         {
             ListName = name,
             Items = new ObservableCollection<Todo>(
-                Todos.Where(t => t.ListName == name && t.Status != TodoStatus.Skipped)
+                Todos.Where(t => t.ListName == name)
             )
         });
     #endregion
@@ -593,7 +593,9 @@ public class TodoWindowViewModel : ViewModelBase
     private void InitializeCollections()
     {
         _incompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
-        _todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+        _todoHistory = new ObservableCollection<Todo>(
+             Todos.Where(t => t.Status == TodoStatus.Complete || t.Status == TodoStatus.Skipped)
+         );
         _listNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
         _incompleteResume = new ObservableCollection<Todo>(_incompleteTodos.Take(7));
     }

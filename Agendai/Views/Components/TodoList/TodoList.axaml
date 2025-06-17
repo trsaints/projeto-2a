@@ -1,9 +1,16 @@
      <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:conv="clr-namespace:Agendai.Data.Converters"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel"
              x:Name="Root">
+         
+         <UserControl.Resources>
+             <conv:StatusToStrikethroughConverter x:Key="StatusToStrikethroughConverter" />
+             <conv:StatusToPuladoSuffixConverter x:Key="StatusToPuladoSuffixConverter" />
+         </UserControl.Resources>
+         
          <Border BorderThickness="0" CornerRadius="10"
                  Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
         <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=Root}">
@@ -17,7 +24,22 @@
                                 Background="Transparent" BorderThickness="0"
                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" FontSize="14"/>
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run Text="{Binding Name}">
+                                            <Run.TextDecorations>
+                                                <Binding Path="Status" Converter="{StaticResource StatusToStrikethroughConverter}" />
+                                            </Run.TextDecorations>
+                                        </Run>
+                                        <Run>
+                                            <Run.Text>
+                                                <Binding Path="Status" Converter="{StaticResource StatusToPuladoSuffixConverter}" />
+                                            </Run.Text>
+                                        </Run>
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+
+
                                 <TextBlock Text="{Binding Description}" FontSize="10"
                                            TextTrimming="CharacterEllipsis"
                                            TextWrapping="NoWrap"

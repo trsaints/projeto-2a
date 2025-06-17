@@ -19,7 +19,7 @@ public class StatusConverter : IValueConverter
 		return status switch
 		{
 			TodoStatus.Complete   => true,
-			TodoStatus.Skipped    => true,
+			TodoStatus.Skipped    => false,
 			TodoStatus.Incomplete => false,
 			_ => throw new ArgumentOutOfRangeException(
 				nameof(value),
