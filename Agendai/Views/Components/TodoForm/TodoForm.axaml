@@ -3,9 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
+             xmlns:conv="clr-namespace:Agendai.Data.Converters"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:Class="Agendai.Views.Components.TodoForm.TodoForm"
              x:DataType="vm:TodoWindowViewModel">
+             
+    <UserControl.Resources>
+        <conv:EventNameDisplayConverter x:Key="EventNameDisplayConverter" />
+    </UserControl.Resources>
 
     <StackPanel Spacing="16">
         <StackPanel Spacing="4" Margin="0,0,0,8">
@@ -69,6 +74,10 @@
                                  FilterMode="Contains" MinimumPrefixLength="0"
                                  GotFocus="TodoListName_OnGotFocus" />
             </StackPanel>
+        </StackPanel>
+        
+        <StackPanel>
+            <TextBlock Text="{Binding SelectedEvent.Name, Converter={StaticResource EventNameDisplayConverter}}" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
