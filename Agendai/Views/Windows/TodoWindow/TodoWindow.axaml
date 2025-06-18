@@ -178,7 +178,7 @@
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}"
                                                        ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                       DeleteCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SkippedTodoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                                       DeleteCommand="{Binding ((vm:TodoWindowViewModel)DataContext).DeleteTodoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 </ScrollViewer>
                             </StackPanel>
                         </DataTemplate>
@@ -235,5 +235,56 @@
                 </Grid>
             </Border>
         </Panel>
+        
+        <Border IsVisible="{Binding IsDeleteConfirmationVisible}"
+            Background="#80000000"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Grid.ColumnSpan="2">
+            <Border Background="WhiteSmoke"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="25"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinWidth="350">
+                
+                <StackPanel Spacing="15" >
+                    <TextBlock Text="Confirmar Exclusão"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"/>
+                    <TextBlock Text="Você tem certeza que deseja excluir permanentemente a seguinte tarefa?"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"/>
+                
+                    <Border Padding="10" CornerRadius="5" Background="White">
+                        <StackPanel DataContext="{Binding TodoForDeletion}" Spacing="5">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="{Binding Description}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            <TextBlock>
+                                <Run Text="Prazo: "/>
+                                <Run Text="{Binding Due, Converter={StaticResource DateConverter}}"/>
+                            </TextBlock>
+                            <TextBlock>
+                                <Run Text="Status: "/>
+                                <Run Text="{Binding Status}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" 
+                                Content="Cancelar" 
+                                Command="{Binding CancelDeleteCommand}"
+                                Margin="0 0 5 0"/>
+                        <Button Grid.Column="1"
+                                Content="Confirmar Exclusão" 
+                                Command="{Binding ConfirmDeleteCommand}"
+                                Margin="5 0 0 0"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
     </Grid>
 </UserControl>
