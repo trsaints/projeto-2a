@@ -244,6 +244,13 @@ public class TodoWindowViewModel : ViewModelBase
 
     #region Nova Tarefa (Formulário)
 
+    private Event? _selectedEvent;
+    public Event? SelectedEvent
+    {
+        get => _selectedEvent;
+        set => SetProperty(ref _selectedEvent, value);
+    }
+
     private string _newTaskName;
     public string NewTaskName
     {
@@ -303,6 +310,7 @@ public class TodoWindowViewModel : ViewModelBase
                 NewDue = value.Due;
                 SelectedRepeats = RepeatOptions.FirstOrDefault(r => r.Repeats == value.Repeats) ?? RepeatOptions[0];
                 ListName = value.ListName;
+                SelectedEvent = value.RelatedEvent;
 
                 _suppressPropertyChanged = false;
                 UpdateHasChanges();
