@@ -65,6 +65,9 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand SortMinhasTarefasCommand { get; private set; }
     public ICommand SortHistoricoCommand { get; private set; }
     public ICommand SortListCommand { get; private set; }
+    public ICommand ConfirmDeleteCommand { get; private set; }
+    public ICommand CancelDeleteCommand { get; private set; }
+
 
     private void InitializeCommands()
     {
@@ -144,6 +147,31 @@ public class TodoWindowViewModel : ViewModelBase
             _listSortTypes[listName] = newSortType;
             OnPropertyChanged(nameof(TodosByListName));
         });
+        
+        CancelDeleteCommand = new RelayCommand(() =>
+        {
+            IsDeleteConfirmationVisible = false;
+        });
+
+        ConfirmDeleteCommand = new RelayCommand(() =>
+        {
+            var todoToDelete = TodoForDeletion;
+            if (todoToDelete == null) return;
+
+            IsDeleteConfirmationVisible = false;
+            
+            Todos.Remove(todoToDelete);
+            IncompleteTodos.Remove(todoToDelete);
+            TodoHistory.Remove(todoToDelete);
+            RefreshFreeTodos();
+
+            OnPropertyChanged(nameof(TodosByListName));
+            OnPropertyChanged(nameof(Todos));
+            OnPropertyChanged(nameof(IncompleteResume));
+            OnPropertyChanged(nameof(TodoHistory));
+        });
+
+
 
 
     }
@@ -151,6 +179,24 @@ public class TodoWindowViewModel : ViewModelBase
 
     #region Propriedades de UI
     public string Title { get; set; } = "Tarefas";
+    
+    private bool _isDeleteConfirmationVisible;
+    public bool IsDeleteConfirmationVisible
+    {
+        get => _isDeleteConfirmationVisible;
+        set => SetProperty(ref _isDeleteConfirmationVisible, value);
+    }
+    
+    private Todo? _todoForDeletion;
+    public Todo? TodoForDeletion
+    {
+        get => _todoForDeletion;
+        set
+        {
+            _todoForDeletion = value;
+            OnPropertyChanged(nameof(TodoForDeletion));
+        }
+    }
 
     private bool _isPopupOpen;
     public bool IsPopupOpen
@@ -515,26 +561,19 @@ public class TodoWindowViewModel : ViewModelBase
         return todo;
     }
 
-
+    
     private void DeleteTodo(Todo todo)
     {
         if (todo == null) return;
 
-        Todos.Remove(todo);
-        IncompleteTodos.Remove(todo);
-        TodoHistory.Remove(todo);
-        RefreshFreeTodos();
-
-        ListNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
-
-        OnPropertyChanged(nameof(TodosByListName));
-        OnPropertyChanged(nameof(Todos));
-        OnPropertyChanged(nameof(IncompleteResume));
-
-        if (EditingTodo == todo)
+        if (todo.Status == TodoStatus.Incomplete)
         {
-            ClearTodoForm();
-            OpenAddTask = false;
+            todo.Status = TodoStatus.Skipped;
+        }
+        else 
+        {
+            TodoForDeletion = todo;
+            IsDeleteConfirmationVisible = true;
         }
     }
     
