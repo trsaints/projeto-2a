@@ -51,11 +51,20 @@
                       VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
         </Border>
 
-        <todoList:TodoList 
-            Grid.Row="2" 
-            Margin="0,16,0,0" 
-            ItemsSource="{Binding TodoWindowVm.IncompleteResume}" 
-            IsVisible="{Binding IsTodoWindow}"/>
+        <ItemsControl Grid.Row="2"
+                      Margin="0,16,0,0"
+                      ItemsSource="{Binding TodoWindowVm.ListNames}"
+                      IsVisible="{Binding IsTodoWindow}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="{Binding}"
+                                  IsCheckedChanged="CheckBoxChecked"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
 
         <Border Grid.Row="2" 
                 Margin="0,16,0,0"

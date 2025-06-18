@@ -7,9 +7,11 @@ using System.Windows.Input;
 using Agendai.Data;
 using Agendai.Data.Converters;
 using Agendai.Data.Models;
+using Agendai.Messages;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Agendai.ViewModels;
 
@@ -28,6 +30,11 @@ public class TodoWindowViewModel : ViewModelBase
             HomeWindowVm = homeWindowVm;
             EventListVm = homeWindowVm.EventListVm;
         }
+        
+        WeakReferenceMessenger.Default.Register<GetListsNamesMessenger>(this, (r, msg) =>
+        {
+            ListasSelecionadas = msg.SelectedItemsName.ToHashSet();
+        });
 
         PropertyChanged += (_, e) =>
         {
@@ -44,7 +51,12 @@ public class TodoWindowViewModel : ViewModelBase
                 (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
             }
         };
-
+        
+        if (ListasSelecionadas == null || ListasSelecionadas.Count == 0)
+        {
+            ListasSelecionadas = new HashSet<string>(ListNames);
+        }
+        
         RefreshFreeTodos();
     }
 
@@ -260,32 +272,39 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _listNames, value);
     }
     
-    private readonly Dictionary<string, SortType> _listSortTypes = new();
+    private readonly Dictionary<string, SortType> _listSortTypes = new(); 
+    
+    private HashSet<string> _listasSelecionadas = new();
+
+    public HashSet<string> ListasSelecionadas
+    {
+        get => _listasSelecionadas;
+        set
+        {
+            _listasSelecionadas = value;
+            OnPropertyChanged(nameof(TodosByListName));
+            OnPropertyChanged(nameof(TodosFiltrados));
+        }
+    }
     
     public IEnumerable<TodosByListName> TodosByListName =>
-        ListNames.Select(name =>
-        {
-            if (!_listSortTypes.TryGetValue(name, out var sortType))
-            {
-                sortType = SortType.Prazo;
-            }
-    
-            var itemsQuery = Todos.Where(t => t.ListName == name);
-    
-            var sortedItems = sortType switch
-            {
-                SortType.Nome => itemsQuery.OrderBy(t => t.Name),
-                SortType.Prazo => itemsQuery.OrderBy(t => t.Due),
-                SortType.NomeLista => itemsQuery.OrderBy(t => t.ListName),
-                _ => itemsQuery.OrderBy(t => t.Due)
-            };
-    
-            return new TodosByListName
-            {
-                ListName = name,
-                Items = new ObservableCollection<Todo>(sortedItems)
-            };
-        });
+        ListNames
+            .Where(name => ListasSelecionadas.Contains(name))
+            .Select(name => {
+                var itemsQuery = Todos.Where(t => t.ListName == name);
+                var sortedItems = itemsQuery.OrderBy(t => t.Due);
+                return new TodosByListName
+                {
+                    ListName = name,
+                    Items = new ObservableCollection<Todo>(sortedItems)
+                };
+            });
+
+
+
+    public IEnumerable<Todo> TodosFiltrados =>
+        TodosByListName.SelectMany(g => g.Items);
+
     #endregion
 
     #region Nova Tarefa (Formulário)

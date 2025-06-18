@@ -60,6 +60,35 @@ namespace Agendai.Views.Components.HomeSidebar
                 }
             }
         }
+        
+        private void CheckBoxChecked(object? sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is string listName)
+            {
+                if (checkBox.IsChecked == true)
+                {
+                    if (!_selectedItems.Contains(listName))
+                        _selectedItems.Add(listName);
+                }
+                else
+                {
+                    _selectedItems.Remove(listName);
+                }
+
+                // Se nenhuma estiver marcada, envia todas
+                if (_selectedItems.Count == 0 && DataContext is HomeWindowViewModel vm)
+                {
+                    var allNames = vm.TodoWindowVm.ListNames.ToArray();
+                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(allNames));
+                }
+                else
+                {
+                    WeakReferenceMessenger.Default.Send(new GetListsNamesMessenger(_selectedItems.ToArray()));
+                }
+            }
+        }
+
+
 
     }
 }
