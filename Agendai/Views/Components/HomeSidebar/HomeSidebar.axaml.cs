@@ -75,7 +75,6 @@ namespace Agendai.Views.Components.HomeSidebar
                     _selectedItems.Remove(listName);
                 }
 
-                // Se nenhuma estiver marcada, envia todas
                 if (_selectedItems.Count == 0 && DataContext is HomeWindowViewModel vm)
                 {
                     var allNames = vm.TodoWindowVm.ListNames.ToArray();
