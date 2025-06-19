@@ -12,7 +12,7 @@ public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropert
 	
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public string? Color { get; set; }
+	public string? Color { get; set; } = "#FFFFFF"; 
 
     protected virtual void OnPropertyChanged(string propertyName)
 	{
