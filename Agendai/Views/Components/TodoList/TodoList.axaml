@@ -8,7 +8,6 @@
          
          <UserControl.Resources>
              <conv:StatusToStrikethroughConverter x:Key="StatusToStrikethroughConverter" />
-             <conv:StatusToPuladoSuffixConverter x:Key="StatusToPuladoSuffixConverter" />
          </UserControl.Resources>
          
          <Border BorderThickness="0" CornerRadius="10"
@@ -31,11 +30,8 @@
                                                 <Binding Path="Status" Converter="{StaticResource StatusToStrikethroughConverter}" />
                                             </Run.TextDecorations>
                                         </Run>
-                                        <Run>
-                                            <Run.Text>
-                                                <Binding Path="Status" Converter="{StaticResource StatusToPuladoSuffixConverter}" />
-                                            </Run.Text>
-                                        </Run>
+										
+                                        <TextBlock Text="{Binding SkippedDisplay}" />
                                     </TextBlock.Inlines>
                                 </TextBlock>
 
