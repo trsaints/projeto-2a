@@ -170,22 +170,24 @@ public class TodoWindowViewModel : ViewModelBase
             var todoToDelete = TodoForDeletion;
             if (todoToDelete == null) return;
 
+            todoToDelete.OnStatusChanged -= HandleStatusChanged;
+
             IsDeleteConfirmationVisible = false;
             
             Todos.Remove(todoToDelete);
             IncompleteTodos.Remove(todoToDelete);
             TodoHistory.Remove(todoToDelete);
+            
+            var listNameExists = Todos.Any(t => t.ListName == todoToDelete.ListName);
+            if (!listNameExists)
+            {
+                ListNames.Remove(todoToDelete.ListName);
+            }
+            
             RefreshFreeTodos();
 
             OnPropertyChanged(nameof(TodosByListName));
-            OnPropertyChanged(nameof(Todos));
-            OnPropertyChanged(nameof(IncompleteResume));
-            OnPropertyChanged(nameof(TodoHistory));
         });
-
-
-
-
     }
     #endregion
 
