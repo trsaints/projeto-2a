@@ -310,28 +310,32 @@ public class EventListViewModel : ViewModelBase
             Description = "Conferência de pamonhas",
             Due = new DateTime(2025, 4, 6, 8, 0, 0),
             Repeats = Repeats.Anually,
-            AgendaName = "Conferências"
+            AgendaName = "Conferências",
+            Color = "#4CABE4"
         },
         new Event(2, "Feira da Foda")
         {
             Description = "Conferência do Agro",
             Due = new DateTime(2025, 4, 5, 14, 0, 0),
             Repeats = Repeats.None,
-            AgendaName = "Conferências"
+            AgendaName = "Conferências",
+            Color = "#FFB900"
         },
         new Event(3, "Festa do Peão")
         {
             Description = "Festa do Peão de Barretos",
             Due = new DateTime(2025, 8, 20, 12, 0, 0),
             Repeats = Repeats.Monthly,
-            AgendaName = "Festas"
+            AgendaName = "Festas",
+            Color = "#E4080A"
         },
         new Event(4, "Feriado")
         {
             Description = "Feriado de alguma coisa",
             Due = new DateTime(2025, 4, 18, 22, 0, 0),
             Repeats = Repeats.Monthly,
-            AgendaName = "Feriados"
+            AgendaName = "Feriados",
+            Color = "#7DDA58"
         }
     };
 
