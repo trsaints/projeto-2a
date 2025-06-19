@@ -1,4 +1,5 @@
-﻿using Agendai.Data.Models;
+﻿using System;
+using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -54,5 +55,14 @@ public partial class MonthView : UserControl
         var autoComplete = (AutoCompleteBox)sender;
         autoComplete.IsDropDownOpen = true;
     }
+    
+    private void SearchBox_TextChanged(object? sender, RoutedEventArgs e)
+    {
+        if (sender is AutoCompleteBox box)
+        {
+            Console.WriteLine($"Usuário digitando: {box.Text}");
+        }
+    }
+
     
 }

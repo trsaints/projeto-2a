@@ -93,7 +93,8 @@
                                  ItemsSource="{Binding SearchableItems}"
                                  GotFocus="SearchText_OnGotFocus"
                                  FilterMode="Contains"
-                                 MinimumPrefixLength="0" />
+                                 MinimumPrefixLength="0" 
+                                 TextChanged="SearchBox_TextChanged"/>
             </StackPanel>
 
             <Button Grid.Column="2"
