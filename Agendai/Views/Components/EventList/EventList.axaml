@@ -9,7 +9,7 @@
     <ItemsControl ItemsSource="{Binding Events}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Border Background="#F2EDEE" BorderThickness="1" Padding="16" BorderBrush="#EBE6E7" CornerRadius="8"
+                <Border Background="{Binding Color}" BorderThickness="1" Padding="16" BorderBrush="#EBE6E7" CornerRadius="8"
                         Margin="0 0 0 16">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Spacing="8" Margin="0 0 16 0">
