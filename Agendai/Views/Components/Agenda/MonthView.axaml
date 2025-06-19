@@ -125,7 +125,9 @@
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
                                             
-                                            <ItemsControl ItemsSource="{Binding Sunday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Sunday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -145,7 +147,9 @@
                                             <TextBlock Text="{Binding Monday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Monday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Monday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -164,7 +168,9 @@
                                             <TextBlock Text="{Binding Tuesday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -183,7 +189,9 @@
                                             <TextBlock Text="{Binding Wednesday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -202,7 +210,9 @@
                                             <TextBlock Text="{Binding Thursday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Thursday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Thursday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -221,7 +231,9 @@
                                             <TextBlock Text="{Binding Friday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Friday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Friday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -240,7 +252,9 @@
                                             <TextBlock Text="{Binding Saturday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            <ItemsControl ItemsSource="{Binding Saturday.Items}" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                                                <ItemsControl ItemsSource="{Binding Saturday.Items}" />
+                                            </ScrollViewer>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
