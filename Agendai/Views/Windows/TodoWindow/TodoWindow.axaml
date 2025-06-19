@@ -43,29 +43,17 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0"
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right"
                                    Text="Minhas Tarefas"
                                    FontSize="18"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <Button Grid.Column="1"
-                                Content="Ordernar por"
-                                Padding="4"
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                Margin="8 0 0 0"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Right">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuItem Header="Nome" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="Nome" />
-                                    <MenuItem Header="Prazo" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="Prazo" />
-                                    <MenuItem Header="Nome da Lista" Command="{Binding SortMinhasTarefasCommand}" CommandParameter="NomeLista" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                        </Button>
+                        <ComboBox HorizontalAlignment="Right"
+                                  Width="80"
+                                  Margin="8 0 0 0"
+                                  SelectedItem="{Binding SortMinhasTarefas, Mode=TwoWay}"
+                                  ItemsSource="{Binding SortOptions}" />
                     </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
@@ -88,23 +76,11 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <Button Grid.Column="1"
-                                Content="Ordernar por"
-                                Padding="4"
-                                FontSize="12"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                Margin="8 0 0 0"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Right">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuItem Header="Nome" Command="{Binding SortHistoricoCommand}" CommandParameter="Nome" />
-                                    <MenuItem Header="Prazo" Command="{Binding SortHistoricoCommand}" CommandParameter="Prazo" />
-                                    <MenuItem Header="Nome da Lista" Command="{Binding SortHistoricoCommand}" CommandParameter="NomeLista" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                        </Button>
+                        <ComboBox HorizontalAlignment="Right"
+                                  Width="80"
+                                  Margin="8 0 0 0"
+                                  SelectedItem="{Binding SortHistorico, Mode=TwoWay}"
+                                  ItemsSource="{Binding SortOptions}" />
                     </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">

@@ -487,6 +487,8 @@ public class TodoWindowViewModel : ViewModelBase
         Prazo,
         NomeLista
     }
+    
+    public ObservableCollection<string> SortOptions { get; } = new() { "Nome", "Prazo", "NomeLista" };
 
     private SortType _sortMinhasTarefas = SortType.Prazo;
     public SortType SortMinhasTarefas
