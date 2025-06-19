@@ -132,13 +132,7 @@ public class TodoWindowViewModel : ViewModelBase
 			{
 				if (string.IsNullOrEmpty(sort)) return;
 
-				SortMinhasTarefas = sort switch
-				{
-					"Nome"      => SortType.Nome,
-					"Prazo"     => SortType.Prazo,
-					"NomeLista" => SortType.NomeLista,
-					_           => SortType.Nome
-				};
+				SortMinhasTarefas = SortTypeValue(sort);
 			}
 		);
 
@@ -212,6 +206,17 @@ public class TodoWindowViewModel : ViewModelBase
 				OnPropertyChanged(nameof(TodosByListName));
 			}
 		);
+	}
+
+	private static SortType SortTypeValue(string sort)
+	{
+		return sort switch
+		{
+			"Nome"      => SortType.Nome,
+			"Prazo"     => SortType.Prazo,
+			"NomeLista" => SortType.NomeLista,
+			_           => SortType.Nome
+		};
 	}
 
 	#endregion
