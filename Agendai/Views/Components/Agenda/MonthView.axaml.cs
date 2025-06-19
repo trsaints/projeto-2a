@@ -1,8 +1,10 @@
 ﻿using System;
+using Agendai.Data.Models;
 using Agendai.ViewModels;
 using Agendai.ViewModels.Agenda;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
@@ -30,7 +32,13 @@ public partial class MonthView : UserControl
 
     private void OnDayClicked(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button button && button.Tag is int clickedDate)
+        
+        if (e.Source is Control source && (source.DataContext is Todo || source.DataContext is Event))
+        {
+            return;
+        }
+        
+        if (sender is Border border && border.Tag is int clickedDate)
         {
             if (DataContext is AgendaWindowViewModel vm)
             {
@@ -38,6 +46,7 @@ public partial class MonthView : UserControl
             }
         }
     }
+
     private void ForwardClickToParent(object? sender, RoutedEventArgs e)
     {
         var parentAgenda = this.FindAncestorOfType<Agenda>();

@@ -114,31 +114,40 @@
                         <DataGridTemplateColumn Header="Dom">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Sunday.DayNumber}" 
-                                                Tag="{Binding Sunday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Sunday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Sunday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Sunday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            
+                                            <ItemsControl ItemsSource="{Binding Sunday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
+
                         <DataGridTemplateColumn Header="Seg">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Monday.DayNumber}" 
-                                                Tag="{Binding Monday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Monday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Monday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Monday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Monday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -146,31 +155,37 @@
                         <DataGridTemplateColumn Header="Ter">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Tuesday.DayNumber}" 
-                                                Tag="{Binding Tuesday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Tuesday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Tuesday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         
-                        <DataGridTemplateColumn Header="Quar">
+                        <DataGridTemplateColumn Header="Qua">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Wednesday.DayNumber}" 
-                                                Tag="{Binding Wednesday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Wednesday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Wednesday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -178,15 +193,18 @@
                         <DataGridTemplateColumn Header="Qui">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Thursday.DayNumber}" 
-                                                Tag="{Binding Thursday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Thursday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Thursday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Thursday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Thursday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -194,15 +212,18 @@
                         <DataGridTemplateColumn Header="Sex">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Friday.DayNumber}" 
-                                                Tag="{Binding Friday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Friday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Friday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Friday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Friday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -210,15 +231,18 @@
                         <DataGridTemplateColumn Header="Sáb">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="{Binding Saturday.DayNumber}" 
-                                                Tag="{Binding Saturday.DayNumber}" 
-                                                Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
-                                                FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
-                                                Cursor="Hand" />
-                                        <ItemsControl ItemsSource="{Binding Saturday.Items}" />
-                                    </StackPanel>
+                                    <Border Tapped="OnDayClicked"
+                                            Tag="{Binding Saturday.DayNumber}"
+                                            Background="Transparent"
+                                            Padding="4"
+                                            Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Saturday.DayNumber}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left" />
+                                            <ItemsControl ItemsSource="{Binding Saturday.Items}" />
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
