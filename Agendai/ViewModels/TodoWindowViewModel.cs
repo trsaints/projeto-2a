@@ -141,13 +141,7 @@ public class TodoWindowViewModel : ViewModelBase
 			{
 				if (string.IsNullOrEmpty(sort)) return;
 
-				SortHistorico = sort switch
-				{
-					"Nome"      => SortType.Nome,
-					"Prazo"     => SortType.Prazo,
-					"NomeLista" => SortType.NomeLista,
-					_           => SortType.Nome
-				};
+				SortHistorico = SortTypeValue(sort);
 			}
 		);
 
@@ -156,20 +150,15 @@ public class TodoWindowViewModel : ViewModelBase
 			{
 				if (paramsArray is not { Length: 2 }) return;
 
-				var listName     = paramsArray[0] as string;
-				var sortTypeName = paramsArray[1] as string;
+				var listName = paramsArray[0] as string;
+				var sort     = paramsArray[1] as string;
 
 				if (string.IsNullOrEmpty(listName)
-				    || string.IsNullOrEmpty(sortTypeName)) return;
+				    || string.IsNullOrEmpty(sort)) { return; }
 
-				var newSortType = sortTypeName switch
-				{
-					"Nome"      => SortType.Nome,
-					"Prazo"     => SortType.Prazo,
-					"NomeLista" => SortType.NomeLista,
-					_           => SortType.Prazo
-				};
+				var newSortType = SortTypeValue(sort);
 				_listSortTypes[listName] = newSortType;
+				
 				OnPropertyChanged(nameof(TodosByListName));
 			}
 		);
