@@ -19,7 +19,7 @@ public static class MonthViewService
         rows.Clear();
 
         int daysInMonth = DateTime.DaysInMonth(referenceDate.Year, referenceDate.Month);
-        DateTime firstDay = new DateTime(referenceDate.Year, referenceDate.Month, 1);
+        DateTime firstDay = new(referenceDate.Year, referenceDate.Month, 1);
         int startOffset = (int)firstDay.DayOfWeek;
 
         var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
@@ -40,9 +40,9 @@ public static class MonthViewService
             .GroupBy(t => t.Due.Day)
             .ToDictionary(g => g.Key, g => g.ToList());
 
-        int day = 1;
-        int totalSlots = daysInMonth + startOffset;
-        int totalWeeks = (int)Math.Ceiling(totalSlots / 7.0);
+        int currentDay = 1;
+        var totalSlots = daysInMonth + startOffset;
+        var totalWeeks = (int)Math.Ceiling(totalSlots / 7.0);
 
         for (int w = 0; w < totalWeeks; w++)
         {
@@ -50,24 +50,24 @@ public static class MonthViewService
             for (int d = 0; d < 7; d++)
             {
                 int slot = w * 7 + d;
-                if (slot >= startOffset && day <= daysInMonth)
+                if (slot >= startOffset && currentDay <= daysInMonth)
                 {
                     var cell = new DayCell
                     {
-                        DayNumber = day,
-                        Items = new ObservableCollection<object>()
+                        DayNumber = currentDay,
+                        Items = []
                     };
 
-                    if (showData && eventMap.TryGetValue(day, out var evts))
+                    if (showData && eventMap.TryGetValue(currentDay, out var evts))
                         foreach (var evt in evts)
                             cell.Items.Add(evt);
 
-                    if (showData && todoMap.TryGetValue(day, out var tds))
+                    if (showData && todoMap.TryGetValue(currentDay, out var tds))
                         foreach (var todo in tds)
                             cell.Items.Add(todo);
 
                     row[d] = cell;
-                    day++;
+                    currentDay++;
                 }
                 else
                 {
