@@ -23,7 +23,7 @@ public class EventListViewModel : ViewModelBase
     private DateTime _newDue = DateTime.Today;
     private string _newDescription = string.Empty;
     private string _agendaName = string.Empty;
-    private RepeatsOption _repeat = new RepeatsOption{Repeats = Repeats.None};
+    private RepeatsOption _repeat = new RepeatsOption { Repeats = Repeats.None };
     private ObservableCollection<Todo> _todosForSelectedEvent = new();
     private ObservableCollection<string> _agendaNames;
 
@@ -180,6 +180,13 @@ public class EventListViewModel : ViewModelBase
 
     #region Public Methods
 
+    private static Color? StringToColor(string? colorStr)
+    {
+        if (string.IsNullOrWhiteSpace(colorStr)) return null;
+
+        return Color.TryParse(colorStr, out var color) ? color : null;
+    }
+
     public void LoadEvent(Event? ev)
     {
         _currentEvent = ev;
@@ -189,6 +196,8 @@ public class EventListViewModel : ViewModelBase
         Repeat = RepeatOptions.FirstOrDefault(r => r.Repeats == ev.Repeats) ?? RepeatOptions[0];
         AgendaName = ev?.AgendaName ?? "";
         SelectedEvent = _currentEvent;
+        NewColor = StringToColor(ev?.Color);
+
         UpdateCanSave();
     }
 
@@ -196,19 +205,19 @@ public class EventListViewModel : ViewModelBase
     {
         if (TodoWindowVm == null) return;
 
-        bool hasTaskChanges = 
+        bool hasTaskChanges =
             !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
             !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim());
 
-        CanSave = !string.IsNullOrWhiteSpace(NewEventName) && (
-            _currentEvent == null ||
-            NewEventName != _currentEvent.Name ||
-            NewDescription != _currentEvent.Description ||
-            NewDue.Date != _currentEvent.Due.Date ||
-            Repeat?.Repeats != _currentEvent.Repeats ||
-            AgendaName != _currentEvent.AgendaName ||
-            hasTaskChanges
-        );
+        CanSave = !string.IsNullOrWhiteSpace(NewEventName)
+            && (_currentEvent is null
+            || NewEventName != _currentEvent.Name
+            || NewDescription != _currentEvent.Description
+            || NewDue.Date != _currentEvent.Due.Date
+            || Repeat?.Repeats != _currentEvent.Repeats
+            || AgendaName != _currentEvent.AgendaName
+            || hasTaskChanges
+            || NewColor != StringToColor(_currentEvent.Color));
 
         ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
     }
@@ -248,7 +257,7 @@ public class EventListViewModel : ViewModelBase
         NewEventName = string.Empty;
         NewDescription = string.Empty;
         NewDue = DateTime.Today;
-        Repeat = new RepeatsOption { Repeats = Repeats.None};
+        Repeat = new RepeatsOption { Repeats = Repeats.None };
         AgendaName = string.Empty;
         TodoWindowVm.SelectedTodoName = string.Empty;
         _currentEvent = null;
@@ -269,8 +278,7 @@ public class EventListViewModel : ViewModelBase
 
     private void UpdateTodosForSelectedEvent()
     {
-        TodosForSelectedEvent = new ObservableCollection<Todo>(
-            SelectedEvent?.Todos ?? Enumerable.Empty<Todo>());
+        TodosForSelectedEvent = [.. SelectedEvent?.Todos ?? Enumerable.Empty<Todo>()];
     }
 
     private void AddTodosToEvent(Event ev)
@@ -298,6 +306,7 @@ public class EventListViewModel : ViewModelBase
         ev.Due = NewDue;
         ev.Repeats = Repeat.Repeats;
         ev.AgendaName = AgendaName;
+        ev.Color = NewColor?.ToString() ?? "#FFFFFF";
 
         if (ev.Todos == null)
             ev.Todos = new List<Todo>();
