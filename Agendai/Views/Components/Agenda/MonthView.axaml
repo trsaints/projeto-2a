@@ -94,7 +94,8 @@
                                  GotFocus="SearchText_OnGotFocus"
                                  FilterMode="Contains"
                                  MinimumPrefixLength="0" 
-                                 TextChanged="SearchBox_TextChanged"/>
+                                 TextChanged="SearchBox_TextChanged"
+                                 SelectionChanged="SearchBox_SelectionChanged"/>
             </StackPanel>
 
             <Button Grid.Column="2"

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using Avalonia.Controls;
@@ -66,6 +67,26 @@ public partial class MonthView : UserControl
             }
         }
     }
+    
+    private void SearchBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (sender is AutoCompleteBox box && box.SelectedItem is string selectedName)
+        {
+            var viewModel = DataContext as AgendaWindowViewModel;
+
+            var ev = viewModel?.EventList.Events.FirstOrDefault(x => x.Name == selectedName);
+            var todo = viewModel?.TodoList.Todos.FirstOrDefault(x => x.Name == selectedName);
+
+            if (ev != null || todo != null)
+            {
+                var fakeButton = new Button { Tag = ev ?? (object)todo };
+                var parentAgenda = this.FindAncestorOfType<Agenda>();
+
+                parentAgenda?.OnEventOrTodoCLicked(fakeButton, e);
+            }
+        }
+    }
+
 
     
 }
