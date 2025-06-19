@@ -230,10 +230,26 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         switch (SelectedIndex)
         {
             case 0:
-                MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, ShowData, SelectedListNames, SearchText);
+                var newReferencedDate = MonthViewService.GenerateMonthView(
+                    MonthViewRows, 
+                    EventList.Events, 
+                    TodoList.Todos, 
+                    CurrentMonth, 
+                    ShowData, 
+                    SelectedListNames, 
+                    SearchText);
+                CurrentMonth = newReferencedDate;
+                UpdateDateSelectors();
                 break;
             case 1:
-                WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, ShowData, SelectedListNames);
+                WeekViewService.GenerateWeekView(
+                    WeekViewRows, 
+                    Hours, 
+                    EventList.Events, 
+                    TodoList.Todos, 
+                    CurrentWeek, 
+                    ShowData, 
+                    SelectedListNames);
                 break;
             case 2:
                 var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay, SelectedListNames);
@@ -251,16 +267,26 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         var culture = new CultureInfo("pt-BR");
 
-        SelectedMonth = culture.TextInfo.ToTitleCase(CurrentDay.ToString("MMMM", culture));
+        if (SelectedIndex == 0) 
+        {
+            SelectedMonth = culture.TextInfo.ToTitleCase(
+                CurrentMonth.ToString("MMMM", culture));
+        }
+        else
+        {
+            SelectedMonth = culture.TextInfo.ToTitleCase(
+                CurrentDay.ToString("MMMM", culture));
+        }
 
-        var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(CurrentDay);
+        var (weekNumber, start, end) = WeekViewService.GetWeekOfMonthRange(
+            SelectedIndex == 1 ? CurrentWeek : CurrentDay);
         SelectedWeek = $"Semana {weekNumber} - {start:dd/MM} a {end:dd/MM}";
 
-        SelectedDay = culture.TextInfo.ToTitleCase(CurrentDay.ToString("dddd, dd 'de' MMMM", culture));
-
-        CurrentMonth = CurrentDay;
-        CurrentWeek = CurrentDay;
+        SelectedDay = culture.TextInfo.ToTitleCase(
+            (SelectedIndex == 2 ? CurrentDay : CurrentDay)
+            .ToString("dddd, dd 'de' MMMM", culture));
     }
+
 
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

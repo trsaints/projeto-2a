@@ -8,7 +8,7 @@ namespace Agendai.Services.Views
 {
     public static class MonthViewService
     {
-        public static void GenerateMonthView(
+        public static DateTime GenerateMonthView(
             ObservableCollection<MonthRow> rows,
             IEnumerable<Event> events,
             IEnumerable<Todo> todos,
@@ -19,6 +19,32 @@ namespace Agendai.Services.Views
         )
         {
             rows.Clear();
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var normalized = searchText.Trim().ToLower();
+
+                var matchedEvent = events
+                    .Where(e => e.Name != null && e.Name.ToLower().Contains(normalized))
+                    .OrderBy(e => e.Due)
+                    .FirstOrDefault();
+
+                var matchedTodo = todos
+                    .Where(t => t.Name != null && t.Name.ToLower().Contains(normalized))
+                    .OrderBy(t => t.Due)
+                    .FirstOrDefault();
+
+                DateTime? matchedDate = null;
+                if (matchedEvent != null && matchedTodo != null)
+                    matchedDate = matchedEvent.Due < matchedTodo.Due ? matchedEvent.Due : matchedTodo.Due;
+                else if (matchedEvent != null)
+                    matchedDate = matchedEvent.Due;
+                else if (matchedTodo != null)
+                    matchedDate = matchedTodo.Due;
+
+                if (matchedDate.HasValue)
+                    referenceDate = new DateTime(matchedDate.Value.Year, matchedDate.Value.Month, 1);
+            }
 
             int daysInMonth = DateTime.DaysInMonth(referenceDate.Year, referenceDate.Month);
             DateTime firstDay = new(referenceDate.Year, referenceDate.Month, 1);
@@ -86,6 +112,9 @@ namespace Agendai.Services.Views
                 }
                 rows.Add(row);
             }
+
+            return referenceDate;
         }
+
     }
 }
