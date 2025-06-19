@@ -1,12 +1,7 @@
-﻿using System;
-using Agendai.Data.Models;
-using Agendai.ViewModels;
+﻿using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 
 namespace Agendai.Views.Components.Agenda;
