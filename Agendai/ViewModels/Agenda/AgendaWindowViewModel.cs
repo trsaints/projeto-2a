@@ -186,7 +186,7 @@ namespace Agendai.ViewModels.Agenda
             EventList.NewEventName = ev.Name;
             EventList.NewDescription = ev.Description;
             EventList.NewDue = ev.Due.Date;
-            EventList.Repeat = ev.Repeats;
+            EventList.Repeat = EventList.RepeatOptions.FirstOrDefault(o => o.Repeats == ev.Repeats);
             EventList.LoadEvent(ev);
         }
 
