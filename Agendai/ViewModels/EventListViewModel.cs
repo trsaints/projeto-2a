@@ -189,6 +189,7 @@ public class EventListViewModel : ViewModelBase
         Repeat = RepeatOptions.FirstOrDefault(r => r.Repeats == ev.Repeats) ?? RepeatOptions[0];
         AgendaName = ev?.AgendaName ?? "";
         SelectedEvent = _currentEvent;
+        NewColor = ev?.Color is { } colorStr && Color.TryParse(colorStr, out var color) ? color : null;
         UpdateCanSave();
     }
 
@@ -269,8 +270,7 @@ public class EventListViewModel : ViewModelBase
 
     private void UpdateTodosForSelectedEvent()
     {
-        TodosForSelectedEvent = new ObservableCollection<Todo>(
-            SelectedEvent?.Todos ?? Enumerable.Empty<Todo>());
+        TodosForSelectedEvent = [.. SelectedEvent?.Todos ?? Enumerable.Empty<Todo>()];
     }
 
     private void AddTodosToEvent(Event ev)
@@ -298,6 +298,7 @@ public class EventListViewModel : ViewModelBase
         ev.Due = NewDue;
         ev.Repeats = Repeat.Repeats;
         ev.AgendaName = AgendaName;
+        ev.Color = NewColor?.ToString() ?? "#FFFFFF";
 
         if (ev.Todos == null)
             ev.Todos = new List<Todo>();
