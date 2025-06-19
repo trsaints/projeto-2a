@@ -10,7 +10,7 @@
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel"
              x:Name="Root">
-             
+
     <UserControl.Resources>
         <conv:SortParameterConverter x:Key="SortParamConverter" />
         <sys:String x:Key="SortParam_Nome">Nome</sys:String>
@@ -19,7 +19,7 @@
     </UserControl.Resources>
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
-        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}"/>
+        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}" />
 
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
@@ -49,7 +49,7 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <ComboBox HorizontalAlignment="Right"
+                        <ComboBox Grid.Column="1" HorizontalAlignment="Right"
                                   Width="80"
                                   Margin="8 0 0 0"
                                   SelectedItem="{Binding SortMinhasTarefas, Mode=TwoWay}"
@@ -57,9 +57,9 @@
                     </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}" 
-                                           ItemClickCommand="{Binding SelectTarefaCommand}" 
-                                           DeleteCommand="{Binding SkippedTodoCommand}"/>
+                        <todoList:TodoList ItemsSource="{Binding IncompleteTodos}"
+                                           ItemClickCommand="{Binding SelectTarefaCommand}"
+                                           DeleteCommand="{Binding SkippedTodoCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -76,7 +76,7 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
 
-                        <ComboBox HorizontalAlignment="Right"
+                        <ComboBox Grid.Column="1" HorizontalAlignment="Right"
                                   Width="80"
                                   Margin="8 0 0 0"
                                   SelectedItem="{Binding SortHistorico, Mode=TwoWay}"
@@ -84,9 +84,9 @@
                     </Grid>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                        <todoList:TodoList ItemsSource="{Binding TodoHistory}" 
-                                           ItemClickCommand="{Binding SelectTarefaCommand}" 
-                                           DeleteCommand="{Binding DeleteTodoCommand}"/>
+                        <todoList:TodoList ItemsSource="{Binding TodoHistory}"
+                                           ItemClickCommand="{Binding SelectTarefaCommand}"
+                                           DeleteCommand="{Binding DeleteTodoCommand}" />
                     </ScrollViewer>
                 </StackPanel>
 
@@ -110,54 +110,23 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Text="{Binding ListName}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="0" Text="{Binding ListName}" FontSize="18"
+                                               FontWeight="Bold" VerticalAlignment="Center" />
 
-                                    <Button Grid.Column="1" Content="Ordernar por" Padding="4" FontSize="12" FontWeight="SemiBold"
-                                            Background="Transparent" Margin="8 0 0 0" 
-                                            VerticalAlignment="Center" HorizontalAlignment="Right">
-                                        <Button.Flyout>
-                                            <MenuFlyout>
-                                                <MenuItem Header="Nome">
-                                                    <MenuItem.Command>
-                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
-                                                    </MenuItem.Command>
-                                                    <MenuItem.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
-                                                            <Binding Path="ListName" />
-                                                            <Binding Source="{StaticResource SortParam_Nome}" />
-                                                        </MultiBinding>
-                                                    </MenuItem.CommandParameter>
-                                                </MenuItem>
-                                                <MenuItem Header="Prazo">
-                                                    <MenuItem.Command>
-                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
-                                                    </MenuItem.Command>
-                                                    <MenuItem.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
-                                                            <Binding Path="ListName" />
-                                                            <Binding Source="{StaticResource SortParam_Prazo}" />
-                                                        </MultiBinding>
-                                                    </MenuItem.CommandParameter>
-                                                </MenuItem>
-                                                <MenuItem Header="Nome da Lista">
-                                                    <MenuItem.Command>
-                                                        <Binding Path="((vm:TodoWindowViewModel)DataContext).SortListCommand" ElementName="Root" />
-                                                    </MenuItem.Command>
-                                                    <MenuItem.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource SortParamConverter}">
-                                                            <Binding Path="ListName" />
-                                                            <Binding Source="{StaticResource SortParam_NomeLista}" />
-                                                        </MultiBinding>
-                                                    </MenuItem.CommandParameter>
-                                                </MenuItem>
-                                            </MenuFlyout>
-                                        </Button.Flyout>
-                                    </Button>
+                                    <ComboBox Grid.Column="1" HorizontalAlignment="Right"
+                                              Width="80"
+                                              Margin="8 0 0 0"
+                                              SelectedItem="{Binding ((vm:TodoWindowViewModel)DataContext), 
+                                              Mode=TwoWay,
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              ItemsSource="{Binding ((vm:TodoWindowViewModel)DataContext),
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              />
                                 </Grid>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
                                     <todoList:TodoList ItemsSource="{Binding Items}"
-                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                       ItemClickCommand="{Binding ((vm:TodoWindowViewModel)DataContext).SelectTarefaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                        DeleteCommand="{Binding ((vm:TodoWindowViewModel)DataContext).DeleteTodoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 </ScrollViewer>
                             </StackPanel>
@@ -167,9 +136,8 @@
             </Grid>
         </ScrollViewer>
 
-        <Panel IsVisible="{Binding OpenAddTask}"
-               ZIndex="100"
-               Grid.ColumnSpan="2">
+        <Panel Grid.Column="2" IsVisible="{Binding OpenAddTask}"
+               ZIndex="100">
             <Border Width="{Binding $parent[Window].Bounds.Width}"
                     Height="{Binding $parent[Window].Bounds.Height}"
                     Background="#80202020"
@@ -191,7 +159,8 @@
                 </Grid>
             </Border>
         </Panel>
-        <Panel 
+        
+        <Panel
             Grid.ColumnSpan="2"
             IsVisible="{Binding EventListVm.OpenAddEvent}"
             ZIndex="100">
@@ -215,12 +184,12 @@
                 </Grid>
             </Border>
         </Panel>
-        
+
         <Border IsVisible="{Binding IsDeleteConfirmationVisible}"
-            Background="#80000000"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Grid.ColumnSpan="2">
+                Background="#80000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Grid.ColumnSpan="2">
             <Border Background="WhiteSmoke"
                     BorderBrush="LightGray"
                     BorderThickness="1"
@@ -229,39 +198,39 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     MinWidth="350">
-                
-                <StackPanel Spacing="15" >
+
+                <StackPanel Spacing="15">
                     <TextBlock Text="Confirmar Exclusão"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                               FontSize="18"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center" />
                     <TextBlock Text="Você tem certeza que deseja excluir permanentemente a seguinte tarefa?"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"/>
-                
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Center" />
+
                     <Border Padding="10" CornerRadius="5" Background="White">
                         <StackPanel DataContext="{Binding TodoForDeletion}" Spacing="5">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16"/>
-                            <TextBlock Text="{Binding Description}" FontStyle="Italic" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" />
+                            <TextBlock Text="{Binding Description}" FontStyle="Italic" TextWrapping="Wrap" />
                             <TextBlock>
-                                <Run Text="Prazo: "/>
-                                <Run Text="{Binding Due, Converter={StaticResource DateConverter}}"/>
+                                <Run Text="Prazo: " />
+                                <Run Text="{Binding Due, Converter={StaticResource DateConverter}}" />
                             </TextBlock>
                             <TextBlock>
-                                <Run Text="Status: "/>
-                                <Run Text="{Binding Status}"/>
+                                <Run Text="Status: " />
+                                <Run Text="{Binding Status}" />
                             </TextBlock>
                         </StackPanel>
                     </Border>
                     <Grid ColumnDefinitions="*,*">
-                        <Button Grid.Column="0" 
-                                Content="Cancelar" 
+                        <Button Grid.Column="0"
+                                Content="Cancelar"
                                 Command="{Binding CancelDeleteCommand}"
-                                Margin="0 0 5 0"/>
+                                Margin="0 0 5 0" />
                         <Button Grid.Column="1"
-                                Content="Confirmar Exclusão" 
+                                Content="Confirmar Exclusão"
                                 Command="{Binding ConfirmDeleteCommand}"
-                                Margin="5 0 0 0"/>
+                                Margin="5 0 0 0" />
                     </Grid>
                 </StackPanel>
             </Border>
