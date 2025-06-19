@@ -101,7 +101,9 @@
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
                                             DataContext="{Binding}"
-                                            Margin="0 0 8 0"/>
+                                            Margin="0 0 8 0"
+                                            IsChecked="True"
+                                            Loaded="CheckBoxLoaded"/>
                                         <TextBlock Text="{Binding ListName}" VerticalAlignment="Center" Grid.Column="1"/>
                                     </Grid>
                                 </DataTemplate>
@@ -146,7 +148,9 @@
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
                                             DataContext="{Binding}"
-                                            Margin="0 0 8 0"/>
+                                            Margin="0 0 8 0"
+                                            IsChecked="True"
+                                            Loaded="CheckBoxLoaded"/>
                                         <TextBlock Text="{Binding AgendaName}" VerticalAlignment="Center" Grid.Column="1"/>
                                     </Grid>
                                 </DataTemplate>

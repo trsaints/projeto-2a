@@ -75,6 +75,23 @@ namespace Agendai.Views.Components.HomeSidebar
                 }
             }
         }
+        
+        private void CheckBoxLoaded(object? sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb)
+            {
+                var name = cb.DataContext switch
+                {
+                    TodosByListName todo => todo.ListName,
+                    EventsByAgenda ev => ev.AgendaName,
+                    _ => null
+                };
+                if (name != null && cb.IsChecked == true)
+                {
+                    _selectedItems.Add(name);
+                }
+            }
+        }
 
     }
 }
