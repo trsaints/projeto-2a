@@ -24,7 +24,7 @@ namespace Agendai.ViewModels
         private DateTime _newDue = DateTime.Today;
         private string _newDescription = string.Empty;
         private string _agendaName = string.Empty;
-        private RepeatsOption _repeat;
+        private RepeatsOption _repeat = new RepeatsOption{Repeats = Repeats.None};
         private ObservableCollection<Todo> _todosForSelectedEvent = new();
         private ObservableCollection<string> _agendaNames;
 

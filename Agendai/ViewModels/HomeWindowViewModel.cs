@@ -9,6 +9,10 @@ namespace Agendai.ViewModels;
 public class HomeWindowViewModel : ViewModelBase
 {
 	private bool _isPopupOpen;
+	private bool _isEventListsAbleToView = true;
+	private bool _isTodoListsAbleToView = true;
+	public string EventListsVisibilityText => IsEventListsAbleToView ? "Ocultar" : "Exibir";
+	public string TodoListsVisibilityText => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
 
 	public TodoWindowViewModel TodoWindowVm { get; set; }
 	public EventListViewModel EventListVm { get; set; }
@@ -24,6 +28,30 @@ public class HomeWindowViewModel : ViewModelBase
 	{
 		get => _isPopupOpen;
 		set => SetProperty(ref _isPopupOpen, value);
+	}
+
+	public bool IsEventListsAbleToView
+	{
+		get => _isEventListsAbleToView;
+		set
+		{
+			if (SetProperty(ref _isEventListsAbleToView, value))
+			{
+				OnPropertyChanged(nameof(EventListsVisibilityText));
+			}
+		}
+	}
+
+	public bool IsTodoListsAbleToView
+	{
+		get => _isTodoListsAbleToView;
+		set
+		{
+			if (SetProperty(ref _isTodoListsAbleToView, value))
+			{
+				OnPropertyChanged(nameof(TodoListsVisibilityText));
+			}
+		}
 	}
 
 	private bool _isAgendaWindow;
