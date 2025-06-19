@@ -11,8 +11,10 @@ public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropert
 	public virtual ICollection<Todo>? Todos { get; set; }
 	
 	public event PropertyChangedEventHandler? PropertyChanged;
-	
-	protected virtual void OnPropertyChanged(string propertyName)
+
+	public string? Color { get; set; }
+
+    protected virtual void OnPropertyChanged(string propertyName)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
