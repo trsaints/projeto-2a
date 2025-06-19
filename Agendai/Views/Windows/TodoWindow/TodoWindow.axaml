@@ -1,8 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
-             xmlns:conv="clr-namespace:Agendai.Data.Converters"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:todoList="clr-namespace:Agendai.Views.Components.TodoList"
              xmlns:homeSidebar="clr-namespace:Agendai.Views.Components.HomeSidebar"
              xmlns:todoForm="clr-namespace:Agendai.Views.Components.TodoForm"
@@ -10,14 +8,6 @@
              x:Class="Agendai.Views.Windows.TodoWindow.TodoWindow"
              x:DataType="vm:TodoWindowViewModel"
              x:Name="Root">
-
-    <UserControl.Resources>
-        <conv:SortParameterConverter x:Key="SortParamConverter" />
-        <sys:String x:Key="SortParam_Nome">Nome</sys:String>
-        <sys:String x:Key="SortParam_Prazo">Prazo</sys:String>
-        <sys:String x:Key="SortParam_NomeLista">NomeLista</sys:String>
-    </UserControl.Resources>
-
     <Grid ColumnDefinitions="0.25*, 0.75*">
         <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}" />
 
