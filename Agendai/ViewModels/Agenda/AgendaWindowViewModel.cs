@@ -117,6 +117,13 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         get => _currentDay;
         set => SetProperty(ref _currentDay, value);
     }
+    
+    private ObservableCollection<string> _searchableItems = new();
+    public ObservableCollection<string> SearchableItems
+    {
+        get => _searchableItems;
+        set => SetProperty(ref _searchableItems, value);
+    }
 
     public ObservableCollection<MonthRow> MonthViewRows { get; } = new();
     public ObservableCollection<WeekRow> WeekViewRows { get; } = new();
@@ -257,7 +264,7 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
         void Subscribe(INotifyPropertyChanged item)
         {
-            item.PropertyChanged += (s, e) => UpdateDataGridItems();
+            item.PropertyChanged += (s, e) => UpdateSearchableItems();
         }
 
         EventList.Events.CollectionChanged += (s, e) =>
@@ -266,8 +273,10 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
                 foreach (INotifyPropertyChanged item in e.NewItems) Subscribe(item);
             if (e.OldItems != null)
                 foreach (INotifyPropertyChanged item in e.OldItems)
-                    item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+                    item.PropertyChanged -= (s2, e2) => UpdateSearchableItems();
+
             UpdateDataGridItems();
+            UpdateSearchableItems(); // <== Atualiza aqui
         };
 
         TodoList.Todos.CollectionChanged += (s, e) =>
@@ -276,15 +285,18 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
                 foreach (INotifyPropertyChanged item in e.NewItems) Subscribe(item);
             if (e.OldItems != null)
                 foreach (INotifyPropertyChanged item in e.OldItems)
-                    item.PropertyChanged -= (s2, e2) => UpdateDataGridItems();
+                    item.PropertyChanged -= (s2, e2) => UpdateSearchableItems();
+
             UpdateDataGridItems();
+            UpdateSearchableItems(); // <== Atualiza aqui
         };
 
-        foreach (var item in EventList.Events)
-            Subscribe(item);
-        foreach (var item in TodoList.Todos)
-            Subscribe(item);
+        foreach (var ev in EventList.Events) Subscribe(ev);
+        foreach (var todo in TodoList.Todos) Subscribe(todo);
+
+        UpdateSearchableItems();
     }
+
 
     private void RegisterMessages()
     {
@@ -294,4 +306,20 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
             UpdateDataGridItems();
         });
     }
+    
+    private void UpdateSearchableItems()
+    {
+        var names = new HashSet<string>();
+
+        foreach (var ev in EventList.Events)
+            if (!string.IsNullOrEmpty(ev.Name))
+                names.Add(ev.Name);
+
+        foreach (var todo in TodoList.Todos)
+            if (!string.IsNullOrEmpty(todo.Name))
+                names.Add(todo.Name);
+
+        SearchableItems = new ObservableCollection<string>(names.OrderBy(n => n));
+    }
+
 }

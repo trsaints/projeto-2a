@@ -77,19 +77,23 @@
                         HorizontalAlignment="Center"
                         Spacing="4"
                         Grid.Column="1">
-                <Label Target="{Binding ElementName=searchTextBox}"
+                <Label Target="{Binding ElementName=searchBox}"
                        FontWeight="SemiBold"
                        FontSize="14"
                        Content="Pesquisar na Agenda" />
-                <TextBox x:Name="searchTextBox"
-                         Width="200"
-                         Watermark="Ex.: Festa Junina"
-                         FontSize="14"
-                         Padding="6"
-                         CornerRadius="6"
-                         Background="White"
-                         BorderBrush="Gray"
-                         BorderThickness="1" />
+                <AutoCompleteBox x:Name="searchBox"
+                                 Width="200"
+                                 Watermark="Ex.: Festa Junina"
+                                 FontSize="14"
+                                 Padding="6"
+                                 CornerRadius="6"
+                                 Background="White"
+                                 BorderBrush="Gray"
+                                 BorderThickness="1"
+                                 ItemsSource="{Binding SearchableItems}"
+                                 GotFocus="SearchText_OnGotFocus"
+                                 FilterMode="Contains"
+                                 MinimumPrefixLength="0" />
             </StackPanel>
 
             <Button Grid.Column="2"

@@ -1,6 +1,7 @@
 ﻿using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
@@ -48,4 +49,10 @@ public partial class MonthView : UserControl
         parentAgenda?.OnEventOrTodoCLicked(sender, e);
     }
 
+    private void SearchText_OnGotFocus(object? sender, GotFocusEventArgs e)
+    {
+        var autoComplete = (AutoCompleteBox)sender;
+        autoComplete.IsDropDownOpen = true;
+    }
+    
 }
