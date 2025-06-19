@@ -13,7 +13,7 @@
                     BorderBrush="Black"
                     BorderThickness="1"
                     CornerRadius="6"
-                    Background="Transparent"
+                    Background="{Binding ColorBrush}"
                     Tag="{Binding}">
                 <StackPanel>
                     <TextBlock Text="{Binding Name}" Foreground="Black" />
@@ -29,7 +29,7 @@
                     BorderBrush="Black"
                     BorderThickness="1"
                     CornerRadius="6"
-                    Background="Transparent"
+                    Background="#73B9DF"
                     Tag="{Binding}">
                 <StackPanel>
                     <TextBlock Text="{Binding Name}" Foreground="Black" />
