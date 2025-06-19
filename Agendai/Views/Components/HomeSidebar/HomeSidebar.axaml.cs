@@ -61,5 +61,20 @@ namespace Agendai.Views.Components.HomeSidebar
             }
         }
 
+        private void OnChangingListsVisibility(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is HomeWindowViewModel homeWindowViewModel)
+            {
+                if (button.Tag is EventListViewModel eventListViewModel)
+                {
+                    homeWindowViewModel.IsEventListsAbleToView = !homeWindowViewModel.IsEventListsAbleToView;
+                }
+                else
+                {
+                    homeWindowViewModel.IsTodoListsAbleToView = !homeWindowViewModel.IsTodoListsAbleToView;
+                }
+            }
+        }
+
     }
 }
