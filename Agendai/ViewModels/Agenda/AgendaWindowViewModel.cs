@@ -230,7 +230,7 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         switch (SelectedIndex)
         {
             case 0:
-                var newReferencedDate = MonthViewService.GenerateMonthView(
+                var newReferenceDateMonth = MonthViewService.GenerateMonthView(
                     MonthViewRows, 
                     EventList.Events, 
                     TodoList.Todos, 
@@ -238,18 +238,21 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
                     ShowData, 
                     SelectedListNames, 
                     SearchText);
-                CurrentMonth = newReferencedDate;
+                CurrentMonth = newReferenceDateMonth;
                 UpdateDateSelectors();
                 break;
             case 1:
-                WeekViewService.GenerateWeekView(
+                var newReferenceDateWeek = WeekViewService.GenerateWeekView(
                     WeekViewRows, 
                     Hours, 
                     EventList.Events, 
                     TodoList.Todos, 
                     CurrentWeek, 
                     ShowData, 
-                    SelectedListNames);
+                    SelectedListNames,
+                    SearchText);
+                CurrentWeek = newReferenceDateWeek;
+                UpdateDateSelectors();
                 break;
             case 2:
                 var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay, SelectedListNames);
