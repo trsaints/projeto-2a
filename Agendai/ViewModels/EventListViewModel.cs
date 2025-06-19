@@ -24,7 +24,7 @@ namespace Agendai.ViewModels
         private DateTime _newDue = DateTime.Today;
         private string _newDescription = string.Empty;
         private string _agendaName = string.Empty;
-        private Repeats _repeat = Repeats.None;
+        private RepeatsOption _repeat;
         private ObservableCollection<Todo> _todosForSelectedEvent = new();
         private ObservableCollection<string> _agendaNames;
 
@@ -66,10 +66,14 @@ namespace Agendai.ViewModels
 
         public ObservableCollection<Event> Events { get; set; }
 
-        public ObservableCollection<Repeats> RepeatOptions { get; } = new()
-        {
-            Repeats.None, Repeats.Daily, Repeats.Weekly, Repeats.Monthly, Repeats.Anually
-        };
+        public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
+        [
+            new() { Repeats = Repeats.None },
+            new() { Repeats = Repeats.Daily },
+            new() { Repeats = Repeats.Weekly },
+            new() { Repeats = Repeats.Monthly },
+            new() { Repeats = Repeats.Anually }
+        ];
 
         public ObservableCollection<string> AgendaNames
         {
@@ -125,7 +129,7 @@ namespace Agendai.ViewModels
             set { if (SetProperty(ref _agendaName, value)) UpdateCanSave(); }
         }
 
-        public Repeats Repeat
+        public RepeatsOption Repeat
         {
             get => _repeat;
             set { if (SetProperty(ref _repeat, value)) UpdateCanSave(); }
@@ -175,7 +179,7 @@ namespace Agendai.ViewModels
             NewEventName = ev?.Name ?? "";
             NewDescription = ev?.Description ?? "";
             NewDue = ev?.Due ?? DateTime.Today;
-            Repeat = ev?.Repeats ?? Repeats.None;
+            Repeat = RepeatOptions.FirstOrDefault(r => r.Repeats == ev.Repeats) ?? RepeatOptions[0];
             AgendaName = ev?.AgendaName ?? "";
             SelectedEvent = _currentEvent;
             UpdateCanSave();
@@ -194,7 +198,7 @@ namespace Agendai.ViewModels
                 NewEventName != _currentEvent.Name ||
                 NewDescription != _currentEvent.Description ||
                 NewDue.Date != _currentEvent.Due.Date ||
-                Repeat != _currentEvent.Repeats ||
+                Repeat?.Repeats != _currentEvent.Repeats ||
                 AgendaName != _currentEvent.AgendaName ||
                 hasTaskChanges
             );
@@ -212,7 +216,7 @@ namespace Agendai.ViewModels
                 {
                     Description = NewDescription,
                     Due = NewDue,
-                    Repeats = Repeat,
+                    Repeats = Repeat.Repeats,
                     AgendaName = AgendaName,
                     Todos = new List<Todo>()
                 };
@@ -236,7 +240,7 @@ namespace Agendai.ViewModels
             NewEventName = string.Empty;
             NewDescription = string.Empty;
             NewDue = DateTime.Today;
-            Repeat = Repeats.None;
+            Repeat = new RepeatsOption { Repeats = Repeats.None};
             AgendaName = string.Empty;
             TodoWindowVm.SelectedTodoName = null;
             _currentEvent = null;
@@ -284,7 +288,7 @@ namespace Agendai.ViewModels
             ev.Name = NewEventName;
             ev.Description = NewDescription;
             ev.Due = NewDue;
-            ev.Repeats = Repeat;
+            ev.Repeats = Repeat.Repeats;
             ev.AgendaName = AgendaName;
 
             if (ev.Todos == null)
