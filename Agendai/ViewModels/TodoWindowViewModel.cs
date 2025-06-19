@@ -106,7 +106,7 @@ public class TodoWindowViewModel : ViewModelBase
         });
         
         DeleteTodoCommand = new RelayCommand<Todo>(
-            todo => DeleteTodo(todo),
+            todo => RequestDeleteOrSkipTodo(todo),
             todo => todo != null
         );
         SkippedTodoCommand = new RelayCommand<Todo>(
@@ -287,18 +287,33 @@ public class TodoWindowViewModel : ViewModelBase
         }
     }
     
-    public IEnumerable<TodosByListName> TodosByListName =>
-        ListNames
-            .Where(name => ListasSelecionadas.Contains(name))
-            .Select(name => {
-                var itemsQuery = Todos.Where(t => t.ListName == name);
-                var sortedItems = itemsQuery.OrderBy(t => t.Due);
-                return new TodosByListName
+    public IEnumerable<TodosByListName> TodosByListName
+    {
+        get
+        {
+            return ListNames
+                .Where(name => ListasSelecionadas.Contains(name))
+                .Select(name =>
                 {
-                    ListName = name,
-                    Items = new ObservableCollection<Todo>(sortedItems)
-                };
-            });
+                    var sortType = _listSortTypes.TryGetValue(name, out var type) ? type : SortType.Prazo;
+    
+                    var itemsQuery = Todos.Where(t => t.ListName == name);
+                    
+                    IOrderedEnumerable<Todo> sortedItems = sortType switch
+                    {
+                        SortType.Nome => itemsQuery.OrderBy(t => t.Name),
+                        SortType.NomeLista => itemsQuery.OrderBy(t => t.ListName),
+                        _ => itemsQuery.OrderBy(t => t.Due),
+                    };
+    
+                    return new TodosByListName
+                    {
+                        ListName = name,
+                        Items = new ObservableCollection<Todo>(sortedItems)
+                    };
+                });
+        }
+    }
 
 
 
@@ -479,20 +494,24 @@ public class TodoWindowViewModel : ViewModelBase
         {
             _sortMinhasTarefas = value;
             OrdenarMinhasTarefas();
-            OnPropertyChanged(nameof(SortMinhasTarefas));
         }
+    }
+    
+    private IEnumerable<Todo> SortTodos(IEnumerable<Todo> todos, SortType sortType)
+    {
+        return sortType switch
+        {
+            SortType.Nome => todos.OrderBy(t => t.Name),
+            SortType.Prazo => todos.OrderBy(t => t.Due),
+            SortType.NomeLista => todos.OrderBy(t => t.ListName),
+            _ => todos
+        };
     }
     
     private void OrdenarMinhasTarefas()
     {
-        var ordenado = SortMinhasTarefas switch
-        {
-            SortType.Nome => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.Name),
-            SortType.Prazo => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.Due),
-            SortType.NomeLista => Todos.Where(t => !IsComplete(t)).OrderBy(t => t.ListName),
-            _ => Todos.Where(t => !IsComplete(t))
-        };
-
+        var incomplete = Todos.Where(t => !IsComplete(t));
+        var ordenado = SortTodos(incomplete, SortMinhasTarefas);
         IncompleteTodos = new ObservableCollection<Todo>(ordenado);
         OnPropertyChanged(nameof(IncompleteTodos));
     }
@@ -505,20 +524,13 @@ public class TodoWindowViewModel : ViewModelBase
         {
             _sortHistorico = value;
             OrdenarHistorico();
-            OnPropertyChanged(nameof(SortHistorico));
         }
     }
     
     private void OrdenarHistorico()
     {
-        var ordenado = SortHistorico switch
-        {
-            SortType.Nome => Todos.Where(IsComplete).OrderBy(t => t.Name),
-            SortType.Prazo => Todos.Where(IsComplete).OrderBy(t => t.Due),
-            SortType.NomeLista => Todos.Where(IsComplete).OrderBy(t => t.ListName),
-            _ => Todos.Where(IsComplete)
-        };
-
+        var complete = Todos.Where(IsComplete);
+        var ordenado = SortTodos(complete, SortHistorico);
         TodoHistory = new ObservableCollection<Todo>(ordenado);
         OnPropertyChanged(nameof(TodoHistory));
     }
@@ -548,7 +560,12 @@ public class TodoWindowViewModel : ViewModelBase
         }
         else
         {
-            todo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+            uint newId = 1;
+            if (Todos.Any())
+            {
+                newId = (uint)(Todos.Max(t => t.Id) + 1);
+            }   
+            todo = new Todo(newId, NewTaskName)
             {
                 Description = NewDescription,
                 Due = NewDue,
@@ -559,6 +576,18 @@ public class TodoWindowViewModel : ViewModelBase
     
             todo.OnStatusChanged += HandleStatusChanged;
             Todos.Add(todo);
+            
+            if (!ListNames.Contains(todo.ListName))
+            {
+                ListNames.Add(todo.ListName);
+                OnPropertyChanged(nameof(ListNames));
+            }
+            
+            if (!ListasSelecionadas.Contains(todo.ListName))
+            {
+                ListasSelecionadas.Add(todo.ListName);
+                OnPropertyChanged(nameof(TodosByListName));
+            }
         }
     
         RefreshFreeTodos();
@@ -570,6 +599,7 @@ public class TodoWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(IncompleteTodos));
         OnPropertyChanged(nameof(IncompleteResume));
         OnPropertyChanged(nameof(TodosByListName));
+        OnPropertyChanged(nameof(ListNames));
         
         OrdenarMinhasTarefas();
     
@@ -581,7 +611,7 @@ public class TodoWindowViewModel : ViewModelBase
     }
 
     
-    private void DeleteTodo(Todo todo)
+    private void RequestDeleteOrSkipTodo(Todo todo)
     {
         if (todo == null) return;
 
