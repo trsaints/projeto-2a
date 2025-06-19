@@ -8,7 +8,7 @@ namespace Agendai.Services.Views
 {
     public static class DayViewService
     {
-        public static void GenerateDayView(
+        public static void FillDayRows(
             ObservableCollection<DayRow> rows,
             string[] hours,
             Dictionary<string, ObservableCollection<object>> dayMap,
@@ -30,23 +30,64 @@ namespace Agendai.Services.Views
             }
         }
 
-        public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
+        public static DateTime GenerateDayView(
+            ObservableCollection<DayRow> rows,
+            string[] hours,
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
-            DateTime selectedDay,
-            string[]? selectedListNames)
+            DateTime referenceDate,
+            bool showData,
+            string[]? selectedListNames,
+            string? searchText)
         {
-            var map = new Dictionary<string, ObservableCollection<object>>();
-            
             var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
-            
             var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
                 ? events
                 : events.Where(e => selectedListNames.Contains(e.AgendaName));
 
-            foreach (var ev in filteredEvents)
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var normalized = searchText.Trim().ToLower();
+
+                filteredEvents = filteredEvents
+                    .Where(e => !string.IsNullOrEmpty(e.Name) && e.Name.ToLower().Contains(normalized));
+                filteredTodos = filteredTodos
+                    .Where(t => !string.IsNullOrEmpty(t.Name) && t.Name.ToLower().Contains(normalized));
+            }
+
+            var minDateEvent = filteredEvents.Any() ? filteredEvents.Min(e => e.Due) : DateTime.MaxValue;
+            var minDateTodo = filteredTodos.Any() ? filteredTodos.Min(t => t.Due) : DateTime.MaxValue;
+
+            var minDate = minDateEvent < minDateTodo ? minDateEvent : minDateTodo;
+
+            if (!string.IsNullOrWhiteSpace(searchText) && minDate != DateTime.MaxValue)
+            {
+                referenceDate = minDate;
+            }
+
+            var dayMap = MapDayItemsFrom(
+                filteredEvents.ToObservableCollection(),
+                filteredTodos.ToObservableCollection(),
+                referenceDate,
+                selectedListNames);
+
+            FillDayRows(rows, hours, dayMap, showData);
+
+            return referenceDate;
+        }
+
+
+        public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
+            IEnumerable<Event> events,
+            IEnumerable<Todo> todos,
+            DateTime selectedDay,
+            string[]? selectedListNames)
+        {
+            var map = new Dictionary<string, ObservableCollection<object>>();
+
+            foreach (var ev in events)
             {
                 if (ev.Due.Date == selectedDay.Date)
                 {
@@ -58,7 +99,7 @@ namespace Agendai.Services.Views
                 }
             }
 
-            foreach (var todo in filteredTodos)
+            foreach (var todo in todos)
             {
                 if (todo.Due.Date == selectedDay.Date)
                 {
@@ -71,6 +112,11 @@ namespace Agendai.Services.Views
             }
 
             return map;
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            return new ObservableCollection<T>(source);
         }
     }
 }

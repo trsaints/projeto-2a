@@ -255,8 +255,16 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
                 UpdateDateSelectors();
                 break;
             case 2:
-                var map = DayViewService.MapDayItemsFrom(EventList.Events, TodoList.Todos, CurrentDay, SelectedListNames);
-                DayViewService.GenerateDayView(DayViewRows, Hours, map, ShowData);
+                CurrentDay = DayViewService.GenerateDayView(
+                    DayViewRows,
+                    Hours,
+                    EventList.Events,
+                    TodoList.Todos,
+                    CurrentDay,
+                    ShowData,
+                    SelectedListNames,
+                    SearchText);
+                UpdateDateSelectors();
                 break;
             default:
                 MonthViewRows.Clear();
