@@ -25,8 +25,10 @@ public class Todo(ulong id, string name) : Recurrence(id, name), INotifyProperty
 			}
 		}
 	}
-	
-	public event PropertyChangedEventHandler PropertyChanged;
+
+	public string? SkippedDisplay => Status == TodoStatus.Skipped ? " (pulado)" : string.Empty;
+
+    public event PropertyChangedEventHandler PropertyChanged;
 	public event Action<Todo, TodoStatus>? OnStatusChanged;
 
 	protected virtual void OnPropertyChanged(string propertyName)
