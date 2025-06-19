@@ -60,7 +60,10 @@ public partial class MonthView : UserControl
     {
         if (sender is AutoCompleteBox box)
         {
-            Console.WriteLine($"Usuário digitando: {box.Text}");
+            if (this.DataContext is AgendaWindowViewModel vm)
+            {
+                vm.SearchText = box.Text;
+            }
         }
     }
 

@@ -124,6 +124,20 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         get => _searchableItems;
         set => SetProperty(ref _searchableItems, value);
     }
+    
+    private string _searchText = string.Empty;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (SetProperty(ref _searchText, value)) 
+            {
+                UpdateDataGridItems();
+            }
+        }
+    }
+
 
     public ObservableCollection<MonthRow> MonthViewRows { get; } = new();
     public ObservableCollection<WeekRow> WeekViewRows { get; } = new();
@@ -216,7 +230,7 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
         switch (SelectedIndex)
         {
             case 0:
-                MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, ShowData, SelectedListNames);
+                MonthViewService.GenerateMonthView(MonthViewRows, EventList.Events, TodoList.Todos, CurrentMonth, ShowData, SelectedListNames, SearchText);
                 break;
             case 1:
                 WeekViewService.GenerateWeekView(WeekViewRows, Hours, EventList.Events, TodoList.Todos, CurrentWeek, ShowData, SelectedListNames);
@@ -251,13 +265,14 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
-        if (!EqualityComparer<T>.Default.Equals(field, value))
-        {
-            field = value;
-            OnPropertyChanged(propertyName);
-        }
+        if (EqualityComparer<T>.Default.Equals(field, value))
+            return false;
+
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 
     private void SubscribeToCollectionChanges()
