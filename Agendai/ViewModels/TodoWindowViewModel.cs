@@ -372,6 +372,8 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _selectedEvent, value);
     }
 
+    public string? EventNameDisplay => SelectedEvent?.Name ?? "Nenhum evento selecionado";
+
     private string _newTaskName;
     public string NewTaskName
     {
