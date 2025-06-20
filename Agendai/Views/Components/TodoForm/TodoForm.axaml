@@ -7,11 +7,6 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:Class="Agendai.Views.Components.TodoForm.TodoForm"
              x:DataType="vm:TodoWindowViewModel">
-             
-    <UserControl.Resources>
-        <conv:EventNameDisplayConverter x:Key="EventNameDisplayConverter" />
-    </UserControl.Resources>
-
     <StackPanel Spacing="16">
         <StackPanel Spacing="4" Margin="0,0,0,8">
             <Label Target="TodoTitle" FontWeight="Medium">Título</Label>
@@ -77,9 +72,7 @@
         </StackPanel>
         
         <StackPanel>
-            <TextBlock Text="{Binding SelectedEvent.Name, 
-					   Converter={StaticResource EventNameDisplayConverter},
-					   FallbackValue='Nenhum Evento Associado'}" />
+            <TextBlock Text="{Binding EventNameDisplay}" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
