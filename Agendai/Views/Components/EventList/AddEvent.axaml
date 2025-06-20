@@ -62,14 +62,20 @@
 
 			<StackPanel Spacing="4">
 				<Label Target="AgendaNames" FontWeight="Medium">Adicionar à</Label>
-				<ComboBox ItemsSource="{Binding AgendaNames}"
-                          SelectedItem="{Binding AgendaName}"
-                          SelectedIndex="0"
-                          FontSize="14"
-                          CornerRadius="8"
-                          BorderBrush="Transparent"
-                          Background="#EBE6E7"
-                          x:Name="AgendaNames" />
+				<AutoCompleteBox 
+					x:Name="AgendaNames"
+					ItemsSource="{Binding AgendaNames}"
+					GotFocus="SearchText_OnGotFocus"
+					TextChanged="AddSearchBox_TextChanged"
+					SelectedItem="{Binding AgendaName}"
+					FilterMode="Contains"
+					Watermark="Ex.: Festas"
+					FontSize="14"
+					CornerRadius="8"
+					BorderBrush="Transparent"
+					Background="#EBE6E7"
+					MinimumPrefixLength="0" 
+					/>
 			</StackPanel>
 
 			<StackPanel Spacing="4">
@@ -113,14 +119,30 @@
 
 			<StackPanel Grid.Column="0" Spacing="4">
 				<Label Target="SelectTodo" FontWeight="Medium">Selecionar Tarefa</Label>
-				<ComboBox ItemsSource="{Binding TodoWindowVm.FreeTodosNames}"
-                          SelectedItem="{Binding TodoWindowVm.SelectedTodoName}"
-                          FontSize="14"
-                          CornerRadius="8"
-                          BorderBrush="#DDD"
-                          Background="#EBE6E7"
-                          Padding="4"
-                          x:Name="SelectTodo"/>
+				<AutoCompleteBox 
+					x:Name="SelectTodo"
+					ItemsSource="{Binding TodoWindowVm.FreeTodosNames}"
+					SelectedItem="{Binding TodoWindowVm.SelectedTodoName}"
+					GotFocus="SearchText_OnGotFocus"
+					TextChanged="SelectTodoSearchBox_TextChanged"
+					FilterMode="Contains"
+					Watermark="Ex.: Comprar Pamonha"
+					FontSize="14"
+					CornerRadius="8"
+					Background="#EBE6E7"
+					MinimumPrefixLength="0" 
+					BorderBrush="#DDD"
+					Padding="4"
+					/>
+				
+				<!-- <ComboBox ItemsSource="{Binding TodoWindowVm.FreeTodosNames}" -->
+    <!--                       SelectedItem="{Binding TodoWindowVm.SelectedTodoName}" -->
+    <!--                       FontSize="14" -->
+    <!--                       CornerRadius="8" -->
+    <!--                       BorderBrush="#DDD" -->
+    <!--                       Background="#EBE6E7" -->
+    <!--                       Padding="4" -->
+    <!--                       x:Name="SelectTodo"/> -->
 			</StackPanel>
 
 			<Button Grid.Column="1"
@@ -182,7 +204,6 @@
 
 						<StackPanel Spacing="4">
 							<Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
-
 							<ComboBox ItemsSource="{Binding TodoWindowVm.ListNames}"
                                       SelectedItem="{Binding TodoWindowVm.ListName}"
                                       SelectedIndex="0"
