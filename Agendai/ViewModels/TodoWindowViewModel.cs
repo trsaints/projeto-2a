@@ -69,7 +69,6 @@ public class TodoWindowViewModel : ViewModelBase
 
 	public HomeWindowViewModel HomeWindowVm     { get; set; }
 	public EventListViewModel  EventListVm      { get; set; }
-	public RepeatsConverter    RepeatsConverter { get; } = new();
 	public Action?             OnTaskAdded      { get; set; }
 
 	#endregion
@@ -150,8 +149,8 @@ public class TodoWindowViewModel : ViewModelBase
 			{
 				if (paramsArray is not { Length: 2 }) return;
 
-				var listName = paramsArray[0] as string;
-				var sort     = paramsArray[1] as string;
+				var listName = paramsArray[0].ToString();
+				var sort     = paramsArray[1].ToString();
 
 				if (string.IsNullOrEmpty(listName)
 				    || string.IsNullOrEmpty(sort)) { return; }
