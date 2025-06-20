@@ -58,7 +58,7 @@ public class TodoWindowViewModel : ViewModelBase
 			(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
 		};
 
-		if (ListasSelecionadas == null || ListasSelecionadas.Count == 0)
+		if (ListasSelecionadas is not null || ListasSelecionadas!.Count is 0)
 		{
 			ListasSelecionadas = [..ListNames];
 		}
@@ -157,9 +157,22 @@ public class TodoWindowViewModel : ViewModelBase
 				if (string.IsNullOrEmpty(listName)
 				    || string.IsNullOrEmpty(sort)) { return; }
 
+				// Atualiza o tipo de ordenação para a lista específica
 				var newSortType = SortTypeValue(sort);
 				_listSortTypes[listName] = newSortType;
 
+				// Reordena explicitamente os itens da lista correspondente
+				var itemsQuery  = Todos.Where(t => t.ListName == listName);
+				var sortedItems = SortTodos(itemsQuery, newSortType);
+
+				// Atualiza a coleção correspondente
+				var listToUpdate = TodosByListName.FirstOrDefault(l => l.ListName == listName);
+				if (listToUpdate != null)
+				{
+					listToUpdate.Items = new ObservableCollection<Todo>(sortedItems);
+				}
+
+				// Notifica a interface do usuário sobre a mudança
 				OnPropertyChanged(nameof(TodosByListName));
 			}
 		);
