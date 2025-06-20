@@ -5,9 +5,9 @@ namespace Agendai.Messages;
 
 public class GetListsNamesMessenger
 {
-    public string[] SelectedItemsName { get; }
+    public string?[] SelectedItemsName { get; }
 
-    public GetListsNamesMessenger(string[] listNames)
+    public GetListsNamesMessenger(string?[] listNames)
     {
         SelectedItemsName = listNames;
     }

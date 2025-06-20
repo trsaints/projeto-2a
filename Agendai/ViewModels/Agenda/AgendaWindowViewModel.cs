@@ -46,8 +46,8 @@ namespace Agendai.ViewModels.Agenda
             }
         }
 
-        private string[] _selectedListNames = Array.Empty<string>();
-        public string[] SelectedListNames
+        private string?[] _selectedListNames = Array.Empty<string>();
+        public string?[] SelectedListNames
         {
             get => _selectedListNames;
             set

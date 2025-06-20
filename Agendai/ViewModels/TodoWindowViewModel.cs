@@ -18,7 +18,7 @@ namespace Agendai.ViewModels;
 
 public class TodoWindowViewModel : ViewModelBase
 {
-	public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
+	public TodoWindowViewModel(HomeWindowViewModel? homeWindowVm = null)
 	{
 		InitializeCommands();
 		InitializeSampleTodos();
@@ -26,7 +26,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 		_newDue = DateTime.Today;
 
-		if (homeWindowVm != null)
+		if (homeWindowVm is not null)
 		{
 			HomeWindowVm = homeWindowVm;
 			EventListVm  = homeWindowVm.EventListVm;
@@ -44,21 +44,23 @@ public class TodoWindowViewModel : ViewModelBase
 		{
 			if (_suppressPropertyChanged) return;
 
-			if (e.PropertyName is nameof(NewTaskName)
-			                      or nameof(NewDescription)
-			                      or nameof(NewDue)
-			                      or nameof(SelectedRepeats)
-			                      or nameof(ListName)
-			                      or nameof(EditingTodo))
+			if (e.PropertyName is not (nameof(NewTaskName)
+			                           or nameof(NewDescription)
+			                           or nameof(NewDue)
+			                           or nameof(SelectedRepeats)
+			                           or nameof(ListName)
+			                           or nameof(EditingTodo)))
 			{
-				UpdateHasChanges();
-				(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
+				return;
 			}
+			
+			UpdateHasChanges();
+			(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
 		};
 
 		if (ListasSelecionadas == null || ListasSelecionadas.Count == 0)
 		{
-			ListasSelecionadas = new HashSet<string>(ListNames);
+			ListasSelecionadas = [..ListNames];
 		}
 
 		RefreshFreeTodos();
@@ -67,9 +69,9 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Dependências
 
-	public HomeWindowViewModel HomeWindowVm     { get; set; }
-	public EventListViewModel  EventListVm      { get; set; }
-	public Action?             OnTaskAdded      { get; set; }
+	public HomeWindowViewModel? HomeWindowVm { get; set; }
+	public EventListViewModel   EventListVm  { get; set; }
+	public Action?              OnTaskAdded  { get; set; }
 
 	#endregion
 
@@ -118,11 +120,11 @@ public class TodoWindowViewModel : ViewModelBase
 		);
 
 		DeleteTodoCommand = new RelayCommand<Todo>(
-			todo => RequestDeleteOrSkipTodo(todo),
+			RequestDeleteOrSkipTodo,
 			todo => todo != null
 		);
 		SkippedTodoCommand = new RelayCommand<Todo>(
-			todo => SkippedTodo(todo),
+			SkippedTodo,
 			todo => todo != null
 		);
 
@@ -157,7 +159,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 				var newSortType = SortTypeValue(sort);
 				_listSortTypes[listName] = newSortType;
-				
+
 				OnPropertyChanged(nameof(TodosByListName));
 			}
 		);
@@ -212,8 +214,6 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Propriedades de UI
 
-	public string Title { get; set; } = "Tarefas";
-
 	private bool _isDeleteConfirmationVisible;
 	public bool IsDeleteConfirmationVisible
 	{
@@ -229,14 +229,13 @@ public class TodoWindowViewModel : ViewModelBase
 		set
 		{
 			_todoForDeletion = value;
-			OnPropertyChanged(nameof(TodoForDeletion));
+			OnPropertyChanged();
 		}
 	}
 
 	private bool _isPopupOpen;
 	public bool IsPopupOpen
 	{
-		get => _isPopupOpen;
 		set => SetProperty(ref _isPopupOpen, value);
 	}
 
@@ -247,16 +246,13 @@ public class TodoWindowViewModel : ViewModelBase
 
 		set
 		{
-			if (SetProperty(ref _openAddTask, value) && value)
-			{
-				if (EditingTodo == null)
-				{
-					SelectedRepeats = RepeatOptions.FirstOrDefault()
-					                  ?? new RepeatsOption
-							                  { Repeats = Repeats.None };
-					ListName = ListNames.FirstOrDefault() ?? string.Empty;
-				}
-			}
+			if (!SetProperty(ref _openAddTask, value) || !value) return;
+
+			if (EditingTodo is not null) return;
+
+			SelectedRepeats = RepeatOptions.FirstOrDefault()
+			                  ?? new RepeatsOption { Repeats = Repeats.None };
+			ListName = ListNames.FirstOrDefault() ?? string.Empty;
 		}
 	}
 
@@ -293,8 +289,8 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _incompleteResume, value);
 	}
 
-	private ObservableCollection<string> _listNames = [];
-	public ObservableCollection<string> ListNames
+	private ObservableCollection<string?> _listNames = [];
+	public ObservableCollection<string?> ListNames
 	{
 		get => _listNames;
 		set => SetProperty(ref _listNames, value);
@@ -302,9 +298,9 @@ public class TodoWindowViewModel : ViewModelBase
 
 	private readonly Dictionary<string, SortType> _listSortTypes = new();
 
-	private HashSet<string> _listasSelecionadas = new();
+	private HashSet<string?> _listasSelecionadas = [];
 
-	public HashSet<string> ListasSelecionadas
+	private HashSet<string?> ListasSelecionadas
 	{
 		get => _listasSelecionadas;
 
@@ -327,7 +323,7 @@ public class TodoWindowViewModel : ViewModelBase
 				       {
 					       var sortType =
 							       _listSortTypes.TryGetValue(
-								       name,
+								       name!,
 								       out var type
 							       )
 									       ? type
@@ -336,7 +332,7 @@ public class TodoWindowViewModel : ViewModelBase
 					       var itemsQuery =
 							       Todos.Where(t => t.ListName == name);
 
-					       IOrderedEnumerable<Todo> sortedItems =
+					       var sortedItems =
 							       sortType switch
 							       {
 								       SortType.Nome => itemsQuery.OrderBy(
@@ -383,8 +379,8 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _newTaskName, value);
 	}
 
-	private string _newDescription;
-	public string NewDescription
+	private string? _newDescription;
+	public string? NewDescription
 	{
 		get => _newDescription;
 		set => SetProperty(ref _newDescription, value);
@@ -404,8 +400,8 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _selectedRepeats, value);
 	}
 
-	private string _listName;
-	public string ListName
+	private string? _listName;
+	public string? ListName
 	{
 		get => _listName;
 		set => SetProperty(ref _listName, value);
@@ -491,7 +487,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Seleção de Tarefa Existente
 
-	private ObservableCollection<Todo> _freeTodos = new();
+	private ObservableCollection<Todo> _freeTodos = [];
 	public ObservableCollection<Todo> FreeTodos
 	{
 		get => _freeTodos;
@@ -508,19 +504,18 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _selectedTodo, value);
 	}
 
-	private string _selectedTodoName;
-	public string SelectedTodoName
+	private string? _selectedTodoName;
+	public string? SelectedTodoName
 	{
 		get => _selectedTodoName;
 
 		set
 		{
-			if (_selectedTodoName != value)
-			{
-				_selectedTodoName = value;
-				OnPropertyChanged();
-				SelectedTodo = FreeTodos.FirstOrDefault(t => t.Name == value);
-			}
+			if (_selectedTodoName == value) return;
+
+			_selectedTodoName = value;
+			OnPropertyChanged();
+			SelectedTodo = FreeTodos.FirstOrDefault(t => t.Name == value);
 		}
 	}
 
@@ -548,7 +543,7 @@ public class TodoWindowViewModel : ViewModelBase
 		}
 	}
 
-	private IEnumerable<Todo> SortTodos(
+	private static IEnumerable<Todo> SortTodos(
 		IEnumerable<Todo> todos,
 		SortType          sortType
 	)
@@ -638,9 +633,8 @@ public class TodoWindowViewModel : ViewModelBase
 				OnPropertyChanged(nameof(ListNames));
 			}
 
-			if (!ListasSelecionadas.Contains(todo.ListName))
+			if (ListasSelecionadas.Add(todo.ListName))
 			{
-				ListasSelecionadas.Add(todo.ListName);
 				OnPropertyChanged(nameof(TodosByListName));
 			}
 		}
@@ -671,7 +665,7 @@ public class TodoWindowViewModel : ViewModelBase
 	}
 
 
-	private void RequestDeleteOrSkipTodo(Todo todo)
+	private void RequestDeleteOrSkipTodo(Todo? todo)
 	{
 		if (todo == null) return;
 
@@ -686,7 +680,7 @@ public class TodoWindowViewModel : ViewModelBase
 		}
 	}
 
-	public void SkippedTodo(Todo todo)
+	private static void SkippedTodo(Todo? todo)
 	{
 		if (todo == null) return;
 
@@ -696,10 +690,9 @@ public class TodoWindowViewModel : ViewModelBase
 
 	private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
 	{
-		if (newStatus == TodoStatus.Complete || newStatus == TodoStatus.Skipped)
+		if (newStatus is TodoStatus.Complete or TodoStatus.Skipped)
 		{
-			if (IncompleteTodos.Contains(todo))
-				IncompleteTodos.Remove(todo);
+			IncompleteTodos.Remove(todo);
 
 			if (!TodoHistory.Contains(todo))
 				TodoHistory.Add(todo);
@@ -719,7 +712,7 @@ public class TodoWindowViewModel : ViewModelBase
 		IncompleteResume =
 				new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
-		ListNames = new ObservableCollection<string>(
+		ListNames = new ObservableCollection<string?>(
 			Todos.Select(t => t.ListName).OfType<string>().Distinct()
 		);
 
@@ -777,12 +770,11 @@ public class TodoWindowViewModel : ViewModelBase
 				);
 		_todoHistory = new ObservableCollection<Todo>(
 			Todos.Where(
-				t => t.Status == TodoStatus.Complete
-				     || t.Status == TodoStatus.Skipped
+				t => t.Status is TodoStatus.Complete or TodoStatus.Skipped
 			)
 		);
 		_listNames =
-				new ObservableCollection<string>(
+				new ObservableCollection<string?>(
 					Todos.Select(t => t.ListName).Distinct()
 				);
 		_incompleteResume =
@@ -792,8 +784,8 @@ public class TodoWindowViewModel : ViewModelBase
 	#endregion
 
 
-	private bool _suppressPropertyChanged = false;
+	private bool _suppressPropertyChanged;
 
-	private bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete
-	                                      || todo.Status == TodoStatus.Skipped;
+	private static bool IsComplete(Todo todo) =>
+			todo.Status is TodoStatus.Complete or TodoStatus.Skipped;
 }

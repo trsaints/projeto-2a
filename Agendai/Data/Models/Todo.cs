@@ -6,7 +6,7 @@ namespace Agendai.Data.Models;
 
 public class Todo(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
 {
-	public string?    ListName       { get; set; }
+	public string    ListName       { get; set; }
 	public uint       FinishedShifts { get; set; }
 	public uint       TotalShifts    { get; set; }
 	public virtual Event? RelatedEvent { get; set; }

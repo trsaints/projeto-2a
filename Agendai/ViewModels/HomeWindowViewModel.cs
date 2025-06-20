@@ -58,14 +58,14 @@ public class HomeWindowViewModel : ViewModelBase
 
 	public HomeWindowViewModel()
 	{
-		_openPopupCommand = new RelayCommand(() => IsPopupOpen = true);
-		_openTodoFormCommand = new RelayCommand(OpenTodoForm);
-		_openAgendaCommand = new RelayCommand(OpenAgenda);
-		_openTodoCommand = new RelayCommand(OpenTodo);
-		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
+		_openPopupCommand     = new RelayCommand(() => IsPopupOpen = true);
+		_openTodoFormCommand  = new RelayCommand(OpenTodoForm);
+		_openAgendaCommand    = new RelayCommand(OpenAgenda);
+		_openTodoCommand      = new RelayCommand(OpenTodo);
+		_openPomodoroCommand  = new RelayCommand(OpenPomodoro);
 		_openEventFormCommand = new RelayCommand(OpenEventForm);
-		TodoWindowVm = new TodoWindowViewModel(this);
-		EventListVm = new EventListViewModel(TodoWindowVm);
+		TodoWindowVm          = new TodoWindowViewModel();
+		EventListVm           = new EventListViewModel(TodoWindowVm);
 	}
 
 	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
