@@ -13,6 +13,7 @@ public class ViewModelBase : ObservableObject
     protected bool _isPomodoroWindow;
     protected bool _openAddEvent;
     protected ObservableCollection<string?> _listNames = [];
+    private string? _listName = string.Empty;
 
     public MainWindowViewModel? MainViewModel { get; set; }
     public TodoWindowViewModel? TodoWindowVm { get; set; }
@@ -93,5 +94,11 @@ public class ViewModelBase : ObservableObject
     {
         get => _openAddEvent;
         set => SetProperty(ref _openAddEvent, value);
+    }
+
+    public string? ListName
+    {
+        get => _listName;
+        set => SetProperty(ref _listName, value);
     }
 }

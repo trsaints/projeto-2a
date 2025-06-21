@@ -176,8 +176,8 @@
                         <StackPanel Spacing="4">
                             <Label Target="TodoListName" FontWeight="Medium">Adicionar à</Label>
 
-                            <ComboBox ItemsSource="{Binding TodoWindowVm.ListNames}"
-                                      SelectedItem="{Binding TodoWindowVm.ListName}"
+                            <ComboBox ItemsSource="{Binding ListNames}"
+                                      SelectedItem="{Binding ListName}"
                                       SelectedIndex="0"
                                       FontSize="14"
                                       CornerRadius="8"

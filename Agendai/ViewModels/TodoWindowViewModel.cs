@@ -391,13 +391,7 @@ public class TodoWindowViewModel : ViewModelBase
         get => _selectedRepeats;
         set => SetProperty(ref _selectedRepeats, value);
     }
-
-    private string? _listName;
-    public string? ListName
-    {
-        get => _listName;
-        set => SetProperty(ref _listName, value);
-    }
+    
 
     public ObservableCollection<RepeatsOption> RepeatOptions { get; } =
     [
@@ -452,7 +446,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     private void UpdateHasChanges()
     {
-        HasChanges = EditingTodo == null
+        HasChanges = EditingTodo is null
                 ? !string.IsNullOrWhiteSpace(NewTaskName)
                 : EditingTodo.Name != NewTaskName
                   || EditingTodo.Description != NewDescription
@@ -628,12 +622,8 @@ public class TodoWindowViewModel : ViewModelBase
         RefreshFreeTodos();
         ClearTodoForm();
 
-        IncompleteTodos =
-                new ObservableCollection<Todo>(
-                    Todos.Where(t => !IsComplete(t))
-                );
-        IncompleteResume =
-                new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+        IncompleteTodos = [.. Todos.Where(t => !IsComplete(t))];
+        IncompleteResume = [.. IncompleteTodos.Take(7)];
 
         OnPropertyChanged(nameof(IncompleteTodos));
         OnPropertyChanged(nameof(IncompleteResume));
