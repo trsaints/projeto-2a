@@ -61,7 +61,8 @@
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
                         <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
-                        <ItemsControl ItemsSource="{Binding TodoWindowVm.ListNames}">
+						
+                        <ItemsControl ItemsSource="{Binding ListNames}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="4 2">
@@ -69,6 +70,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
+										
                                         <CheckBox 
                                             IsCheckedChanged="CheckBoxChecked"
                                             VerticalAlignment="Center"
@@ -95,6 +97,7 @@
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
                         <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
+						
                         <ItemsControl ItemsSource="{Binding TodoWindowVm.TodosByListName}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -103,6 +106,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
+										
                                         <CheckBox 
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
@@ -115,9 +119,11 @@
                         </ItemsControl>
                     </StackPanel>
                 </Border>
+				
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
                         <TextBlock Text="Filtrar por Lista de Eventos:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
+						
                         <ItemsControl ItemsSource="{Binding EventListVm.EventsByAgendaName}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -126,6 +132,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
+										
                                         <CheckBox 
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
