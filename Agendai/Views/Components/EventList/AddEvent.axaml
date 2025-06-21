@@ -238,6 +238,15 @@
                                 BorderThickness="2"
                                 CornerRadius="24"
                                 Command="{Binding ClosePopupCommand}" />
+						
+						<Button Content="Salvar"
+						        Padding="12,6"
+						        Background="#0078D7"
+						        Foreground="White"
+						        BorderBrush="#0078D7"
+						        BorderThickness="2"
+						        CornerRadius="24"
+						        Command="{Binding TodoWindowVm.AddTodoToEventCommand}" />
 					</StackPanel>
 				</StackPanel>
 			</Border>

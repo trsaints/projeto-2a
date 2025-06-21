@@ -9,6 +9,7 @@ using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using DynamicData.Binding;
 using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
@@ -61,6 +62,8 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand SelectTarefaCommand { get; private set; }
     public ICommand AddTodoCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
+    
+    public ICommand AddTodoToEventCommand { get; private set; }
 
     private void InitializeCommands()
     {
@@ -79,6 +82,36 @@ public class TodoWindowViewModel : ViewModelBase
             OpenAddTask = false;
             IsPopupOpen = false;
             ClearTodoForm();
+        });
+        
+        AddTodoToEventCommand = new RelayCommand(() =>
+        {
+            var relatedEvent = EventListVm?.SelectedEvent;
+
+            var todo = new Todo((uint)(Todos.Count + 1), NewTaskName)
+            {
+                Description = NewDescription,
+                Due = NewDue,
+                Repeats = SelectedRepeats.Repeats,
+                ListName = ListName,
+                RelatedEvent = relatedEvent
+            };
+
+            todo.OnStatusChanged += HandleStatusChanged;
+
+            Todos.Add(todo);
+
+            RefreshFreeTodos();
+            ClearTodoForm();
+
+            HomeWindowVm.EventListVm.TodosForSelectedEvent.Add(todo);
+            HomeWindowVm.EventListVm.HasRelatedTodos = HomeWindowVm.EventListVm.TodosForSelectedEvent.Count > 0;
+
+            HomeWindowVm.EventListVm.UpdateCanSave();
+
+            HomeWindowVm.EventListVm.IsAddTodoPopupOpen = false;
+            
+            FreeTodos.Remove(todo);
         });
     }
     #endregion
