@@ -6,13 +6,12 @@ using Agendai.Views.Windows.HomeWindow;
 using Agendai.Views.Windows.TodoWindow;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Avalonia.Threading;
 
 namespace Agendai;
 
 public class ViewLocator : IDataTemplate
 {
-    public Control Build(object param)
+    public Control Build(object? param)
     {
         if (param is null)
             return new TextBlock { Text = "No ViewModel provided" };
