@@ -21,7 +21,6 @@ namespace Agendai.Services.Views
         {
             rows.Clear();
 
-            // Ajusta referência com base na busca
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 var normalized = searchText.Trim().ToLower();
@@ -55,7 +54,6 @@ namespace Agendai.Services.Views
             DateTime monthStart = firstDay;
             DateTime monthEnd = firstDay.AddMonths(1).AddDays(-1);
 
-            // Filtra por lista, se houver filtro
             var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
                 ? events
                 : events.Where(e => selectedListNames.Contains(e.AgendaName));
@@ -64,7 +62,6 @@ namespace Agendai.Services.Views
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
 
-            // Filtra por texto, se houver
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 var normalized = searchText.Trim().ToLower();
@@ -75,7 +72,6 @@ namespace Agendai.Services.Views
 
             var occurrences = new List<(DateTime due, object item)>();
 
-            // Eventos
             foreach (var ev in filteredEvents)
             {
                 if (ev.Repeats == Repeats.None)
@@ -95,7 +91,6 @@ namespace Agendai.Services.Views
                 }
             }
 
-            // Todos
             foreach (var todo in filteredTodos)
             {
                 if (todo.Repeats == Repeats.None)
@@ -115,7 +110,6 @@ namespace Agendai.Services.Views
                 }
             }
 
-            // Agrupa por dia
             var dayMap = new Dictionary<int, List<object>>();
             foreach (var (due, item) in occurrences)
             {
