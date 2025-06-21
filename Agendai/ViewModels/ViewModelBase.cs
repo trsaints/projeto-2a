@@ -3,102 +3,110 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+
 namespace Agendai.ViewModels;
 
 public class ViewModelBase : ObservableObject
 {
-    protected bool _isPopupOpen;
-    protected bool _isAgendaWindow;
-    protected bool _isTodoWindow;
-    protected bool _isPomodoroWindow;
-    protected bool _openAddEvent;
-    protected ObservableCollection<string?> _listNames = [];
-    private string? _listName = string.Empty;
+	protected bool                          _isPopupOpen;
+	protected bool                          _isAgendaWindow;
+	protected bool                          _isTodoWindow;
+	protected bool                          _isPomodoroWindow;
+	protected bool                          _openAddEvent;
+	private   string?                       _listName = string.Empty;
+	private   bool                          _isAddTodoPopupOpen;
+	protected ObservableCollection<string?> _listNames = [];
 
-    public MainWindowViewModel? MainViewModel { get; set; }
-    public TodoWindowViewModel? TodoWindowVm { get; set; }
-    public EventListViewModel? EventListVm { get; set; }
-    public ICommand ReturnHomeCommand => new RelayCommand(ReturnHome);
 
-    #region Commands
-    public ICommand OpenPopupCommand => new RelayCommand(() => IsPopupOpen = true);
-    public ICommand OpenTodoFormCommand => new RelayCommand(OpenTodoForm);
-    public ICommand OpenEventFormCommand => new RelayCommand(OpenEventForm);
-    public ICommand OpenAgendaCommand => new RelayCommand(OpenAgenda);
-    public ICommand OpenTodoCommand => new RelayCommand(OpenTodo);
-    public ICommand OpenPomodoroCommand => new RelayCommand(OpenPomodoro);
-    #endregion
+	public MainWindowViewModel? MainViewModel { get; set; }
+	public TodoWindowViewModel? TodoWindowVm { get; set; }
+	public EventListViewModel? EventListVm { get; set; }
+	public ICommand ReturnHomeCommand => new RelayCommand(ReturnHome);
 
-    private void ReturnHome()
-    {
-        MainViewModel?.NavigateToHome();
-    }
 
-    private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
+	#region Commands
 
-    private void OpenTodo() { MainViewModel?.NavigateToTodo(); }
+	public ICommand OpenPopupCommand =>
+			new RelayCommand(() => IsPopupOpen = true);
+	public ICommand OpenTodoFormCommand  => new RelayCommand(OpenTodoForm);
+	public ICommand OpenEventFormCommand => new RelayCommand(OpenEventForm);
+	public ICommand OpenAgendaCommand    => new RelayCommand(OpenAgenda);
+	public ICommand OpenTodoCommand      => new RelayCommand(OpenTodo);
+	public ICommand OpenPomodoroCommand  => new RelayCommand(OpenPomodoro);
+	public ICommand ClosePopupCommand =>
+			new RelayCommand(() => IsAddTodoPopupOpen = false);
 
-    private void OpenPomodoro() { MainViewModel?.NavigateToPomodoro(); }
+	#endregion
 
-    private void OpenTodoForm()
-    {
-        IsPopupOpen = false;
 
-        if (TodoWindowVm is not null)
-        {
-            TodoWindowVm.OpenAddTask = true;
-        }
-    }
+	private void ReturnHome() { MainViewModel?.NavigateToHome(); }
 
-    private void OpenEventForm()
-    {
-        IsPopupOpen = false;
+	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
 
-        if (EventListVm is not null)
-        {
-            OpenAddEvent = true;
-        }
-    }
+	private void OpenTodo() { MainViewModel?.NavigateToTodo(); }
 
-    public bool IsPopupOpen
-    {
-        get => _isPopupOpen;
-        set => SetProperty(ref _isPopupOpen, value);
-    }
+	private void OpenPomodoro() { MainViewModel?.NavigateToPomodoro(); }
 
-    public bool IsAgendaWindow
-    {
-        get => _isAgendaWindow;
-        set => SetProperty(ref _isAgendaWindow, value);
-    }
+	private void OpenTodoForm()
+	{
+		IsPopupOpen = false;
 
-    public bool IsTodoWindow
-    {
-        get => _isTodoWindow;
-        set => SetProperty(ref _isTodoWindow, value);
-    }
+		if (TodoWindowVm is not null) { TodoWindowVm.OpenAddTask = true; }
+	}
 
-    public bool IsPomodoroWindow
-    {
-        get => _isPomodoroWindow;
-        set => SetProperty(ref _isPomodoroWindow, value);
-    }
+	private void OpenEventForm()
+	{
+		IsPopupOpen = false;
 
-    public ObservableCollection<string?> ListNames
-    {
-        get => _listNames;
-        set => SetProperty(ref _listNames, value);
-    }
+		if (EventListVm is not null) { OpenAddEvent = true; }
+	}
 
-    public bool OpenAddEvent
-    {
-        get => _openAddEvent;
-        set => SetProperty(ref _openAddEvent, value);
-    }
+	public bool IsPopupOpen
+	{
+		get => _isPopupOpen;
+		set => SetProperty(ref _isPopupOpen, value);
+	}
 
-    public string? ListName
-    {
-        get => _listName;
-        set => SetProperty(ref _listName, value);
-    }
+	public bool IsAgendaWindow
+	{
+		get => _isAgendaWindow;
+		set => SetProperty(ref _isAgendaWindow, value);
+	}
+
+	public bool IsTodoWindow
+	{
+		get => _isTodoWindow;
+		set => SetProperty(ref _isTodoWindow, value);
+	}
+
+	public bool IsPomodoroWindow
+	{
+		get => _isPomodoroWindow;
+		set => SetProperty(ref _isPomodoroWindow, value);
+	}
+
+	public ObservableCollection<string?> ListNames
+	{
+		get => _listNames;
+		set => SetProperty(ref _listNames, value);
+	}
+
+	public bool OpenAddEvent
+	{
+		get => _openAddEvent;
+		set => SetProperty(ref _openAddEvent, value);
+	}
+
+	public string? ListName
+	{
+		get => _listName;
+		set => SetProperty(ref _listName, value);
+	}
+
+
+	public bool IsAddTodoPopupOpen
+	{
+		get => _isAddTodoPopupOpen;
+		set => SetProperty(ref _isAddTodoPopupOpen, value);
+	}
 }
