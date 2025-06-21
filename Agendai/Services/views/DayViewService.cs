@@ -1,4 +1,5 @@
 ﻿using Agendai.Data.Models;
+using Agendai.Services.Recurrency;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -67,17 +68,62 @@ namespace Agendai.Services.Views
                 referenceDate = minDate;
             }
 
-            var dayMap = MapDayItemsFrom(
-                filteredEvents.ToObservableCollection(),
-                filteredTodos.ToObservableCollection(),
-                referenceDate,
-                selectedListNames);
+            var eventSchedulers = new Dictionary<ulong, RecurringScheduler<Event>>();
+            foreach (var ev in filteredEvents.Where(e => e.Repeats != Repeats.None))
+                eventSchedulers[ev.Id] = new RecurringScheduler<Event>(ev);
+
+            var todoSchedulers = new Dictionary<ulong, RecurringScheduler<Todo>>();
+            foreach (var todo in filteredTodos.Where(t => t.Repeats != Repeats.None))
+                todoSchedulers[todo.Id] = new RecurringScheduler<Todo>(todo);
+
+            var dayOccurrences = new List<object>();
+
+            foreach (var ev in filteredEvents.Where(e => e.Repeats == Repeats.None && e.Due.Date == referenceDate.Date))
+                dayOccurrences.Add(ev);
+
+            foreach (var scheduler in eventSchedulers.Values)
+            {
+                dayOccurrences.AddRange(
+                    scheduler.GetUpcoming()
+                             .Where(o => o.Due.Date == referenceDate.Date)
+                             .Select(o => o.Item));
+            }
+
+            foreach (var todo in filteredTodos.Where(t => t.Repeats == Repeats.None && t.Due.Date == referenceDate.Date))
+                dayOccurrences.Add(todo);
+
+            foreach (var scheduler in todoSchedulers.Values)
+            {
+                dayOccurrences.AddRange(
+                    scheduler.GetUpcoming()
+                             .Where(o => o.Due.Date == referenceDate.Date)
+                             .Select(o => o.Item));
+            }
+
+            var dayMap = new Dictionary<string, ObservableCollection<object>>();
+
+            foreach (var item in dayOccurrences)
+            {
+                DateTime due;
+                if (item is Event ev)
+                    due = ev.Due;
+                else if (item is Todo td)
+                    due = td.Due;
+                else
+                    continue;
+
+                var hourKey = due.ToString("HH:mm");
+
+                if (!dayMap.ContainsKey(hourKey))
+                    dayMap[hourKey] = new ObservableCollection<object>();
+
+                dayMap[hourKey].Add(item);
+            }
 
             FillDayRows(rows, hours, dayMap, showData);
 
             return referenceDate;
         }
-
 
         public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
             IEnumerable<Event> events,
