@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Remove="Services\recurrence\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,14 +48,28 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Remove="Data\EventsByAgendaName.cs" />
+    <Compile Remove="Services\recurrence\**" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="Views\Components\TodoList\TodoList.axaml" />
+    <AdditionalFiles Remove="Services\recurrence\**" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
     <UpToDateCheckInput Remove="Views\Components\AgendaSidebar\AgendaSidebar.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Remove="Services\recurrence\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Services\recurrence\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Services\recurrence\**" />
   </ItemGroup>
 </Project>
