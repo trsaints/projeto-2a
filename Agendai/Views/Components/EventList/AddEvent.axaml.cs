@@ -29,9 +29,20 @@ public partial class AddEvent : UserControl
         {
             if (this.DataContext is EventListViewModel vm)
             {
-                Console.WriteLine($"texto: {box.Text}");
             }
         }
     }
+
+    private void RemoveRelatedTask(object sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender;
+        var todo = button.DataContext as Todo;
+
+        if (DataContext is EventListViewModel vm && todo != null)
+        {
+            vm.RemoveTodoFromEvent(todo);
+        }
+    }
+
 
 }

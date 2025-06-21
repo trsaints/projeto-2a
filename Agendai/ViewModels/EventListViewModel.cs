@@ -41,6 +41,7 @@ public class EventListViewModel : ViewModelBase
         AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
         CancelCommand = new RelayCommand(CancelAction);
 
+
         OnEventAddedOrUpdated = () => { OpenAddEvent = false; };
 
         Events = new ObservableCollection<Event>(GenerateSampleEvents());
@@ -290,6 +291,21 @@ public class EventListViewModel : ViewModelBase
     {
         OnPropertyChanged(nameof(TodosForSelectedEvent));
     }
+    
+    public void RemoveTodoFromEvent(Todo todo)
+    {
+        if (todo == null) return;
+
+        TodosForSelectedEvent.Remove(todo);
+        
+        TodoWindowVm.FreeTodos.Add(todo);
+
+        todo.RelatedEvent = null;
+
+        HasRelatedTodos = TodosForSelectedEvent.Count > 0;
+        OnPropertyChanged(nameof(TodosForSelectedEvent));
+        UpdateCanSave();
+    }
 
     #endregion
 
@@ -381,6 +397,7 @@ public class EventListViewModel : ViewModelBase
             Color = "#7DDA58"
         }
     };
+
 
     #endregion
 }

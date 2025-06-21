@@ -119,9 +119,10 @@
 									BorderBrush="#B71C1C"
 									BorderThickness="1"
 									Padding="4"
-									MinHeight="24"      
-									CommandParameter="{Binding}"
+									MinHeight="24"
 									VerticalAlignment="Center"
+									Click="RemoveRelatedTask"
+									CommandParameter="{Binding}"
 								/>
 
 							</StackPanel>
