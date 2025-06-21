@@ -36,7 +36,7 @@ public class TodoWindowViewModel : ViewModelBase
             this,
             (r, msg) =>
             {
-                ListasSelecionadas = msg.SelectedItemsName.ToHashSet();
+                SelectedLists = msg.SelectedItemsName.ToHashSet();
             }
         );
 
@@ -58,9 +58,9 @@ public class TodoWindowViewModel : ViewModelBase
             (AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
         };
 
-        if (ListasSelecionadas is not null || ListasSelecionadas!.Count is 0)
+        if (SelectedLists is not null || SelectedLists!.Count is 0)
         {
-            ListasSelecionadas = [.. ListNames];
+            SelectedLists = [.. ListNames];
         }
 
         RefreshFreeTodos();
@@ -292,17 +292,17 @@ public class TodoWindowViewModel : ViewModelBase
 
     private readonly Dictionary<string, SortType> _listSortTypes = [];
 
-    private HashSet<string?> _listasSelecionadas = [];
+    private HashSet<string?> _selectedLists = [];
 
-    private HashSet<string?> ListasSelecionadas
+    private HashSet<string?> SelectedLists
     {
-        get => _listasSelecionadas;
+        get => _selectedLists;
 
         set
         {
-            _listasSelecionadas = value;
+            _selectedLists = value;
             OnPropertyChanged(nameof(TodosByListName));
-            OnPropertyChanged(nameof(TodosFiltrados));
+            OnPropertyChanged(nameof(FilteredTodos));
         }
     }
 
@@ -310,8 +310,7 @@ public class TodoWindowViewModel : ViewModelBase
     {
         get
         {
-            return ListNames
-                   .Where(name => ListasSelecionadas.Contains(name))
+            return ListNames.Where(SelectedLists.Contains)
                    .Select(
                        name =>
                        {
@@ -323,24 +322,22 @@ public class TodoWindowViewModel : ViewModelBase
                                            ? type
                                            : SortType.Prazo;
 
-                           var itemsQuery =
-                                   Todos.Where(t => t.ListName == name);
+                           var itemsQuery = Todos.Where(t => t.ListName == name);
 
-                           var sortedItems =
-                                   sortType switch
-                                   {
-                                       SortType.Nome => itemsQuery.OrderBy(
-                                           t => t.Name
-                                       ),
-                                       SortType.NomeLista => itemsQuery.OrderBy(
-                                           t => t.ListName
-                                       ),
-                                       _ => itemsQuery.OrderBy(t => t.Due),
-                                   };
+                           var sortedItems = sortType switch
+                           {
+                               SortType.Nome => itemsQuery.OrderBy(
+                                   t => t.Name
+                               ),
+                               SortType.NomeLista => itemsQuery.OrderBy(
+                                   t => t.ListName
+                               ),
+                               _ => itemsQuery.OrderBy(t => t.Due),
+                           };
 
                            return new TodosByListName
                            {
-                               ListName = name,
+                               ListName = name ?? string.Empty,
                                Items = new ObservableCollection<Todo>(
                                    sortedItems
                                )
@@ -350,8 +347,7 @@ public class TodoWindowViewModel : ViewModelBase
         }
     }
 
-
-    public IEnumerable<Todo> TodosFiltrados =>
+    public IEnumerable<Todo> FilteredTodos =>
             TodosByListName.SelectMany(g => g.Items);
 
     #endregion
@@ -477,12 +473,10 @@ public class TodoWindowViewModel : ViewModelBase
         SelectedTodoName = null;
         HasChanges = false;
     }
-
     #endregion
 
 
     #region Seleção de Tarefa Existente
-
     private ObservableCollection<Todo> _freeTodos = [];
     public ObservableCollection<Todo> FreeTodos
     {
@@ -517,9 +511,7 @@ public class TodoWindowViewModel : ViewModelBase
 
     private void RefreshFreeTodos()
     {
-        FreeTodos = new ObservableCollection<Todo>(
-            Todos.Where(t => t.RelatedEvent == null)
-        );
+        FreeTodos = [.. Todos.Where(t => t.RelatedEvent == null)];
     }
 
     public ObservableCollection<string> SortOptions { get; } =
@@ -557,7 +549,7 @@ public class TodoWindowViewModel : ViewModelBase
     {
         var incomplete = Todos.Where(t => !IsComplete(t));
         var ordenado = SortTodos(incomplete, SortMinhasTarefas);
-        IncompleteTodos = new ObservableCollection<Todo>(ordenado);
+        IncompleteTodos = [.. ordenado];
         OnPropertyChanged(nameof(IncompleteTodos));
     }
 
@@ -577,15 +569,13 @@ public class TodoWindowViewModel : ViewModelBase
     {
         var complete = Todos.Where(IsComplete);
         var ordenado = SortTodos(complete, SortHistorico);
-        TodoHistory = new ObservableCollection<Todo>(ordenado);
+        TodoHistory = [.. ordenado];
         OnPropertyChanged(nameof(TodoHistory));
     }
-
     #endregion
 
 
     #region Métodos principais
-
     public Todo? AddTodo(Event? relatedEv)
     {
         if (string.IsNullOrWhiteSpace(NewTaskName)) return null;
@@ -629,7 +619,7 @@ public class TodoWindowViewModel : ViewModelBase
                 OnPropertyChanged(nameof(ListNames));
             }
 
-            if (ListasSelecionadas.Add(todo.ListName))
+            if (SelectedLists.Add(todo.ListName))
             {
                 OnPropertyChanged(nameof(TodosByListName));
             }
@@ -660,7 +650,6 @@ public class TodoWindowViewModel : ViewModelBase
         return todo;
     }
 
-
     private void RequestDeleteOrSkipTodo(Todo? todo)
     {
         if (todo == null) return;
@@ -682,7 +671,6 @@ public class TodoWindowViewModel : ViewModelBase
 
         todo.Status = TodoStatus.Skipped;
     }
-
 
     private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
     {
@@ -706,11 +694,9 @@ public class TodoWindowViewModel : ViewModelBase
         OrdenarMinhasTarefas();
 
         IncompleteResume =
-                new ObservableCollection<Todo>(IncompleteTodos.Take(7));
+                [.. IncompleteTodos.Take(7)];
 
-        ListNames = new ObservableCollection<string?>(
-            Todos.Select(t => t.ListName).OfType<string>().Distinct()
-        );
+        ListNames = [.. Todos.Select(t => t.ListName).OfType<string>().Distinct()];
 
         OnPropertyChanged(nameof(TodosByListName));
     }
@@ -760,23 +746,16 @@ public class TodoWindowViewModel : ViewModelBase
 
     private void InitializeCollections()
     {
-        _incompleteTodos =
-                new ObservableCollection<Todo>(
-                    Todos.Where(t => !IsComplete(t))
-                );
-        _todoHistory = new ObservableCollection<Todo>(
-            Todos.Where(
+        _incompleteTodos = [.. Todos.Where(t => !IsComplete(t))];
+
+        _todoHistory = [.. Todos.Where(
                 t => t.Status is TodoStatus.Complete or TodoStatus.Skipped
-            )
-        );
-        _listNames =
-                [.. Todos.Select(t => t.ListName).Distinct()];
-        _incompleteResume =
-                [.. _incompleteTodos.Take(7)];
+            )];
+
+        _listNames = [.. Todos.Select(t => t.ListName).Distinct()];
+        _incompleteResume = [.. _incompleteTodos.Take(7)];
     }
-
     #endregion
-
 
     private bool _suppressPropertyChanged;
 
