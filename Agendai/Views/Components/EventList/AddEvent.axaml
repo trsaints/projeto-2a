@@ -98,8 +98,8 @@
 						<Button
                             Content="{Binding Name}"
                             FontSize="14"
-                            Foreground="#555"
-                            Background="#F5F5F5"
+                            Foreground="Black"
+                            Background="#73B9DF"
                             BorderBrush="#DDD"
                             BorderThickness="1"
                             Padding="8"
