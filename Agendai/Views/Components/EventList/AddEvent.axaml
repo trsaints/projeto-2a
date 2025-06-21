@@ -124,7 +124,6 @@
 					ItemsSource="{Binding TodoWindowVm.FreeTodosNames}"
 					SelectedItem="{Binding TodoWindowVm.SelectedTodoName, Mode=TwoWay}"
 					GotFocus="SearchText_OnGotFocus"
-					TextChanged="SelectTodoSearchBox_TextChanged"
 					FilterMode="Contains"
 					Watermark="Ex.: Comprar Pamonha"
 					FontSize="14"

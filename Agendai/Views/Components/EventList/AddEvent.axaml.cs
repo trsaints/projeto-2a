@@ -33,16 +33,5 @@ public partial class AddEvent : UserControl
             }
         }
     }
-    
-    private void SelectTodoSearchBox_TextChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is AutoCompleteBox box)
-        {
-            if (this.DataContext is EventListViewModel vm)
-            {
-                Console.WriteLine($"texto: {box.Text}");
-            }
-        }
-    }
 
 }
