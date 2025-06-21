@@ -1,4 +1,5 @@
 ﻿using Agendai.Data.Models;
+using Agendai.Services.Recurrency;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,6 +49,14 @@ namespace Agendai.Services.Views
 
             var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
 
+            var eventSchedulers = new Dictionary<ulong, RecurringScheduler<Event>>();
+            foreach (var ev in filteredEvents.Where(e => e.Repeats != Repeats.None))
+                eventSchedulers[ev.Id] = new RecurringScheduler<Event>(ev);
+
+            var todoSchedulers = new Dictionary<ulong, RecurringScheduler<Todo>>();
+            foreach (var todo in filteredTodos.Where(t => t.Repeats != Repeats.None))
+                todoSchedulers[todo.Id] = new RecurringScheduler<Todo>(todo);
+
             foreach (var hour in hours)
             {
                 var row = new WeekRow { Hour = hour };
@@ -55,15 +64,40 @@ namespace Agendai.Services.Views
                 {
                     var day = startOfWeek.AddDays(i);
                     var cell = new DayCell { Items = new ObservableCollection<object>() };
+
                     if (showData)
                     {
-                        foreach (var e in filteredEvents)
+                        foreach (var e in filteredEvents.Where(e => e.Repeats == Repeats.None))
+                        {
                             if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(e);
+                        }
 
-                        foreach (var t in filteredTodos)
+                        foreach (var scheduler in eventSchedulers.Values)
+                        {
+                            var occurrences = scheduler.GetUpcoming()
+                                .Where(o => o.Due.Date == day.Date && o.Due.ToString("HH:00") == hour)
+                                .Select(o => o.Item);
+
+                            foreach (var occ in occurrences)
+                                cell.Items.Add(occ);
+                        }
+
+                        foreach (var t in filteredTodos.Where(t => t.Repeats == Repeats.None))
+                        {
                             if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(t);
+                        }
+
+                        foreach (var scheduler in todoSchedulers.Values)
+                        {
+                            var occurrences = scheduler.GetUpcoming()
+                                .Where(o => o.Due.Date == day.Date && o.Due.ToString("HH:00") == hour)
+                                .Select(o => o.Item);
+
+                            foreach (var occ in occurrences)
+                                cell.Items.Add(occ);
+                        }
                     }
 
                     row[day.DayOfWeek.ToString()] = cell;
@@ -75,21 +109,20 @@ namespace Agendai.Services.Views
             return referenceDate;
         }
 
-        
         public static TKey MinOrDefault<TSource, TKey>(this IEnumerable<TSource> source,
             Func<TSource, TKey> selector, TKey defaultValue)
         {
             return source.Any() ? source.Min(selector) : defaultValue;
         }
-        
+
         public static (int WeekNumber, DateTime StartOfWeek, DateTime EndOfWeek) GetWeekOfMonthRange(DateTime date)
         {
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek; 
-            
+            var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
+
             int totalDays = (date - firstDayOfMonth).Days + dayOfWeekOffset;
             int weekNumber = (int)Math.Floor(totalDays / 7.0) + 1;
-            
+
             var startOfWeek = date.Date.AddDays(-(int)date.DayOfWeek);
 
             if (startOfWeek.Month < date.Month)
@@ -101,6 +134,5 @@ namespace Agendai.Services.Views
 
             return (weekNumber, startOfWeek, endOfWeek);
         }
-
     }
 }
