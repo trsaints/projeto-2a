@@ -1,23 +1,23 @@
-     <UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Agendai.ViewModels"
              xmlns:conv="clr-namespace:Agendai.Data.Converters"
              x:Class="Agendai.Views.Components.TodoList.TodoList"
              x:DataType="vm:TodoListViewModel"
              x:Name="Root">
-         
-         <UserControl.Resources>
-             <conv:StatusToStrikethroughConverter x:Key="StatusToStrikethroughConverter" />
-         </UserControl.Resources>
-         
-         <Border BorderThickness="0" CornerRadius="10"
-                 Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
+
+    <UserControl.Resources>
+        <conv:StatusToStrikethroughConverter x:Key="StatusToStrikethroughConverter" />
+    </UserControl.Resources>
+
+    <Border BorderThickness="0" CornerRadius="10"
+            Padding="15" Margin="0 0 0 40" Background="WhiteSmoke">
         <ItemsControl ItemsSource="{Binding ItemsSource, ElementName=Root}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="*, Auto, Auto" Margin="0 0 0 16">
-                        
-                        <Button Grid.Column="0" 
+
+                        <Button Grid.Column="0"
                                 Command="{Binding ItemClickCommand, ElementName=Root}"
                                 CommandParameter="{Binding}"
                                 Background="Transparent" BorderThickness="0"
@@ -27,10 +27,11 @@
                                     <TextBlock.Inlines>
                                         <Run Text="{Binding Name}">
                                             <Run.TextDecorations>
-                                                <Binding Path="Status" Converter="{StaticResource StatusToStrikethroughConverter}" />
+                                                <Binding Path="Status"
+                                                         Converter="{StaticResource StatusToStrikethroughConverter}" />
                                             </Run.TextDecorations>
                                         </Run>
-										
+
                                         <TextBlock Text="{Binding SkippedDisplay}" />
                                     </TextBlock.Inlines>
                                 </TextBlock>

@@ -12,7 +12,7 @@
 
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     </Application.Styles>
 
     <Application.Resources>
@@ -21,7 +21,7 @@
         <FontFamily x:Key="MontserratItalic">avares://Agendai/Assets/Font/Montserrat-Italic.ttf#Montserrat Italic</FontFamily>
         <FontFamily x:Key="MontserratThin">avares://Agendai/Assets/Font/Montserrat-Thin.ttf#Montserrat Thin</FontFamily>
         <FontFamily x:Key="MontserratBlack">avares://Agendai/Assets/Font/Montserrat-Black.ttf#Montserrat Black</FontFamily>
-        
+
         <converters:DateConverter x:Key="DateConverter" />
         <converters:StatusConverter x:Key="StatusConverter" />
         <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeOffsetConverter" />

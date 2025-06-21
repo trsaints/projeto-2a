@@ -1,6 +1,5 @@
 namespace Agendai.Data.Models;
 
-
 public enum Repeats
 {
 	None,

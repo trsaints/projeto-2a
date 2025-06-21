@@ -35,7 +35,7 @@ namespace Agendai.ViewModels
 		public EventListViewModel(TodoWindowViewModel? todoWindowVm = null)
 		{
 			TodoWindowVm = todoWindowVm;
-					
+
 			SelectTarefaCommand = new RelayCommand(() => OpenAddEvent = true);
 			AddEventCommand = new RelayCommand(AddOrUpdateEvent, () => CanSave);
 			CancelCommand = new RelayCommand(CancelAction);
@@ -76,9 +76,9 @@ namespace Agendai.ViewModels
 			set => SetProperty(ref _agendaNames, value);
 		}
 
-		public  ICommand AddEventCommand     { get; }
-		public  ICommand CancelCommand       { get; }
-		public  ICommand SelectTarefaCommand { get; }
+		public ICommand AddEventCommand     { get; }
+		public ICommand CancelCommand       { get; }
+		public ICommand SelectTarefaCommand { get; }
 
 
 		public bool CanSave
@@ -288,13 +288,12 @@ namespace Agendai.ViewModels
 			}
 
 			if (string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName)) return;
-			
+
 			var newTodo = TodoWindowVm.AddTodo(ev);
 
-			if (newTodo != null && ev.Todos != null && !ev.Todos.Contains(newTodo))
-			{
-				ev.Todos.Add(newTodo);
-			}
+			if (newTodo != null
+			    && ev.Todos != null
+			    && !ev.Todos.Contains(newTodo)) { ev.Todos.Add(newTodo); }
 		}
 
 		private void UpdateEventProperties(Event ev)

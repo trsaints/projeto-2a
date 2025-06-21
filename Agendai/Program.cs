@@ -31,22 +31,20 @@ sealed class Program
 		// Captura exceções globais
 		AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
 		{
-			Log.Fatal(e.ExceptionObject as Exception, "Unhandled exception");
+			Log.Fatal(
+				e.ExceptionObject as Exception,
+				"Unhandled exception"
+			);
 		};
 
-		try
-		{
-			BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-		}
+		try { BuildAvaloniaApp().StartWithClassicDesktopLifetime(args); }
 		catch (Exception ex)
 		{
 			Log.Fatal(ex, "Application terminated unexpectedly");
+
 			throw;
 		}
-		finally
-		{
-			Log.CloseAndFlush();
-		}
+		finally { Log.CloseAndFlush(); }
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.

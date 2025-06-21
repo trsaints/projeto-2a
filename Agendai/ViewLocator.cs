@@ -7,29 +7,29 @@ using Agendai.Views.Windows.TodoWindow;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
+
 namespace Agendai;
 
 public class ViewLocator : IDataTemplate
 {
-    public Control Build(object? param)
-    {
-        if (param is null)
-            return new TextBlock { Text = "No ViewModel provided" };
+	public Control Build(object? param)
+	{
+		if (param is null)
+			return new TextBlock { Text = "No ViewModel provided" };
 
-        Control result = param switch
-        {
-            HomeWindowViewModel => new HomeWindow(),
-            AgendaWindowViewModel => new AgendaWindow(),
-            TodoWindowViewModel => new TodoWindow(),
-            PomodoroWindowViewModel => new PomodoroWindow(),
-            _ => throw new ArgumentException($"No view found for {param.GetType().Name}"),
-        };
+		Control result = param switch
+		{
+			HomeWindowViewModel     => new HomeWindow(),
+			AgendaWindowViewModel   => new AgendaWindow(),
+			TodoWindowViewModel     => new TodoWindow(),
+			PomodoroWindowViewModel => new PomodoroWindow(),
+			_ => throw new ArgumentException(
+				$"No view found for {param.GetType().Name}"
+			),
+		};
 
-        return result;
-    }
+		return result;
+	}
 
-    public bool Match(object? data)
-    {
-        return data is ViewModelBase;
-    }
+	public bool Match(object? data) { return data is ViewModelBase; }
 }

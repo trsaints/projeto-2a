@@ -107,8 +107,7 @@
                                               Width="80"
                                               Margin="8 0 0 0"
                                               ItemsSource="{Binding ((vm:TodoWindowViewModel)DataContext).SortOptions,
-                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                              />
+                                              RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 </Grid>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
@@ -146,7 +145,7 @@
                 </Grid>
             </Border>
         </Panel>
-        
+
         <Panel
             Grid.ColumnSpan="2"
             IsVisible="{Binding EventListVm.OpenAddEvent}"

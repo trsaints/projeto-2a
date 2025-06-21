@@ -48,10 +48,11 @@
         <Border Grid.Row="1" Background="#F2EDEE" Padding="16" CornerRadius="24" HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch" Margin="0,16,0,0">
             <Calendar Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged" SelectionMode="SingleDate"/>
+                      VerticalAlignment="Stretch" SelectedDatesChanged="OnCalendarDateChanged"
+                      SelectionMode="SingleDate" />
         </Border>
 
-        <Border Grid.Row="2" 
+        <Border Grid.Row="2"
                 Margin="0,16,0,0"
                 Background="WhiteSmoke"
                 Padding="16"
@@ -60,23 +61,24 @@
             <StackPanel Spacing="16">
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
-						
+                        <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18"
+                                   Margin="0 0 0 8" />
+
                         <ItemsControl ItemsSource="{Binding ListNames}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="4 2">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-										
-                                        <CheckBox 
+
+                                        <CheckBox
                                             IsCheckedChanged="CheckBoxChecked"
                                             VerticalAlignment="Center"
                                             DataContext="{Binding}"
-                                            Margin="0 0 8 0"/>
-                                        <TextBlock Text="{Binding }" VerticalAlignment="Center" Grid.Column="1"/>
+                                            Margin="0 0 8 0" />
+                                        <TextBlock Text="{Binding }" VerticalAlignment="Center" Grid.Column="1" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -87,7 +89,7 @@
         </Border>
 
 
-        <Border Grid.Row="2" 
+        <Border Grid.Row="2"
                 Margin="0,16,0,0"
                 Background="WhiteSmoke"
                 Padding="16"
@@ -96,49 +98,52 @@
             <StackPanel Spacing="16">
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
-						
+                        <TextBlock Text="Filtrar por Lista de Tarefas:" FontWeight="Bold" FontSize="18"
+                                   Margin="0 0 0 8" />
+
                         <ItemsControl ItemsSource="{Binding TodoWindowVm.TodosByListName}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="4 2">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-										
-                                        <CheckBox 
+
+                                        <CheckBox
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
                                             DataContext="{Binding}"
-                                            Margin="0 0 8 0"/>
-                                        <TextBlock Text="{Binding ListName}" VerticalAlignment="Center" Grid.Column="1"/>
+                                            Margin="0 0 8 0" />
+                                        <TextBlock Text="{Binding ListName}" VerticalAlignment="Center" Grid.Column="1" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
                 </Border>
-				
+
                 <Border Background="#F9F9F9" CornerRadius="8" Padding="12" BorderBrush="#DDD" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Filtrar por Lista de Eventos:" FontWeight="Bold" FontSize="18" Margin="0 0 0 8"/>
-						
+                        <TextBlock Text="Filtrar por Lista de Eventos:" FontWeight="Bold" FontSize="18"
+                                   Margin="0 0 0 8" />
+
                         <ItemsControl ItemsSource="{Binding EventListVm.EventsByAgendaName}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="4 2">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-										
-                                        <CheckBox 
+
+                                        <CheckBox
                                             IsCheckedChanged="OnCheckBoxChecked"
                                             VerticalAlignment="Center"
                                             DataContext="{Binding}"
-                                            Margin="0 0 8 0"/>
-                                        <TextBlock Text="{Binding AgendaName}" VerticalAlignment="Center" Grid.Column="1"/>
+                                            Margin="0 0 8 0" />
+                                        <TextBlock Text="{Binding AgendaName}" VerticalAlignment="Center"
+                                                   Grid.Column="1" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

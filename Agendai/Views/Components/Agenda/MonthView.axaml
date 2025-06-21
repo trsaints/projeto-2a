@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
-    
+
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type models:Event}">
             <Button Click="ForwardClickToParent"
@@ -23,7 +23,7 @@
 
 
         <DataTemplate DataType="{x:Type models:Todo}">
-            <Button Click="ForwardClickToParent" 
+            <Button Click="ForwardClickToParent"
                     Margin="2"
                     Padding="1"
                     BorderBrush="Black"
@@ -42,41 +42,41 @@
     <StackPanel>
         <Grid Margin="0 0 0 20">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Column="0" Spacing="12">
-                <TextBlock Text="{Binding SelectedMonth}" 
-                           FontSize="18" 
-                           FontWeight="Bold" 
-                           VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding SelectedMonth}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center" />
 
                 <Border CornerRadius="24" Padding="0" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
 
-                        <Button Click="OnPreviousMonthClicked" 
+                        <Button Click="OnPreviousMonthClicked"
                                 Padding="8"
                                 Background="Transparent"
-                                BorderBrush="Transparent" 
+                                BorderBrush="Transparent"
                                 CornerRadius="24 0 0 24"
                                 VerticalAlignment="Center">
                             <Image Source="../../../Assets/arrow_back.png"
                                    Height="20"
                                    Width="20"
-                                   Margin="0,0,10,0"/>
+                                   Margin="0,0,10,0" />
                         </Button>
 
                         <Button Click="OnNextMonthClicked"
                                 Padding="8"
                                 Background="Transparent"
-                                BorderBrush="Transparent" 
+                                BorderBrush="Transparent"
                                 CornerRadius="0 24 24 0"
                                 VerticalAlignment="Center">
                             <Image Source="../../../Assets/arrow_forward.png"
                                    Height="20"
                                    Width="20"
-                                   Margin="10,0,0,0"/>
+                                   Margin="10,0,0,0" />
                         </Button>
                     </StackPanel>
                 </Border>
@@ -95,17 +95,17 @@
                     BorderThickness="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center">
-                <TextBlock Text="Ocultar/Exibir Eventos e Tarefas" VerticalAlignment="Center" TextAlignment="Center"/>
+                <TextBlock Text="Ocultar/Exibir Eventos e Tarefas" VerticalAlignment="Center" TextAlignment="Center" />
             </Button>
 
         </Grid>
 
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="800">
-                <DataGrid 
-                    HeadersVisibility="Column" 
-                    AutoGenerateColumns="False" 
-                    ItemsSource="{Binding MonthViewRows}" 
+                <DataGrid
+                    HeadersVisibility="Column"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding MonthViewRows}"
                     GridLinesVisibility="All"
                     IsReadOnly="True"
                     ColumnWidth="*" RowHeight="130">
@@ -115,10 +115,10 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Sunday.DayNumber}" 
-                                                Tag="{Binding Sunday.DayNumber}" 
+                                        <Button Content="{Binding Sunday.DayNumber}"
+                                                Tag="{Binding Sunday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Sunday.Items}" />
@@ -131,10 +131,10 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Monday.DayNumber}" 
-                                                Tag="{Binding Monday.DayNumber}" 
+                                        <Button Content="{Binding Monday.DayNumber}"
+                                                Tag="{Binding Monday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Monday.Items}" />
@@ -147,10 +147,10 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Tuesday.DayNumber}" 
-                                                Tag="{Binding Tuesday.DayNumber}" 
+                                        <Button Content="{Binding Tuesday.DayNumber}"
+                                                Tag="{Binding Tuesday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Tuesday.Items}" />
@@ -158,15 +158,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Quar">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Wednesday.DayNumber}" 
-                                                Tag="{Binding Wednesday.DayNumber}" 
+                                        <Button Content="{Binding Wednesday.DayNumber}"
+                                                Tag="{Binding Wednesday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Wednesday.Items}" />
@@ -174,15 +174,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Qui">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Thursday.DayNumber}" 
-                                                Tag="{Binding Thursday.DayNumber}" 
+                                        <Button Content="{Binding Thursday.DayNumber}"
+                                                Tag="{Binding Thursday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Thursday.Items}" />
@@ -190,15 +190,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Sex">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Friday.DayNumber}" 
-                                                Tag="{Binding Friday.DayNumber}" 
+                                        <Button Content="{Binding Friday.DayNumber}"
+                                                Tag="{Binding Friday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Friday.Items}" />
@@ -206,15 +206,15 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Sáb">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button Content="{Binding Saturday.DayNumber}" 
-                                                Tag="{Binding Saturday.DayNumber}" 
+                                        <Button Content="{Binding Saturday.DayNumber}"
+                                                Tag="{Binding Saturday.DayNumber}"
                                                 Click="OnDayClicked"
-                                                Background="Transparent" BorderThickness="0" 
+                                                Background="Transparent" BorderThickness="0"
                                                 FontWeight="Bold" HorizontalAlignment="Left" Padding="0"
                                                 Cursor="Hand" />
                                         <ItemsControl ItemsSource="{Binding Saturday.Items}" />

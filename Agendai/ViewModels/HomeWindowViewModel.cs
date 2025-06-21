@@ -15,12 +15,12 @@ public class HomeWindowViewModel : ViewModelBase
 		get => _selectedListNames;
 		set => SetProperty(ref _selectedListNames, value);
 	}
-	
+
 	public void AddSelectedListName(string listName)
 	{
 		if (!_selectedListNames.Contains(listName))
 		{
-            SelectedListNames = [.. _selectedListNames, listName];
+			SelectedListNames = [.. _selectedListNames, listName];
 		}
 	}
 
@@ -28,7 +28,10 @@ public class HomeWindowViewModel : ViewModelBase
 	{
 		if (_selectedListNames.Contains(listName))
 		{
-            SelectedListNames = [.. _selectedListNames.Where(name => name != listName)];
+			SelectedListNames =
+			[
+				.. _selectedListNames.Where(name => name != listName)
+			];
 		}
 	}
 }

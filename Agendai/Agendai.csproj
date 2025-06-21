@@ -1,62 +1,62 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3" />
-    <PackageReference Include="ReactiveUI" Version="20.2.45" />
-    <PackageReference Include="Serilog" Version="4.3.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3"/>
+        <PackageReference Include="ReactiveUI" Version="20.2.45"/>
+        <PackageReference Include="Serilog" Version="4.3.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\Components\SideBar\SideBar.axaml.cs">
-      <DependentUpon>SideBar.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Components\TodoList\TodoList.axaml.cs">
-      <DependentUpon>TodoList.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Components\EventList\AddEvent.axaml.cs">
-      <DependentUpon>AddEvent.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Components\TaskForm\TaskForm.axaml.cs">
-      <DependentUpon>AddTask.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Remove="Data\EventsByAgendaName.cs" />
-    <Compile Remove="Data\Converters\StatusIsSkippedConverter.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Views\Components\SideBar\SideBar.axaml.cs">
+            <DependentUpon>SideBar.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Components\TodoList\TodoList.axaml.cs">
+            <DependentUpon>TodoList.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Components\EventList\AddEvent.axaml.cs">
+            <DependentUpon>AddEvent.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Components\TaskForm\TaskForm.axaml.cs">
+            <DependentUpon>AddTask.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Remove="Data\EventsByAgendaName.cs"/>
+        <Compile Remove="Data\Converters\StatusIsSkippedConverter.cs"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Views\Components\TodoList\TodoList.axaml" />
-  </ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="Views\Components\TodoList\TodoList.axaml"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml" />
-    <UpToDateCheckInput Remove="Views\Components\AgendaSidebar\AgendaSidebar.axaml" />
-  </ItemGroup>
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Views\Components\TodoControl\TodoControl.axaml"/>
+        <UpToDateCheckInput Remove="Views\Components\AgendaSidebar\AgendaSidebar.axaml"/>
+    </ItemGroup>
 </Project>
