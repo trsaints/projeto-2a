@@ -289,14 +289,8 @@ public class TodoWindowViewModel : ViewModelBase
         set => SetProperty(ref _incompleteResume, value);
     }
 
-    private ObservableCollection<string?> _listNames = [];
-    public ObservableCollection<string?> ListNames
-    {
-        get => _listNames;
-        set => SetProperty(ref _listNames, value);
-    }
 
-    private readonly Dictionary<string, SortType> _listSortTypes = new();
+    private readonly Dictionary<string, SortType> _listSortTypes = [];
 
     private HashSet<string?> _listasSelecionadas = [];
 
@@ -776,11 +770,9 @@ public class TodoWindowViewModel : ViewModelBase
             )
         );
         _listNames =
-                new ObservableCollection<string?>(
-                    Todos.Select(t => t.ListName).Distinct()
-                );
+                [.. Todos.Select(t => t.ListName).Distinct()];
         _incompleteResume =
-                new ObservableCollection<Todo>(_incompleteTodos.Take(7));
+                [.. _incompleteTodos.Take(7)];
     }
 
     #endregion

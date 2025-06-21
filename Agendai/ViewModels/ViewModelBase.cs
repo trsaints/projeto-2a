@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -6,22 +7,26 @@ namespace Agendai.ViewModels;
 
 public class ViewModelBase : ObservableObject
 {
-    private bool _isPopupOpen;
-    private bool _isAgendaWindow;
-    private bool _isTodoWindow;
-    private bool _isPomodoroWindow;
+    protected bool _isPopupOpen;
+    protected bool _isAgendaWindow;
+    protected bool _isTodoWindow;
+    protected bool _isPomodoroWindow;
+    protected bool _openAddEvent;
+    protected ObservableCollection<string?> _listNames = [];
 
     public MainWindowViewModel? MainViewModel { get; set; }
     public TodoWindowViewModel? TodoWindowVm { get; set; }
     public EventListViewModel? EventListVm { get; set; }
     public ICommand ReturnHomeCommand => new RelayCommand(ReturnHome);
 
+    #region Commands
     public ICommand OpenPopupCommand => new RelayCommand(() => IsPopupOpen = true);
     public ICommand OpenTodoFormCommand => new RelayCommand(OpenTodoForm);
     public ICommand OpenEventFormCommand => new RelayCommand(OpenEventForm);
     public ICommand OpenAgendaCommand => new RelayCommand(OpenAgenda);
     public ICommand OpenTodoCommand => new RelayCommand(OpenTodo);
     public ICommand OpenPomodoroCommand => new RelayCommand(OpenPomodoro);
+    #endregion
 
     private void ReturnHome()
     {
@@ -47,10 +52,10 @@ public class ViewModelBase : ObservableObject
     private void OpenEventForm()
     {
         IsPopupOpen = false;
-        if (EventListVm != null)
-        {
-            EventListVm.OpenAddEvent = true;
 
+        if (EventListVm is not null)
+        {
+            OpenAddEvent = true;
         }
     }
 
@@ -76,5 +81,17 @@ public class ViewModelBase : ObservableObject
     {
         get => _isPomodoroWindow;
         set => SetProperty(ref _isPomodoroWindow, value);
+    }
+
+    public ObservableCollection<string?> ListNames
+    {
+        get => _listNames;
+        set => SetProperty(ref _listNames, value);
+    }
+
+    public bool OpenAddEvent
+    {
+        get => _openAddEvent;
+        set => SetProperty(ref _openAddEvent, value);
     }
 }
