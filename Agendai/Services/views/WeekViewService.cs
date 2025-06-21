@@ -48,14 +48,43 @@ namespace Agendai.Services.Views
             }
 
             var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
+            var endOfWeek = startOfWeek.AddDays(6);
 
-            var eventSchedulers = new Dictionary<ulong, RecurringScheduler<Event>>();
+            var occurrenceMap = new Dictionary<DateTime, List<object>>();
+
             foreach (var ev in filteredEvents.Where(e => e.Repeats != Repeats.None))
-                eventSchedulers[ev.Id] = new RecurringScheduler<Event>(ev);
+            {
+                var scheduler = new RecurringScheduler<Event>(ev);
+                RecurrenceOccurrence<Event>? occ;
+                while ((occ = scheduler.GetNext()) != null)
+                {
+                    if (occ.Due.Date > endOfWeek) break;
+                    if (occ.Due.Date >= startOfWeek)
+                    {
+                        var key = new DateTime(occ.Due.Year, occ.Due.Month, occ.Due.Day, occ.Due.Hour, 0, 0);
+                        if (!occurrenceMap.ContainsKey(key))
+                            occurrenceMap[key] = new List<object>();
+                        occurrenceMap[key].Add(occ.Item);
+                    }
+                }
+            }
 
-            var todoSchedulers = new Dictionary<ulong, RecurringScheduler<Todo>>();
             foreach (var todo in filteredTodos.Where(t => t.Repeats != Repeats.None))
-                todoSchedulers[todo.Id] = new RecurringScheduler<Todo>(todo);
+            {
+                var scheduler = new RecurringScheduler<Todo>(todo);
+                RecurrenceOccurrence<Todo>? occ;
+                while ((occ = scheduler.GetNext()) != null)
+                {
+                    if (occ.Due.Date > endOfWeek) break;
+                    if (occ.Due.Date >= startOfWeek)
+                    {
+                        var key = new DateTime(occ.Due.Year, occ.Due.Month, occ.Due.Day, occ.Due.Hour, 0, 0);
+                        if (!occurrenceMap.ContainsKey(key))
+                            occurrenceMap[key] = new List<object>();
+                        occurrenceMap[key].Add(occ.Item);
+                    }
+                }
+            }
 
             foreach (var hour in hours)
             {
@@ -73,30 +102,17 @@ namespace Agendai.Services.Views
                                 cell.Items.Add(e);
                         }
 
-                        foreach (var scheduler in eventSchedulers.Values)
-                        {
-                            var occurrences = scheduler.GetUpcoming()
-                                .Where(o => o.Due.Date == day.Date && o.Due.ToString("HH:00") == hour)
-                                .Select(o => o.Item);
-
-                            foreach (var occ in occurrences)
-                                cell.Items.Add(occ);
-                        }
-
                         foreach (var t in filteredTodos.Where(t => t.Repeats == Repeats.None))
                         {
                             if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(t);
                         }
 
-                        foreach (var scheduler in todoSchedulers.Values)
+                        var cellKey = new DateTime(day.Year, day.Month, day.Day, TimeSpan.Parse(hour).Hours, 0, 0);
+                        if (occurrenceMap.TryGetValue(cellKey, out var items))
                         {
-                            var occurrences = scheduler.GetUpcoming()
-                                .Where(o => o.Due.Date == day.Date && o.Due.ToString("HH:00") == hour)
-                                .Select(o => o.Item);
-
-                            foreach (var occ in occurrences)
-                                cell.Items.Add(occ);
+                            foreach (var occItem in items)
+                                cell.Items.Add(occItem);
                         }
                     }
 
