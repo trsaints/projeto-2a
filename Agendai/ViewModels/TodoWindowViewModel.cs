@@ -7,7 +7,9 @@ using System.Windows.Input;
 using Agendai.Data;
 using Agendai.Data.Converters;
 using Agendai.Data.Models;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using DynamicData.Binding;
 using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
@@ -26,7 +28,7 @@ public class TodoWindowViewModel : ViewModelBase
         if (homeWindowVm != null)
         {
             HomeWindowVm = homeWindowVm;
-            EventListVm = homeWindowVm.EventListVm;
+            EventListVm = HomeWindowVm.EventListVm;
         }
 
         PropertyChanged += (_, e) =>
@@ -60,6 +62,8 @@ public class TodoWindowViewModel : ViewModelBase
     public ICommand SelectTarefaCommand { get; private set; }
     public ICommand AddTodoCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
+    
+    public ICommand AddTodoToEventCommand { get; private set; }
 
     private void InitializeCommands()
     {
@@ -78,6 +82,36 @@ public class TodoWindowViewModel : ViewModelBase
             OpenAddTask = false;
             IsPopupOpen = false;
             ClearTodoForm();
+        });
+        
+        AddTodoToEventCommand = new RelayCommand(() =>
+        {
+            var relatedEvent = EventListVm?.SelectedEvent;
+
+            var todo = new Todo((uint)(Todos.Count + 1), NewTaskName)
+            {
+                Description = NewDescription,
+                Due = NewDue,
+                Repeats = SelectedRepeats.Repeats,
+                ListName = ListName,
+                RelatedEvent = relatedEvent
+            };
+
+            todo.OnStatusChanged += HandleStatusChanged;
+
+            Todos.Add(todo);
+
+            RefreshFreeTodos();
+            ClearTodoForm();
+
+            HomeWindowVm.EventListVm.TodosForSelectedEvent.Add(todo);
+            HomeWindowVm.EventListVm.HasRelatedTodos = HomeWindowVm.EventListVm.TodosForSelectedEvent.Count > 0;
+
+            HomeWindowVm.EventListVm.UpdateCanSave();
+
+            HomeWindowVm.EventListVm.IsAddTodoPopupOpen = false;
+            
+            FreeTodos.Remove(todo);
         });
     }
     #endregion
@@ -255,7 +289,18 @@ public class TodoWindowViewModel : ViewModelBase
     public ObservableCollection<Todo> FreeTodos
     {
         get => _freeTodos;
-        set => SetProperty(ref _freeTodos, value);
+        set
+        {
+            if (SetProperty(ref _freeTodos, value))
+            {
+                _freeTodos.CollectionChanged += (s, e) =>
+                {
+                    OnPropertyChanged(nameof(FreeTodosNames));
+                };
+            
+                OnPropertyChanged(nameof(FreeTodosNames));
+            }
+        }
     }
 
     public IEnumerable<string> FreeTodosNames =>
@@ -278,10 +323,26 @@ public class TodoWindowViewModel : ViewModelBase
             {
                 _selectedTodoName = value;
                 OnPropertyChanged();
-                SelectedTodo = FreeTodos.FirstOrDefault(t => t.Name == value);
+
+                var todoName = _selectedTodoName;
+
+                var todo = FreeTodos.FirstOrDefault(t => t.Name == todoName);
+            
+                if (todo != null)
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        FreeTodos.Remove(todo);
+                        HomeWindowVm.EventListVm?.TodosForSelectedEvent.Add(todo); 
+                        HomeWindowVm.EventListVm?.NotifyTodosForSelectedEventChanged();
+
+                        HomeWindowVm.EventListVm.UpdateCanSave();
+                    });
+                }
             }
         }
     }
+
 
     private void RefreshFreeTodos()
     {

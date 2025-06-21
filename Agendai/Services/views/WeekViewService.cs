@@ -1,5 +1,6 @@
 ﻿using Agendai.Data.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,51 +8,62 @@ namespace Agendai.Services.Views
 {
     public static class WeekViewService
     {
-        public static void GenerateWeekView(
+        public static DateTime GenerateWeekView(
             ObservableCollection<WeekRow> rows,
             string[] hours,
             ObservableCollection<Event> events,
             ObservableCollection<Todo> todos,
             DateTime referenceDate,
             bool showData,
-            string[]? selectedListNames)
+            string[]? selectedListNames,
+            string? searchText)
         {
             rows.Clear();
-            var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
 
             var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
-            
             var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
                 ? events
                 : events.Where(e => selectedListNames.Contains(e.AgendaName));
-            
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var normalized = searchText.Trim().ToLower();
+
+                filteredEvents = filteredEvents
+                    .Where(e => !string.IsNullOrEmpty(e.Name) && e.Name.ToLower().Contains(normalized));
+                filteredTodos = filteredTodos
+                    .Where(t => !string.IsNullOrEmpty(t.Name) && t.Name.ToLower().Contains(normalized));
+
+                var minDateEvent = filteredEvents.MinOrDefault(e => e.Due, DateTime.MaxValue);
+                var minDateTodo = filteredTodos.MinOrDefault(t => t.Due, DateTime.MaxValue);
+                var minDate = minDateEvent < minDateTodo ? minDateEvent : minDateTodo;
+
+                if (minDate != DateTime.MaxValue)
+                {
+                    referenceDate = minDate;
+                }
+            }
+
+            var startOfWeek = referenceDate.AddDays(-(int)referenceDate.DayOfWeek);
+
             foreach (var hour in hours)
             {
                 var row = new WeekRow { Hour = hour };
-
                 for (int i = 0; i < 7; i++)
                 {
                     var day = startOfWeek.AddDays(i);
-                    var cell = new DayCell
-                    {
-                        Items = new ObservableCollection<object>()
-                    };
-
+                    var cell = new DayCell { Items = new ObservableCollection<object>() };
                     if (showData)
                     {
                         foreach (var e in filteredEvents)
-                        {
                             if (e.Due.Date == day.Date && e.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(e);
-                        }
 
                         foreach (var t in filteredTodos)
-                        {
                             if (t.Due.Date == day.Date && t.Due.ToString("HH:00") == hour)
                                 cell.Items.Add(t);
-                        }
                     }
 
                     row[day.DayOfWeek.ToString()] = cell;
@@ -59,6 +71,15 @@ namespace Agendai.Services.Views
 
                 rows.Add(row);
             }
+
+            return referenceDate;
+        }
+
+        
+        public static TKey MinOrDefault<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> selector, TKey defaultValue)
+        {
+            return source.Any() ? source.Min(selector) : defaultValue;
         }
         
         public static (int WeekNumber, DateTime StartOfWeek, DateTime EndOfWeek) GetWeekOfMonthRange(DateTime date)
@@ -80,5 +101,6 @@ namespace Agendai.Services.Views
 
             return (weekNumber, startOfWeek, endOfWeek);
         }
+
     }
 }

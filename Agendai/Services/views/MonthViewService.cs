@@ -8,41 +8,77 @@ namespace Agendai.Services.Views
 {
     public static class MonthViewService
     {
-        public static void GenerateMonthView(
+        public static DateTime GenerateMonthView(
             ObservableCollection<MonthRow> rows,
             IEnumerable<Event> events,
             IEnumerable<Todo> todos,
             DateTime referenceDate,
             bool showData,
-            string[]? selectedListNames)
+            string[]? selectedListNames,
+            string? searchText
+        )
         {
             rows.Clear();
 
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var normalized = searchText.Trim().ToLower();
+
+                var matchedEvent = events
+                    .Where(e => e.Name != null && e.Name.ToLower().Contains(normalized))
+                    .OrderBy(e => e.Due)
+                    .FirstOrDefault();
+
+                var matchedTodo = todos
+                    .Where(t => t.Name != null && t.Name.ToLower().Contains(normalized))
+                    .OrderBy(t => t.Due)
+                    .FirstOrDefault();
+
+                DateTime? matchedDate = null;
+                if (matchedEvent != null && matchedTodo != null)
+                    matchedDate = matchedEvent.Due < matchedTodo.Due ? matchedEvent.Due : matchedTodo.Due;
+                else if (matchedEvent != null)
+                    matchedDate = matchedEvent.Due;
+                else if (matchedTodo != null)
+                    matchedDate = matchedTodo.Due;
+
+                if (matchedDate.HasValue)
+                    referenceDate = new DateTime(matchedDate.Value.Year, matchedDate.Value.Month, 1);
+            }
+
             int daysInMonth = DateTime.DaysInMonth(referenceDate.Year, referenceDate.Month);
-            DateTime firstDay = new DateTime(referenceDate.Year, referenceDate.Month, 1);
+            DateTime firstDay = new(referenceDate.Year, referenceDate.Month, 1);
             int startOffset = (int)firstDay.DayOfWeek;
 
             var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
                 ? events
                 : events.Where(e => selectedListNames.Contains(e.AgendaName));
-            
-            var eventMap = filteredEvents
-                .Where(e => e.Due.Month == referenceDate.Month && e.Due.Year == referenceDate.Year)
-                .GroupBy(e => e.Due.Day)
-                .ToDictionary(g => g.Key, g => g.ToList()); 
 
             var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
                 ? todos
                 : todos.Where(t => selectedListNames.Contains(t.ListName));
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var normalized = searchText.Trim().ToLower();
+
+                filteredEvents = filteredEvents.Where(e => e.Name != null && e.Name.ToLower().Contains(normalized));
+                filteredTodos = filteredTodos.Where(t => t.Name != null && t.Name.ToLower().Contains(normalized));
+            }
+
+            var eventMap = filteredEvents
+                .Where(e => e.Due.Month == referenceDate.Month && e.Due.Year == referenceDate.Year)
+                .GroupBy(e => e.Due.Day)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
             var todoMap = filteredTodos
                 .Where(t => t.Due.Month == referenceDate.Month && t.Due.Year == referenceDate.Year)
                 .GroupBy(t => t.Due.Day)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            int day = 1;
-            int totalSlots = daysInMonth + startOffset;
-            int totalWeeks = (int)Math.Ceiling(totalSlots / 7.0);
+            int currentDay = 1;
+            var totalSlots = daysInMonth + startOffset;
+            var totalWeeks = (int)Math.Ceiling(totalSlots / 7.0);
 
             for (int w = 0; w < totalWeeks; w++)
             {
@@ -50,24 +86,24 @@ namespace Agendai.Services.Views
                 for (int d = 0; d < 7; d++)
                 {
                     int slot = w * 7 + d;
-                    if (slot >= startOffset && day <= daysInMonth)
+                    if (slot >= startOffset && currentDay <= daysInMonth)
                     {
                         var cell = new DayCell
                         {
-                            DayNumber = day,
-                            Items = new ObservableCollection<object>()
+                            DayNumber = currentDay,
+                            Items = []
                         };
 
-                        if (showData && eventMap.TryGetValue(day, out var evts))
+                        if (showData && eventMap.TryGetValue(currentDay, out var evts))
                             foreach (var evt in evts)
                                 cell.Items.Add(evt);
 
-                        if (showData && todoMap.TryGetValue(day, out var tds))
+                        if (showData && todoMap.TryGetValue(currentDay, out var tds))
                             foreach (var todo in tds)
                                 cell.Items.Add(todo);
 
                         row[d] = cell;
-                        day++;
+                        currentDay++;
                     }
                     else
                     {
@@ -76,6 +112,9 @@ namespace Agendai.Services.Views
                 }
                 rows.Add(row);
             }
+
+            return referenceDate;
         }
+
     }
 }

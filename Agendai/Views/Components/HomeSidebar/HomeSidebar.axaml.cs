@@ -61,5 +61,37 @@ namespace Agendai.Views.Components.HomeSidebar
             }
         }
 
+        private void OnChangingListsVisibility(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is HomeWindowViewModel homeWindowViewModel)
+            {
+                if (button.Tag is EventListViewModel eventListViewModel)
+                {
+                    homeWindowViewModel.IsEventListsAbleToView = !homeWindowViewModel.IsEventListsAbleToView;
+                }
+                else
+                {
+                    homeWindowViewModel.IsTodoListsAbleToView = !homeWindowViewModel.IsTodoListsAbleToView;
+                }
+            }
+        }
+        
+        private void CheckBoxLoaded(object? sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb)
+            {
+                var name = cb.DataContext switch
+                {
+                    TodosByListName todo => todo.ListName,
+                    EventsByAgenda ev => ev.AgendaName,
+                    _ => null
+                };
+                if (name != null && cb.IsChecked == true)
+                {
+                    _selectedItems.Add(name);
+                }
+            }
+        }
+
     }
 }
