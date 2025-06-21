@@ -95,20 +95,43 @@
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Button
-                            Content="{Binding Name}"
-                            FontSize="14"
-                            Foreground="Black"
-                            Background="#73B9DF"
-                            BorderBrush="#DDD"
-                            BorderThickness="1"
-                            Padding="8"
-                            Margin="0,0,8,8"
-                            />
+						<Border
+							Background="#73B9DF"
+							BorderBrush="#1E90FF"  
+							BorderThickness="1"
+							CornerRadius="6"
+							Margin="0,0,8,8"
+							Padding="4"
+						>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
+								<TextBlock
+									Text="{Binding Name}"
+									FontSize="14"
+									Foreground="Black"
+									VerticalAlignment="Center"
+								/>
+
+								<Button
+									Content="X"
+									FontSize="14"
+									Foreground="White"
+									Background="#E53935"
+									BorderBrush="#B71C1C"
+									BorderThickness="1"
+									Padding="4"
+									MinHeight="24"      
+									CommandParameter="{Binding}"
+									VerticalAlignment="Center"
+								/>
+
+							</StackPanel>
+						</Border>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 		</StackPanel>
+
+
 
 
 		<Grid Width="350">
