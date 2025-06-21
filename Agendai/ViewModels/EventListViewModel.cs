@@ -155,7 +155,12 @@ public class EventListViewModel : ViewModelBase
         set => SetProperty(ref _todosForSelectedEvent, value);
     }
 
-    public bool HasRelatedTodos => SelectedEvent?.Todos?.Any() == true;
+    private bool _hasRelatedTodos;
+    public bool HasRelatedTodos
+    {
+        get => _hasRelatedTodos;
+        set => SetProperty(ref _hasRelatedTodos, value);
+    }
 
     public IEnumerable<EventsByAgenda> EventsByAgendaName =>
         AgendaNames.Select(name => new EventsByAgenda
@@ -205,22 +210,39 @@ public class EventListViewModel : ViewModelBase
     {
         if (TodoWindowVm == null) return;
 
-        bool hasTaskChanges =
+        bool taskListChanged = false;
+
+        if (_currentEvent != null)
+        {
+            var currentTodos = _currentEvent.Todos ?? new List<Todo>();
+            var selectedTodos = TodosForSelectedEvent ?? new ObservableCollection<Todo>();
+
+            taskListChanged = !currentTodos.SequenceEqual(selectedTodos);
+        }
+        else
+        {
+            taskListChanged = (TodosForSelectedEvent?.Count > 0);
+        }
+
+        bool hasTaskChanges = 
             !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
-            !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim());
+            !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim()) ||
+            taskListChanged;
 
         CanSave = !string.IsNullOrWhiteSpace(NewEventName)
-            && (_currentEvent is null
-            || NewEventName != _currentEvent.Name
-            || NewDescription != _currentEvent.Description
-            || NewDue.Date != _currentEvent.Due.Date
-            || Repeat?.Repeats != _currentEvent.Repeats
-            || AgendaName != _currentEvent.AgendaName
-            || hasTaskChanges
-            || NewColor != StringToColor(_currentEvent.Color));
+                  && (_currentEvent is null
+                      || NewEventName != _currentEvent.Name
+                      || NewDescription != _currentEvent.Description
+                      || NewDue.Date != _currentEvent.Due.Date
+                      || Repeat?.Repeats != _currentEvent.Repeats
+                      || AgendaName != _currentEvent.AgendaName
+                      || hasTaskChanges
+                      || NewColor != StringToColor(_currentEvent.Color));
 
         ((RelayCommand)AddEventCommand).NotifyCanExecuteChanged();
     }
+
+
 
     public void AddOrUpdateEvent()
     {
@@ -263,6 +285,11 @@ public class EventListViewModel : ViewModelBase
         _currentEvent = null;
         SelectedEvent = null;
     }
+    
+    public void NotifyTodosForSelectedEventChanged()
+    {
+        OnPropertyChanged(nameof(TodosForSelectedEvent));
+    }
 
     #endregion
 
@@ -278,26 +305,33 @@ public class EventListViewModel : ViewModelBase
 
     private void UpdateTodosForSelectedEvent()
     {
-        TodosForSelectedEvent = [.. SelectedEvent?.Todos ?? Enumerable.Empty<Todo>()];
+        TodosForSelectedEvent = new ObservableCollection<Todo>(SelectedEvent?.Todos ?? []);
+
+        HasRelatedTodos = TodosForSelectedEvent.Count > 0;
+
+        TodosForSelectedEvent.CollectionChanged += (s, e) =>
+        {
+            HasRelatedTodos = TodosForSelectedEvent.Count > 0;
+        };
     }
 
     private void AddTodosToEvent(Event ev)
     {
-        if (TodoWindowVm.SelectedTodo != null && !ev.Todos.Contains(TodoWindowVm.SelectedTodo))
-        {
-            TodoWindowVm.AddTodo(ev);
-            ev.Todos.Add(TodoWindowVm.SelectedTodo);
-        }
+        if (ev.Todos == null)
+            ev.Todos = new List<Todo>();
 
-        if (!string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName))
+        ev.Todos = ev.Todos.Where(t => TodosForSelectedEvent.Contains(t)).ToList();
+
+        foreach (var todo in TodosForSelectedEvent)
         {
-            var newTodo = TodoWindowVm.AddTodo(ev);
-            if (newTodo != null && !ev.Todos.Contains(newTodo))
+            if (!ev.Todos.Contains(todo))
             {
-                ev.Todos.Add(newTodo);
+                ev.Todos.Add(todo);
+                todo.RelatedEvent = ev; 
             }
         }
     }
+
 
     private void UpdateEventProperties(Event ev)
     {
