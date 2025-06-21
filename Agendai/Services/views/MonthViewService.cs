@@ -82,12 +82,16 @@ namespace Agendai.Services.Views
                 else
                 {
                     var scheduler = new RecurringScheduler<Event>(ev);
-                    var upcoming = scheduler.GetUpcoming();
-                    foreach (var occurrence in upcoming)
+                    RecurrenceOccurrence<Event>? occ;
+                    while ((occ = scheduler.GetNext()) != null)
                     {
-                        if (occurrence.Due >= monthStart && occurrence.Due <= monthEnd)
-                            occurrences.Add((occurrence.Due, occurrence.Item));
+                        if (occ.Due > monthEnd) break;
+                        if (occ.Due >= monthStart)
+                        {
+                            occurrences.Add((occ.Due, occ.Item));
+                        }
                     }
+
                 }
             }
 
@@ -101,12 +105,16 @@ namespace Agendai.Services.Views
                 else
                 {
                     var scheduler = new RecurringScheduler<Todo>(todo);
-                    var upcoming = scheduler.GetUpcoming();
-                    foreach (var occurrence in upcoming)
+                    RecurrenceOccurrence<Todo>? occ;
+                    while ((occ = scheduler.GetNext()) != null)
                     {
-                        if (occurrence.Due >= monthStart && occurrence.Due <= monthEnd)
-                            occurrences.Add((occurrence.Due, occurrence.Item));
+                        if (occ.Due > monthEnd) break;
+                        if (occ.Due >= monthStart)
+                        {
+                            occurrences.Add((occ.Due, occ.Item));
+                        }
                     }
+
                 }
             }
 
