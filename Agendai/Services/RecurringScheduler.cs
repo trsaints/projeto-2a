@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
+using Agendai.Services.Interfaces;
 
 
 namespace Agendai.Services;
 
-public class RecurringScheduler<T> where T : Recurrence
+public class RecurringScheduler<T> : IRecurringScheduler<T> where T : Recurrence
 {
 	private readonly T                              _template;
 	private readonly int                            _limit;
