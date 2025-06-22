@@ -1,10 +1,21 @@
 using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Agendai.Data.Models;
 
-public class Shift(ulong id, string name) : Entity(id, name)
+[Table("Shifts")]
+public class Shift : Entity
 {
-	public TimeOnly    Duration { get; set; }
-	public ShiftStatus Status   { get; set; }
+	public Shift() { }
+	public Shift(int id, string name) : base(id, name) { }
+
+	[DefaultValue(ShiftStatus.Incomplete)]
+	public ShiftStatus Status { get; set; }
+
+	[Required]
+	[Range(0, 90)]
+	public TimeOnly Duration { get; set; }
 }
