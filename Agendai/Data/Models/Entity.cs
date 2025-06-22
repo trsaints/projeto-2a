@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Agendai.Data.Models;
 
+namespace Agendai.Data.Models;
 
 public abstract class Entity : INotifyPropertyChanged
 {
@@ -18,7 +18,7 @@ public abstract class Entity : INotifyPropertyChanged
 
 	protected Entity(ulong id, string name)
 	{
-		Id = id;
+		Id    = id;
 		_name = name;
 	}
 
@@ -27,13 +27,18 @@ public abstract class Entity : INotifyPropertyChanged
 	protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-	protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+	protected bool SetProperty<T>(
+		ref T                      storage,
+		T                          value,
+		[CallerMemberName] string? propertyName = null
+	)
 	{
 		if (EqualityComparer<T>.Default.Equals(storage, value))
 			return false;
 
 		storage = value;
 		OnPropertyChanged(propertyName);
+
 		return true;
 	}
 }

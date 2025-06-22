@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace Agendai.Data.Models;
 
-
 public abstract class Recurrence : Entity
 {
 	private Repeats _repeats;
@@ -42,7 +41,5 @@ public abstract class Recurrence : Entity
 		set => SetProperty(ref _description, value);
 	}
 
-	protected Recurrence(ulong id, string name) : base(id, name)
-	{
-	}
+	protected Recurrence(ulong id, string name) : base(id, name) { }
 }

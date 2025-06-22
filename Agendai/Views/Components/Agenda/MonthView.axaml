@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
-    
+
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type models:Event}">
             <Button Click="ForwardClickToParent"
@@ -23,7 +23,7 @@
 
 
         <DataTemplate DataType="{x:Type models:Todo}">
-            <Button Click="ForwardClickToParent" 
+            <Button Click="ForwardClickToParent"
                     Margin="2"
                     Padding="1"
                     BorderBrush="Black"
@@ -93,9 +93,9 @@
                                  ItemsSource="{Binding SearchableItems}"
                                  GotFocus="SearchText_OnGotFocus"
                                  FilterMode="Contains"
-                                 MinimumPrefixLength="0" 
+                                 MinimumPrefixLength="0"
                                  TextChanged="SearchBox_TextChanged"
-                                 SelectionChanged="SearchBox_SelectionChanged"/>
+                                 SelectionChanged="SearchBox_SelectionChanged" />
             </StackPanel>
 
             <Button Grid.Column="2"
@@ -117,13 +117,12 @@
         </Grid>
 
 
-
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="800">
-                <DataGrid 
-                    HeadersVisibility="Column" 
-                    AutoGenerateColumns="False" 
-                    ItemsSource="{Binding MonthViewRows}" 
+                <DataGrid
+                    HeadersVisibility="Column"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding MonthViewRows}"
                     GridLinesVisibility="All"
                     IsReadOnly="True"
                     ColumnWidth="*" RowHeight="130">
@@ -137,12 +136,12 @@
                                             Background="Transparent"
                                             Padding="4"
                                             Cursor="Hand">
-                                        
+
                                         <StackPanel>
                                             <TextBlock Text="{Binding Sunday.DayNumber}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left" />
-                                            
+
                                             <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="100">
                                                 <ItemsControl ItemsSource="{Binding Sunday.Items}" />
                                             </ScrollViewer>
@@ -194,7 +193,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Qua">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -215,7 +214,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Qui">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -236,7 +235,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Sex">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -257,7 +256,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Sáb">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

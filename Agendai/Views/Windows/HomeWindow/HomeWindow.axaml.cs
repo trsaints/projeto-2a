@@ -6,7 +6,6 @@ using Avalonia.Markup.Xaml;
 
 namespace Agendai.Views.Windows.HomeWindow;
 
-
 public partial class HomeWindow : UserControl
 {
 	public HomeWindow() { InitializeComponent(); }

@@ -8,14 +8,14 @@ namespace Agendai.ViewModels;
 
 public class HomeWindowViewModel : ViewModelBase
 {
-	private bool _isPopupOpen;
-	private bool _isEventListsAbleToView = true;
-	private bool _isTodoListsAbleToView = true;
-	public string EventListsVisibilityText => IsEventListsAbleToView ? "Ocultar" : "Exibir";
-	public string TodoListsVisibilityText => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
+	private bool   _isPopupOpen;
+	private bool   _isEventListsAbleToView = true;
+	private bool   _isTodoListsAbleToView  = true;
+	public  string EventListsVisibilityText => IsEventListsAbleToView ? "Ocultar" : "Exibir";
+	public  string TodoListsVisibilityText  => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
 
 	public TodoWindowViewModel TodoWindowVm { get; set; }
-	public EventListViewModel EventListVm { get; set; }
+	public EventListViewModel  EventListVm  { get; set; }
 
 	private ICommand _openPopupCommand;
 	private ICommand _openTodoFormCommand;
@@ -33,6 +33,7 @@ public class HomeWindowViewModel : ViewModelBase
 	public bool IsEventListsAbleToView
 	{
 		get => _isEventListsAbleToView;
+
 		set
 		{
 			if (SetProperty(ref _isEventListsAbleToView, value))
@@ -45,6 +46,7 @@ public class HomeWindowViewModel : ViewModelBase
 	public bool IsTodoListsAbleToView
 	{
 		get => _isTodoListsAbleToView;
+
 		set
 		{
 			if (SetProperty(ref _isTodoListsAbleToView, value))
@@ -76,24 +78,24 @@ public class HomeWindowViewModel : ViewModelBase
 	}
 
 
-	public ICommand OpenPopupCommand => _openPopupCommand;
+	public ICommand OpenPopupCommand    => _openPopupCommand;
 	public ICommand OpenTodoFormCommand => _openTodoFormCommand;
-	
+
 	public ICommand OpenEventFormCommand => _openEventFormCommand;
-	public ICommand OpenAgendaCommand => _openAgendaCommand;
-	public ICommand OpenTodoCommand => _openTodoCommand;
-	public ICommand OpenPomodoroCommand => _openPomodoroCommand;
+	public ICommand OpenAgendaCommand    => _openAgendaCommand;
+	public ICommand OpenTodoCommand      => _openTodoCommand;
+	public ICommand OpenPomodoroCommand  => _openPomodoroCommand;
 
 	public HomeWindowViewModel()
 	{
-		_openPopupCommand = new RelayCommand(() => IsPopupOpen = true);
-		_openTodoFormCommand = new RelayCommand(OpenTodoForm);
-		_openAgendaCommand = new RelayCommand(OpenAgenda);
-		_openTodoCommand = new RelayCommand(OpenTodo);
-		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
+		_openPopupCommand     = new RelayCommand(() => IsPopupOpen = true);
+		_openTodoFormCommand  = new RelayCommand(OpenTodoForm);
+		_openAgendaCommand    = new RelayCommand(OpenAgenda);
+		_openTodoCommand      = new RelayCommand(OpenTodo);
+		_openPomodoroCommand  = new RelayCommand(OpenPomodoro);
 		_openEventFormCommand = new RelayCommand(OpenEventForm);
-		TodoWindowVm = new TodoWindowViewModel(this);
-		EventListVm = new EventListViewModel(TodoWindowVm);
+		TodoWindowVm          = new TodoWindowViewModel(this);
+		EventListVm           = new EventListViewModel(TodoWindowVm);
 	}
 
 	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
@@ -105,22 +107,17 @@ public class HomeWindowViewModel : ViewModelBase
 	private void OpenTodoForm()
 	{
 		IsPopupOpen = false;
-		if (TodoWindowVm != null)
-		{
-			TodoWindowVm.OpenAddTask = true;
-		}
+
+		if (TodoWindowVm != null) { TodoWindowVm.OpenAddTask = true; }
 	}
 
 	private void OpenEventForm()
 	{
 		IsPopupOpen = false;
-		if (EventListVm != null)
-		{
-			EventListVm.OpenAddEvent = true;
-			
-		}
+
+		if (EventListVm != null) { EventListVm.OpenAddEvent = true; }
 	}
-	
+
 	private string[] _selectedListNames = Array.Empty<string>();
 
 
@@ -129,7 +126,7 @@ public class HomeWindowViewModel : ViewModelBase
 		get => _selectedListNames;
 		set => SetProperty(ref _selectedListNames, value);
 	}
-	
+
 	public void AddSelectedListName(string listName)
 	{
 		if (!_selectedListNames.Contains(listName))
@@ -137,6 +134,7 @@ public class HomeWindowViewModel : ViewModelBase
 			SelectedListNames = _selectedListNames.Concat(new[] { listName }).ToArray();
 		}
 	}
+
 	public void RemoveSelectedListName(string listName)
 	{
 		if (_selectedListNames.Contains(listName))

@@ -9,7 +9,7 @@
              x:DataType="vm:TodoWindowViewModel">
 
     <Grid ColumnDefinitions="0.25*, 0.75*">
-        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}"/>
+        <homeSidebar:HomeSidebar Grid.Column="0" DataContext="{Binding HomeWindowVm}" />
 
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto, Auto" Margin="0 0 0 50">
@@ -93,7 +93,7 @@
                 </Grid>
             </Border>
         </Panel>
-        <Panel 
+        <Panel
             Grid.ColumnSpan="2"
             IsVisible="{Binding EventListVm.OpenAddEvent}"
             ZIndex="100">
