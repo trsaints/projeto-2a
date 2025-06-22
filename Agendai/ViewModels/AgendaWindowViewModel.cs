@@ -1,17 +1,18 @@
-using Agendai.Data.Models;
-using Agendai.Messages;
-using Agendai.Services.Views;
-using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using Agendai.Controllers;
 using Agendai.Data.Abstractions;
+using Agendai.Data.Models;
+using Agendai.Messages;
+using Agendai.Services.Views;
+using CommunityToolkit.Mvvm.Messaging;
 
 
-namespace Agendai.ViewModels.Agenda;
+namespace Agendai.ViewModels;
 
 public class AgendaWindowViewModel : ViewModelBase
 {

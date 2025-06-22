@@ -1,6 +1,5 @@
 ﻿using System;
 using Agendai.Messages;
-using Agendai.ViewModels.Agenda;
 using CommunityToolkit.Mvvm.Messaging;
 
 

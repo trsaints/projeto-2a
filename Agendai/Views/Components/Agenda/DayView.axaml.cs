@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Agendai.ViewModels.Agenda;
+using Agendai.ViewModels;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
