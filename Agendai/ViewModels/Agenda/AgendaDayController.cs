@@ -3,53 +3,63 @@ using System.Globalization;
 using Agendai.Services.Views;
 
 
-namespace Agendai.ViewModels.Agenda
+namespace Agendai.ViewModels.Agenda;
+
+public class AgendaDayController
 {
-	public class AgendaDayController
+	#region Dependencies
+
+	private readonly AgendaWindowViewModel _viewModel;
+
+	#endregion
+
+
+	public AgendaDayController(AgendaWindowViewModel viewModel) { _viewModel = viewModel; }
+
+
+	#region Event Handlers
+
+	public void GoToPreviousDay()
 	{
-		private readonly AgendaWindowViewModel _viewModel;
+		_viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(-1);
+		UpdateDayFromDate(_viewModel.CurrentDay);
+	}
 
-		public AgendaDayController(AgendaWindowViewModel viewModel) { _viewModel = viewModel; }
+	public void GoToNextDay()
+	{
+		_viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(1);
+		UpdateDayFromDate(_viewModel.CurrentDay);
+	}
 
-		public void GoToPreviousDay()
-		{
-			_viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(-1);
-			UpdateDayFromDate(_viewModel.CurrentDay);
-		}
+	public void UpdateDayFromDate(DateTime selectedDate)
+	{
+		var culture = new CultureInfo("pt-BR");
+		_viewModel.SelectedDay = culture.TextInfo.ToTitleCase(
+			_viewModel.CurrentDay.ToString("dddd, dd 'de' MMMM", culture)
+		);
 
-		public void GoToNextDay()
-		{
-			_viewModel.CurrentDay = _viewModel.CurrentDay.AddDays(1);
-			UpdateDayFromDate(_viewModel.CurrentDay);
-		}
-
-		public void UpdateDayFromDate(DateTime selectedDate)
-		{
-			var culture = new CultureInfo("pt-BR");
-			_viewModel.SelectedDay = culture.TextInfo.ToTitleCase(
-				_viewModel.CurrentDay.ToString("dddd, dd 'de' MMMM", culture)
-			);
-
-			var mappedItems = DayViewService.MapDayItemsFrom(
+		if (_viewModel is { EventList: not null, TodoList: not null })
+			DayViewService.MapDayItemsFrom(
 				_viewModel.EventList.Events,
 				_viewModel.TodoList.Todos,
 				selectedDate,
 				_viewModel.SelectedListNames
 			);
 
-			_viewModel.UpdateDataGridItems();
-		}
-
-		public void GoToDay(int dayNumber)
-		{
-			var selectedDate = new DateTime(
-				_viewModel.CurrentMonth.Year,
-				_viewModel.CurrentMonth.Month,
-				dayNumber
-			);
-			_viewModel.CurrentDay    = selectedDate;
-			_viewModel.SelectedIndex = 2;
-			UpdateDayFromDate(selectedDate);
-		}
+		_viewModel.UpdateDataGridItems();
 	}
+
+	public void GoToDay(int dayNumber)
+	{
+		var selectedDate = new DateTime(
+			_viewModel.CurrentMonth.Year,
+			_viewModel.CurrentMonth.Month,
+			dayNumber
+		);
+		_viewModel.CurrentDay    = selectedDate;
+		_viewModel.SelectedIndex = 2;
+		UpdateDayFromDate(selectedDate);
+	}
+
+	#endregion
 }
