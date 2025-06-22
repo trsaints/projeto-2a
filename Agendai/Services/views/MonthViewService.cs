@@ -1,4 +1,5 @@
 ﻿using Agendai.Data.Models;
+using Agendai.Services.Recurrency;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,6 +51,9 @@ namespace Agendai.Services.Views
             DateTime firstDay = new(referenceDate.Year, referenceDate.Month, 1);
             int startOffset = (int)firstDay.DayOfWeek;
 
+            DateTime monthStart = firstDay;
+            DateTime monthEnd = firstDay.AddMonths(1).AddDays(-1);
+
             var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
                 ? events
                 : events.Where(e => selectedListNames.Contains(e.AgendaName));
@@ -66,15 +70,62 @@ namespace Agendai.Services.Views
                 filteredTodos = filteredTodos.Where(t => t.Name != null && t.Name.ToLower().Contains(normalized));
             }
 
-            var eventMap = filteredEvents
-                .Where(e => e.Due.Month == referenceDate.Month && e.Due.Year == referenceDate.Year)
-                .GroupBy(e => e.Due.Day)
-                .ToDictionary(g => g.Key, g => g.ToList());
+            var occurrences = new List<(DateTime due, object item)>();
 
-            var todoMap = filteredTodos
-                .Where(t => t.Due.Month == referenceDate.Month && t.Due.Year == referenceDate.Year)
-                .GroupBy(t => t.Due.Day)
-                .ToDictionary(g => g.Key, g => g.ToList());
+            foreach (var ev in filteredEvents)
+            {
+                if (ev.Repeats == Repeats.None)
+                {
+                    if (ev.Due >= monthStart && ev.Due <= monthEnd)
+                        occurrences.Add((ev.Due, ev));
+                }
+                else
+                {
+                    var scheduler = new RecurringScheduler<Event>(ev);
+                    RecurrenceOccurrence<Event>? occ;
+                    while ((occ = scheduler.GetNext()) != null)
+                    {
+                        if (occ.Due > monthEnd) break;
+                        if (occ.Due >= monthStart)
+                        {
+                            occurrences.Add((occ.Due, occ.Item));
+                        }
+                    }
+
+                }
+            }
+
+            foreach (var todo in filteredTodos)
+            {
+                if (todo.Repeats == Repeats.None)
+                {
+                    if (todo.Due >= monthStart && todo.Due <= monthEnd)
+                        occurrences.Add((todo.Due, todo));
+                }
+                else
+                {
+                    var scheduler = new RecurringScheduler<Todo>(todo);
+                    RecurrenceOccurrence<Todo>? occ;
+                    while ((occ = scheduler.GetNext()) != null)
+                    {
+                        if (occ.Due > monthEnd) break;
+                        if (occ.Due >= monthStart)
+                        {
+                            occurrences.Add((occ.Due, occ.Item));
+                        }
+                    }
+
+                }
+            }
+
+            var dayMap = new Dictionary<int, List<object>>();
+            foreach (var (due, item) in occurrences)
+            {
+                int day = due.Day;
+                if (!dayMap.ContainsKey(day))
+                    dayMap[day] = new List<object>();
+                dayMap[day].Add(item);
+            }
 
             int currentDay = 1;
             var totalSlots = daysInMonth + startOffset;
@@ -91,16 +142,14 @@ namespace Agendai.Services.Views
                         var cell = new DayCell
                         {
                             DayNumber = currentDay,
-                            Items = []
+                            Items = new ObservableCollection<object>()
                         };
 
-                        if (showData && eventMap.TryGetValue(currentDay, out var evts))
-                            foreach (var evt in evts)
-                                cell.Items.Add(evt);
-
-                        if (showData && todoMap.TryGetValue(currentDay, out var tds))
-                            foreach (var todo in tds)
-                                cell.Items.Add(todo);
+                        if (showData && dayMap.TryGetValue(currentDay, out var items))
+                        {
+                            foreach (var item in items)
+                                cell.Items.Add(item);
+                        }
 
                         row[d] = cell;
                         currentDay++;
@@ -115,6 +164,5 @@ namespace Agendai.Services.Views
 
             return referenceDate;
         }
-
     }
 }
