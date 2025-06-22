@@ -170,7 +170,7 @@ public class EventListViewModel : ViewModelBase
             Events = new ObservableCollection<Event>(Events.Where(e => e.AgendaName == name))
         });
 
-    public TodoWindowViewModel TodoWindowVm { get; }
+    public TodoWindowViewModel? TodoWindowVm { get; }
 
     public Action? OnEventAddedOrUpdated { get; set; }
 
@@ -226,8 +226,8 @@ public class EventListViewModel : ViewModelBase
         }
 
         bool hasTaskChanges = 
-            !string.IsNullOrWhiteSpace(TodoWindowVm.NewTaskName?.Trim()) ||
-            !string.IsNullOrWhiteSpace(TodoWindowVm.SelectedTodoName?.Trim()) ||
+            !string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName?.Trim()) ||
+            !string.IsNullOrWhiteSpace(TodoWindowVm?.SelectedTodoName?.Trim()) ||
             taskListChanged;
 
         CanSave = !string.IsNullOrWhiteSpace(NewEventName)
@@ -282,7 +282,8 @@ public class EventListViewModel : ViewModelBase
         NewDue = DateTime.Today;
         Repeat = new RepeatsOption { Repeats = Repeats.None };
         AgendaName = string.Empty;
-        TodoWindowVm.SelectedTodoName = string.Empty;
+        if(TodoWindowVm != null)
+            TodoWindowVm.SelectedTodoName = string.Empty;
         _currentEvent = null;
         SelectedEvent = null;
     }
@@ -298,7 +299,7 @@ public class EventListViewModel : ViewModelBase
 
         TodosForSelectedEvent.Remove(todo);
         
-        TodoWindowVm.FreeTodos.Add(todo);
+        TodoWindowVm?.FreeTodos.Add(todo);
 
         todo.RelatedEvent = null;
 
@@ -315,7 +316,7 @@ public class EventListViewModel : ViewModelBase
     {
         OpenAddEvent = false;
         ClearEventForm();
-        TodoWindowVm.ClearTodoForm();
+        TodoWindowVm?.ClearTodoForm();
         UpdateCanSave();
     }
 
