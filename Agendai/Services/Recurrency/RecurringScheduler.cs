@@ -12,7 +12,7 @@ namespace Agendai.Services.Recurrency
         private readonly Queue<RecurrenceOccurrence<T>> _upcoming = new();
         private readonly Stack<RecurrenceOccurrence<T>> _past = new();
 
-        public RecurringScheduler(T template, int limit = 31)
+        public RecurringScheduler(T template, int limit = 32)
         {
             _template = template;
             _limit = limit;
@@ -29,9 +29,6 @@ namespace Agendai.Services.Recurrency
             FillOccurrences(next.Due);
             return next;
         }
-
-        public IEnumerable<RecurrenceOccurrence<T>> GetUpcoming() => _upcoming;
-        public IEnumerable<RecurrenceOccurrence<T>> GetPast() => _past;
 
         private void FillOccurrences(DateTime from)
         {
