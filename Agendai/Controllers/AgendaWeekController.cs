@@ -1,10 +1,11 @@
-﻿using Agendai.Services.Views;
+﻿using Agendai.Controllers.Interfaces;
+using Agendai.Services.Views;
 using Agendai.ViewModels;
 
 
 namespace Agendai.Controllers;
 
-public class AgendaWeekController
+public class AgendaWeekController : IAgendaWeekController
 {
 	#region Dependencies
 
