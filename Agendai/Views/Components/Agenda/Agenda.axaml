@@ -1,8 +1,8 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:local="clr-namespace:Agendai.Data.Converters"
              xmlns:views="clr-namespace:Agendai.Views.Components.Agenda"
+             xmlns:vm="clr-namespace:Agendai.ViewModels"
              x:Class="Agendai.Views.Components.Agenda.Agenda"
              x:DataType="vm:AgendaWindowViewModel">
 

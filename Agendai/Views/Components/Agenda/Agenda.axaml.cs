@@ -1,5 +1,5 @@
 ﻿using Agendai.Data.Models;
-using Agendai.ViewModels.Agenda;
+using Agendai.ViewModels;
 using Avalonia.Controls;
 
 

@@ -1,10 +1,11 @@
 using System.Windows.Input;
+using Agendai.ViewModels.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 
 
 namespace Agendai.ViewModels;
 
-public class HomeWindowViewModel : ViewModelBase
+public class HomeWindowViewModel : ViewModelBase, IHomeWindowViewModel
 {
 	#region View-Model State
 

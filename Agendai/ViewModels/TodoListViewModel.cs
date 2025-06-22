@@ -1,8 +1,6 @@
-using System.Collections.ObjectModel;
-using Agendai.Data.Models;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Agendai.ViewModels.Interfaces;
 
 
 namespace Agendai.ViewModels;
 
-public class TodoListViewModel : ObservableObject { }
+public class TodoListViewModel : ViewModelBase, ITodoListViewModel;
