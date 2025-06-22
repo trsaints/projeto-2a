@@ -1,5 +1,5 @@
 ﻿using Agendai.Data.Models;
-using Agendai.Services.Recurrency;
+using Agendai.Services.Recurrence;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
