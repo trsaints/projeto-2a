@@ -29,7 +29,7 @@ namespace Agendai.ViewModels.Agenda
 
 			WeekViewService.GenerateWeekView(
 				_viewModel.WeekViewRows,
-				_viewModel.Hours,
+				AgendaWindowViewModel.Hours,
 				_viewModel.EventList.Events,
 				_viewModel.TodoList.Todos,
 				_viewModel.CurrentWeek,
