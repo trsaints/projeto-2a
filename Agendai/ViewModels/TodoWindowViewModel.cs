@@ -266,6 +266,8 @@ public class TodoWindowViewModel : ViewModelBase
               || EditingTodo.Due != NewDue
               || EditingTodo.Repeats != SelectedRepeats.Repeats
               || EditingTodo.ListName != ListName;
+
+        ((RelayCommand<Event?>)AddTodoCommand).NotifyCanExecuteChanged();
     }
 
     public void ClearTodoForm()
