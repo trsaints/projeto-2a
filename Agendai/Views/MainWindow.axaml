@@ -10,5 +10,5 @@
         Title="Agendai">
 
     <ContentControl Content="{Binding CurrentViewModel}" />
-    
+
 </Window>

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
@@ -8,21 +6,57 @@ namespace Agendai.ViewModels;
 
 public class HomeWindowViewModel : ViewModelBase
 {
+	#region View-Model State
+
 	private bool _isPopupOpen;
 	private bool _isEventListsAbleToView = true;
-	private bool _isTodoListsAbleToView = true;
+	private bool _isTodoListsAbleToView  = true;
+
+
+	private bool _isAgendaWindow;
+	private bool _isTodoWindow;
+	private bool _isPomodoroWindow;
+
+	#endregion
+
+
+	#region Dependencies
+
+	public TodoWindowViewModel? TodoWindowVm { get; set; }
+	public EventListViewModel?  EventListVm  { get; set; }
+
+	#endregion
+
+
+	public HomeWindowViewModel()
+	{
+		OpenPopupCommand     = new RelayCommand(() => IsPopupOpen = true);
+		OpenTodoFormCommand  = new RelayCommand(OpenTodoForm);
+		OpenAgendaCommand    = new RelayCommand(OpenAgenda);
+		OpenTodoCommand      = new RelayCommand(OpenTodo);
+		OpenPomodoroCommand  = new RelayCommand(OpenPomodoro);
+		OpenEventFormCommand = new RelayCommand(OpenEventForm);
+		TodoWindowVm         = new TodoWindowViewModel(this);
+		EventListVm          = new EventListViewModel(TodoWindowVm);
+	}
+
 	public string EventListsVisibilityText => IsEventListsAbleToView ? "Ocultar" : "Exibir";
-	public string TodoListsVisibilityText => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
+	public string TodoListsVisibilityText  => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
 
-	public TodoWindowViewModel TodoWindowVm { get; set; }
-	public EventListViewModel EventListVm { get; set; }
 
-	private ICommand _openPopupCommand;
-	private ICommand _openTodoFormCommand;
-	private ICommand _openAgendaCommand;
-	private ICommand _openTodoCommand;
-	private ICommand _openPomodoroCommand;
-	private ICommand _openEventFormCommand;
+	#region Commands
+
+	public ICommand OpenPopupCommand     { get; }
+	public ICommand OpenTodoFormCommand  { get; }
+	public ICommand OpenEventFormCommand { get; }
+	public ICommand OpenAgendaCommand    { get; }
+	public ICommand OpenTodoCommand      { get; }
+	public ICommand OpenPomodoroCommand  { get; }
+
+	#endregion
+
+
+	#region State Tracking
 
 	public bool IsPopupOpen
 	{
@@ -33,6 +67,7 @@ public class HomeWindowViewModel : ViewModelBase
 	public bool IsEventListsAbleToView
 	{
 		get => _isEventListsAbleToView;
+
 		set
 		{
 			if (SetProperty(ref _isEventListsAbleToView, value))
@@ -45,6 +80,7 @@ public class HomeWindowViewModel : ViewModelBase
 	public bool IsTodoListsAbleToView
 	{
 		get => _isTodoListsAbleToView;
+
 		set
 		{
 			if (SetProperty(ref _isTodoListsAbleToView, value))
@@ -53,48 +89,27 @@ public class HomeWindowViewModel : ViewModelBase
 			}
 		}
 	}
-
-	private bool _isAgendaWindow;
 	public bool IsAgendaWindow
 	{
 		get => _isAgendaWindow;
 		set => SetProperty(ref _isAgendaWindow, value);
 	}
 
-	private bool _isTodoWindow;
 	public bool IsTodoWindow
 	{
 		get => _isTodoWindow;
 		set => SetProperty(ref _isTodoWindow, value);
 	}
 
-	private bool _isPomodoroWindow;
 	public bool IsPomodoroWindow
 	{
-		get => _isPomodoroWindow;
 		set => SetProperty(ref _isPomodoroWindow, value);
 	}
 
+	#endregion
 
-	public ICommand OpenPopupCommand => _openPopupCommand;
-	public ICommand OpenTodoFormCommand => _openTodoFormCommand;
-	
-	public ICommand OpenEventFormCommand => _openEventFormCommand;
-	public ICommand OpenAgendaCommand => _openAgendaCommand;
-	public ICommand OpenTodoCommand => _openTodoCommand;
-	public ICommand OpenPomodoroCommand => _openPomodoroCommand;
 
-	public HomeWindowViewModel()
-	{
-		_openPopupCommand = new RelayCommand(() => IsPopupOpen = true);
-		_openTodoFormCommand = new RelayCommand(OpenTodoForm);
-		_openAgendaCommand = new RelayCommand(OpenAgenda);
-		_openTodoCommand = new RelayCommand(OpenTodo);
-		_openPomodoroCommand = new RelayCommand(OpenPomodoro);
-		_openEventFormCommand = new RelayCommand(OpenEventForm);
-		TodoWindowVm = new TodoWindowViewModel(this);
-		EventListVm = new EventListViewModel(TodoWindowVm);
-	}
+	#region Event Handlers
 
 	private void OpenAgenda() { MainViewModel?.NavigateToAgenda(); }
 
@@ -105,43 +120,20 @@ public class HomeWindowViewModel : ViewModelBase
 	private void OpenTodoForm()
 	{
 		IsPopupOpen = false;
-		if (TodoWindowVm != null)
-		{
-			TodoWindowVm.OpenAddTask = true;
-		}
+
+		if (TodoWindowVm is null) return;
+
+		TodoWindowVm.OpenAddTask = true;
 	}
 
 	private void OpenEventForm()
 	{
 		IsPopupOpen = false;
-		if (EventListVm != null)
-		{
-			EventListVm.OpenAddEvent = true;
-			
-		}
-	}
-	
-	private string[] _selectedListNames = Array.Empty<string>();
 
+		if (EventListVm is null) return;
 
-	public string[] SelectedListNames
-	{
-		get => _selectedListNames;
-		set => SetProperty(ref _selectedListNames, value);
+		EventListVm.OpenAddEvent = true;
 	}
-	
-	public void AddSelectedListName(string listName)
-	{
-		if (!_selectedListNames.Contains(listName))
-		{
-			SelectedListNames = _selectedListNames.Concat(new[] { listName }).ToArray();
-		}
-	}
-	public void RemoveSelectedListName(string listName)
-	{
-		if (_selectedListNames.Contains(listName))
-		{
-			SelectedListNames = _selectedListNames.Where(name => name != listName).ToArray();
-		}
-	}
+
+	#endregion
 }

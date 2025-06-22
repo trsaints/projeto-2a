@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
-    
+
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type models:Event}">
             <Button Click="ForwardClickToParent"
@@ -23,7 +23,7 @@
 
 
         <DataTemplate DataType="{x:Type models:Todo}">
-            <Button Click="ForwardClickToParent" 
+            <Button Click="ForwardClickToParent"
                     Margin="2"
                     Padding="1"
                     BorderBrush="Black"
@@ -39,7 +39,7 @@
 
     </UserControl.DataTemplates>
 
-    
+
     <StackPanel>
         <Grid Margin="0 0 0 20">
             <Grid.ColumnDefinitions>
@@ -94,9 +94,9 @@
                                  ItemsSource="{Binding SearchableItems}"
                                  GotFocus="SearchText_OnGotFocus"
                                  FilterMode="Contains"
-                                 MinimumPrefixLength="0" 
+                                 MinimumPrefixLength="0"
                                  TextChanged="SearchBox_TextChanged"
-                                 SelectionChanged="SearchBox_SelectionChanged"/>
+                                 SelectionChanged="SearchBox_SelectionChanged" />
             </StackPanel>
 
             <Button Grid.Column="2"
@@ -118,13 +118,12 @@
         </Grid>
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
             <ScrollViewer VerticalScrollBarVisibility="Hidden" MaxHeight="500">
-                <DataGrid 
-                    ItemsSource="{Binding WeekViewRows}" 
-                    AutoGenerateColumns="False" 
+                <DataGrid
+                    ItemsSource="{Binding WeekViewRows}"
+                    AutoGenerateColumns="False"
                     HeadersVisibility="Column"
                     IsReadOnly="True"
-                    GridLinesVisibility="Vertical"
-                    >
+                    GridLinesVisibility="Vertical">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Hour}" />
 
@@ -134,7 +133,7 @@
                                     <ItemsControl ItemsSource="{Binding Sunday.Items}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <ContentControl Content="{Binding}" /> 
+                                                <ContentControl Content="{Binding}" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
@@ -162,7 +161,7 @@
                                     <ItemsControl ItemsSource="{Binding Tuesday.Items}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <ContentControl Content="{Binding}" /> 
+                                                <ContentControl Content="{Binding}" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

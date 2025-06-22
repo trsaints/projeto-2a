@@ -1,45 +1,57 @@
 ﻿using System.Globalization;
 using Agendai.Services.Views;
 
-namespace Agendai.ViewModels.Agenda
+
+namespace Agendai.ViewModels.Agenda;
+
+public class AgendaMonthController
 {
-    public class AgendaMonthController
-    {
-        private readonly AgendaWindowViewModel _viewModel;
+	#region Dependencies
 
-        public AgendaMonthController(AgendaWindowViewModel viewModel)
-        {
-            _viewModel = viewModel;
-        }
+	private readonly AgendaWindowViewModel _viewModel;
 
-        public void GoToPreviousMonth()
-        {
-            _viewModel.CurrentMonth = _viewModel.CurrentMonth.AddMonths(-1);
-            UpdateMonthFromDate();
-        }
+	#endregion
 
-        public void GoToNextMonth()
-        {
-            _viewModel.CurrentMonth = _viewModel.CurrentMonth.AddMonths(1);
-            UpdateMonthFromDate();
-        }
 
-        public void UpdateMonthFromDate()
-        {
-            var culture = new CultureInfo("pt-BR");
-            _viewModel.SelectedMonth = culture.TextInfo.ToTitleCase(_viewModel.CurrentMonth.ToString("MMMM", culture));
+	public AgendaMonthController(AgendaWindowViewModel viewModel) { _viewModel = viewModel; }
 
-            MonthViewService.GenerateMonthView(
-                _viewModel.MonthViewRows,
-                _viewModel.EventList.Events,
-                _viewModel.TodoList.Todos,
-                _viewModel.CurrentMonth,
-                _viewModel.ShowData,
-                _viewModel.SelectedListNames,
-                _viewModel.SearchText
-            );
 
-            _viewModel.UpdateDataGridItems();
-        }
-    }
+	#region Event Handlers
+
+	public void GoToPreviousMonth()
+	{
+		_viewModel.CurrentMonth = _viewModel.CurrentMonth.AddMonths(-1);
+		UpdateMonthFromDate();
+	}
+
+	public void GoToNextMonth()
+	{
+		_viewModel.CurrentMonth = _viewModel.CurrentMonth.AddMonths(1);
+		UpdateMonthFromDate();
+	}
+
+	private void UpdateMonthFromDate()
+	{
+		var culture = new CultureInfo("pt-BR");
+
+		_viewModel.SelectedMonth =
+				culture.TextInfo.ToTitleCase(
+					_viewModel.CurrentMonth.ToString("MMMM", culture)
+				);
+
+		if (_viewModel is { EventList: not null, TodoList: not null })
+			MonthViewService.GenerateMonthView(
+				_viewModel.MonthViewRows,
+				_viewModel.EventList.Events,
+				_viewModel.TodoList.Todos,
+				_viewModel.CurrentMonth,
+				_viewModel.ShowData,
+				_viewModel.SelectedListNames,
+				_viewModel.SearchText
+			);
+
+		_viewModel.UpdateDataGridItems();
+	}
+
+	#endregion
 }
