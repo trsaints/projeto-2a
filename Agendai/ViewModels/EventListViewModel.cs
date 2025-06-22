@@ -4,14 +4,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Agendai.Data;
+using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
+using Agendai.ViewModels.Interfaces;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 
 
 namespace Agendai.ViewModels;
 
-public class EventListViewModel : ViewModelBase
+public class EventListViewModel : ViewModelBase, IEventListViewModel
 {
 	#region View-Model State
 
@@ -174,7 +176,7 @@ public class EventListViewModel : ViewModelBase
 
 	private bool _hasRelatedTodos;
 	public bool HasRelatedTodos
-	{
+	{	
 		get => _hasRelatedTodos;
 		set => SetProperty(ref _hasRelatedTodos, value);
 	}

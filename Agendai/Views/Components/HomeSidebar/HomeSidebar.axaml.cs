@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Agendai.ViewModels;
 using Avalonia.Interactivity;
 using Agendai.Data;
+using Agendai.Data.Abstractions;
 
 
 namespace Agendai.Views.Components.HomeSidebar;

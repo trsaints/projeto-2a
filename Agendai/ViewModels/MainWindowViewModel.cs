@@ -1,12 +1,12 @@
 ﻿using System;
 using Agendai.Messages;
-using Agendai.ViewModels.Agenda;
+using Agendai.ViewModels.Interfaces;
 using CommunityToolkit.Mvvm.Messaging;
 
 
 namespace Agendai.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase, IMainWindowViewModel
 {
 	#region View-Model State
 
