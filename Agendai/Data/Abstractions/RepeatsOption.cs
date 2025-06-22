@@ -2,7 +2,7 @@
 using Agendai.Data.Models;
 
 
-namespace Agendai.Data;
+namespace Agendai.Data.Abstractions;
 
 public class RepeatsOption
 {

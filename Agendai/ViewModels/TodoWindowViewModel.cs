@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Agendai.Data;
+using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
