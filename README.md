@@ -15,6 +15,8 @@ Nesse projeto foram utilizadas diversas estruturas de dados, cada uma com uma fu
 ### Vetores
 São utilizados para armazenar dados sequenciais que precisam ser mapeados diretamente para a interface, como a lista de horários que preenche as visualizações diárias e semanais.
 
+![img_1.png](./Agendai/Assets/array-example.png)
+
 ### Dicionários (hash)
 Usados para armazenar dados que têm uma chave única, como o número de dias em cada mês. Dessa forma, a transição entre visualizações utiliza o dicionário para saber o limite de dias que cada mês pode ter.
 
@@ -31,6 +33,10 @@ Aqui há um destaque para a utilização das listas e pilhas, pois elas são fun
 - Já as pilhas armazenam o histórico de ocorrências que já passaram. Essa estrutura funciona perfeitamente aqui porque segue o princípio LIFO (Last In, First Out), permitindo que a ocorrência mais recente concluída esteja sempre no topo para consulta ou reversão, facilitando a manutenção e auditoria dessas instâncias.
 
 Essa combinação dá flexibilidade para o sistema “enxergar o futuro” (com as listas) e “relembrar o passado” (com as pilhas), tornando o gerenciamento da recorrência eficiente e organizado.
+
+![img.png](./Agendai/Assets/recurrence-exampl.png)
+
+No caso da imagem acima, a tarefa "Treino Fullbody" possui uma recorrência diária, repetindo para todos os dias até que seja dada como "Completa"
 
 ## Inicializando o Sistema
 O Agendai não requer variáveis de ambiente nem configuração prévia. Todo o gerenciamento de dados é realizado localmente por meio de um banco de dados SQLite, que será criado automaticamente na primeira execução do sistema.
