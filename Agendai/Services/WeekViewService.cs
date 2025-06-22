@@ -23,10 +23,10 @@ public static class WeekViewService
 	{
 		rows.Clear();
 
-		var filteredTodos = (selectedListNames == null || selectedListNames.Length == 0)
+		var filteredTodos = selectedListNames == null || selectedListNames.Length == 0
 				? todos
 				: todos.Where(t => selectedListNames.Contains(t.ListName));
-		var filteredEvents = (selectedListNames == null || selectedListNames.Length == 0)
+		var filteredEvents = selectedListNames == null || selectedListNames.Length == 0
 				? events
 				: events.Where(e => selectedListNames.Contains(e.AgendaName));
 
@@ -36,11 +36,17 @@ public static class WeekViewService
 
 			filteredEvents = filteredEvents
 					.Where(e => !string.IsNullOrEmpty(e.Name)
-					            && e.Name.ToLower().Contains(normalized)
+					            && e.Name.Contains(
+						            normalized,
+						            StringComparison.CurrentCultureIgnoreCase
+					            )
 					);
 			filteredTodos = filteredTodos
 					.Where(t => !string.IsNullOrEmpty(t.Name)
-					            && t.Name.ToLower().Contains(normalized)
+					            && t.Name.Contains(
+						            normalized,
+						            StringComparison.CurrentCultureIgnoreCase
+					            )
 					);
 
 			var minDateEvent = filteredEvents.MinOrDefault(e => e.Due, DateTime.MaxValue);
@@ -57,53 +63,53 @@ public static class WeekViewService
 
 		foreach (var ev in filteredEvents.Where(e => e.Repeats != Repeats.None))
 		{
-			var                          scheduler = new RecurringScheduler<Event>(ev);
-			RecurrenceOccurrence<Event>? occ;
+			var scheduler = new RecurringScheduler<Event>(ev);
 
-			while ((occ = scheduler.GetNext()) != null)
+			while (scheduler.GetNext() is { } occ)
 			{
 				if (occ.Due.Date > endOfWeek) break;
 
-				if (occ.Due.Date >= startOfWeek)
-				{
-					var key = new DateTime(
-						occ.Due.Year,
-						occ.Due.Month,
-						occ.Due.Day,
-						occ.Due.Hour,
-						0,
-						0
-					);
-					if (!occurrenceMap.ContainsKey(key))
-						occurrenceMap[key] = new List<object>();
-					occurrenceMap[key].Add(occ.Item);
-				}
+				if (occ.Due.Date < startOfWeek) continue;
+
+				var key = new DateTime(
+					occ.Due.Year,
+					occ.Due.Month,
+					occ.Due.Day,
+					occ.Due.Hour,
+					0,
+					0
+				);
+
+				if (!occurrenceMap.ContainsKey(key))
+					occurrenceMap[key] = [];
+
+				occurrenceMap[key].Add(occ.Item);
 			}
 		}
 
 		foreach (var todo in filteredTodos.Where(t => t.Repeats != Repeats.None))
 		{
-			var                         scheduler = new RecurringScheduler<Todo>(todo);
-			RecurrenceOccurrence<Todo>? occ;
+			var scheduler = new RecurringScheduler<Todo>(todo);
 
-			while ((occ = scheduler.GetNext()) != null)
+			while (scheduler.GetNext() is { } occ)
 			{
 				if (occ.Due.Date > endOfWeek) break;
 
-				if (occ.Due.Date >= startOfWeek)
-				{
-					var key = new DateTime(
-						occ.Due.Year,
-						occ.Due.Month,
-						occ.Due.Day,
-						occ.Due.Hour,
-						0,
-						0
-					);
-					if (!occurrenceMap.ContainsKey(key))
-						occurrenceMap[key] = new List<object>();
-					occurrenceMap[key].Add(occ.Item);
-				}
+				if (occ.Due.Date < startOfWeek) continue;
+
+				var key = new DateTime(
+					occ.Due.Year,
+					occ.Due.Month,
+					occ.Due.Day,
+					occ.Due.Hour,
+					0,
+					0
+				);
+
+				if (!occurrenceMap.ContainsKey(key))
+					occurrenceMap[key] = [];
+
+				occurrenceMap[key].Add(occ.Item);
 			}
 		}
 
@@ -111,10 +117,10 @@ public static class WeekViewService
 		{
 			var row = new WeekRow { Hour = hour };
 
-			for (int i = 0; i < 7; i++)
+			for (var i = 0; i < 7; i++)
 			{
 				var day  = startOfWeek.AddDays(i);
-				var cell = new DayCell { Items = new ObservableCollection<object>() };
+				var cell = new DayCell { Items = [] };
 
 				if (showData)
 				{
@@ -155,7 +161,7 @@ public static class WeekViewService
 		return referenceDate;
 	}
 
-	public static TKey MinOrDefault<TSource, TKey>(
+	private static TKey MinOrDefault<TSource, TKey>(
 		this IEnumerable<TSource> source,
 		Func<TSource, TKey>       selector,
 		TKey                      defaultValue
@@ -170,8 +176,8 @@ public static class WeekViewService
 		var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
 		var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
 
-		int totalDays  = (date - firstDayOfMonth).Days + dayOfWeekOffset;
-		int weekNumber = (int)Math.Floor(totalDays / 7.0) + 1;
+		var totalDays  = (date - firstDayOfMonth).Days + dayOfWeekOffset;
+		var weekNumber = (int)Math.Floor(totalDays / 7.0) + 1;
 
 		var startOfWeek = date.Date.AddDays(-(int)date.DayOfWeek);
 
