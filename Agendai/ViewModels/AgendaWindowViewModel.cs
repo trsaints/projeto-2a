@@ -9,12 +9,13 @@ using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
 using Agendai.Messages;
 using Agendai.Services.Views;
+using Agendai.ViewModels.Interfaces;
 using CommunityToolkit.Mvvm.Messaging;
 
 
 namespace Agendai.ViewModels;
 
-public class AgendaWindowViewModel : ViewModelBase
+public class AgendaWindowViewModel : ViewModelBase, IAgendaWindowViewModel
 {
 	#region View-Model State
 
