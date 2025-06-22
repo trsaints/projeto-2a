@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml.Templates;
 
@@ -35,9 +34,9 @@ public class ViewIndexToTemplateConverter : IValueConverter
 	}
 
 	public object ConvertBack(
-		object      value,
+		object?     value,
 		Type        targetType,
-		object      parameter,
+		object?     parameter,
 		CultureInfo culture
 	) =>
 			throw new NotImplementedException();

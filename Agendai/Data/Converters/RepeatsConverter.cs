@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Agendai.Data.Models;
-using Avalonia.Data.Converters;
+﻿using Agendai.Data.Models;
 
 
 namespace Agendai.Data.Converters;
@@ -18,19 +15,6 @@ public class RepeatsConverter
 			Repeats.Monthly => "Mensalmente",
 			Repeats.Anually => "Anualmente",
 			_               => ""
-		};
-	}
-
-	public static Repeats ConvertBack(string value)
-	{
-		return value switch
-		{
-			"Nunca"        => Repeats.None,
-			"Diariamente"  => Repeats.Daily,
-			"Semanalmente" => Repeats.Weekly,
-			"Mensalmente"  => Repeats.Monthly,
-			"Anualmente"   => Repeats.Anually,
-			_              => Repeats.None
 		};
 	}
 }

@@ -8,7 +8,7 @@ namespace Agendai.Data.Converters;
 
 public class StatusConverter : IValueConverter
 {
-	public object? Convert(
+	public object Convert(
 		object?     value,
 		Type        targetType,
 		object?     parameter,
@@ -29,7 +29,7 @@ public class StatusConverter : IValueConverter
 		};
 	}
 
-	public object? ConvertBack(
+	public object ConvertBack(
 		object?     value,
 		Type        targetType,
 		object?     parameter,
