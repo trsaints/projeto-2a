@@ -5,7 +5,6 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Agendai.Controllers;
-using Agendai.Services.Views;
 using Avalonia.Markup.Xaml;
 using Agendai.ViewModels;
 using Agendai.Views;

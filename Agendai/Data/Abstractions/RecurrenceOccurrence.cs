@@ -1,9 +1,10 @@
 ﻿using System;
+using Agendai.Data.Models;
 
 
-namespace Agendai.Services.Recurrence;
+namespace Agendai.Data.Abstractions;
 
-public class RecurrenceOccurrence<T> where T : Data.Models.Recurrence
+public class RecurrenceOccurrence<T> where T : Recurrence
 {
 	public T        Item { get; }
 	public DateTime Due  { get; }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
 
 
-namespace Agendai.Services.Recurrence;
+namespace Agendai.Services;
 
-public class RecurringScheduler<T> where T : Data.Models.Recurrence
+public class RecurringScheduler<T> where T : Recurrence
 {
 	private readonly T                              _template;
 	private readonly int                            _limit;

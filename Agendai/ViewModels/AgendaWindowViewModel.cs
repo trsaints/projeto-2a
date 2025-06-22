@@ -8,7 +8,7 @@ using Agendai.Controllers;
 using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
 using Agendai.Messages;
-using Agendai.Services.Views;
+using Agendai.Services;
 using Agendai.ViewModels.Interfaces;
 using CommunityToolkit.Mvvm.Messaging;
 
