@@ -6,13 +6,14 @@ using System.Windows.Input;
 using Agendai.Data;
 using Agendai.Data.Abstractions;
 using Agendai.Data.Models;
+using Agendai.ViewModels.Interfaces;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 
 
 namespace Agendai.ViewModels;
 
-public class TodoWindowViewModel : ViewModelBase
+public class TodoWindowViewModel : ViewModelBase, ITodoWindowViewModel
 {
 	#region View-Model State
 
