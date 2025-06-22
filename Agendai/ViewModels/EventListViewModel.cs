@@ -176,7 +176,7 @@ public class EventListViewModel : ViewModelBase, IEventListViewModel
 
 	private bool _hasRelatedTodos;
 	public bool HasRelatedTodos
-	{
+	{	
 		get => _hasRelatedTodos;
 		set => SetProperty(ref _hasRelatedTodos, value);
 	}
