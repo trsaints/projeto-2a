@@ -1,7 +1,7 @@
 # 📅 Agendai
 Agendai é uma aplicação gráfica desenvolvida com o objetivo de gerenciar compromissos pessoais e profissionais de forma prática e organizada. Voltada para uso individual, permite o registro, edição e consulta de eventos, funcionando como um sistema pessoal de organização de tarefas e agendamentos.
 
-## Conteúdos
+## Sumário
 
 * [Estruturas de Dados](#estruturas-de-dados)
 * [Recorrência de Eventos e Tarefas](#recorrência-de-eventos-e-tarefas)
@@ -9,15 +9,15 @@ Agendai é uma aplicação gráfica desenvolvida com o objetivo de gerenciar com
 * [Requisitos](#requisitos)
 * [Estrutura do Sistema](#estrutura-do-sistema)
 
+---
+
 ## Estruturas de Dados
 Nesse projeto foram utilizadas diversas estruturas de dados, cada uma com uma função específica:
 
 ### Vetores
 São utilizados para armazenar dados sequenciais que precisam ser mapeados diretamente para a interface, como a lista de horários que preenche as visualizações diárias e semanais.
 
-![img_1.png](./Agendai/Assets/array-example.png)
-
-### Dicionários (hash)
+### Dicionários
 Usados para armazenar dados que têm uma chave única, como o número de dias em cada mês. Dessa forma, a transição entre visualizações utiliza o dicionário para saber o limite de dias que cada mês pode ter.
 
 ### Listas
@@ -25,6 +25,8 @@ Armazenam coleções ordenadas e dinâmicas, como as próximas ocorrências de e
 
 ### Pilhas
 Usadas para armazenar ocorrências que já passaram, funcionando como um histórico. Como a pilha segue o princípio LIFO (Last In, First Out), conseguimos acessar facilmente a última ocorrência concluída e gerenciar o que já foi feito.
+
+---
 
 ## Recorrência de Eventos e Tarefas
 Aqui há um destaque para a utilização das listas e pilhas, pois elas são fundamentais para gerenciar a parte mais complexa do projeto — a recorrência.
@@ -34,9 +36,7 @@ Aqui há um destaque para a utilização das listas e pilhas, pois elas são fun
 
 Essa combinação dá flexibilidade para o sistema “enxergar o futuro” (com as listas) e “relembrar o passado” (com as pilhas), tornando o gerenciamento da recorrência eficiente e organizado.
 
-![img.png](./Agendai/Assets/recurrence-exampl.png)
-
-No caso da imagem acima, a tarefa "Treino Fullbody" possui uma recorrência diária, repetindo para todos os dias até que seja dada como "Completa"
+---
 
 ## Inicializando o Sistema
 O Agendai não requer variáveis de ambiente nem configuração prévia. Todo o gerenciamento de dados é realizado localmente por meio de um banco de dados SQLite, que será criado automaticamente na primeira execução do sistema.
@@ -47,25 +47,24 @@ O Agendai não requer variáveis de ambiente nem configuração prévia. Todo o 
 * Sistema operacional Windows, Linux ou macOS (multiplataforma via Avalonia UI).
 
 ### Clonando o repositório
+
 Para obter o código-fonte e preparar o ambiente de execução:
+
 ```
 git clone https://github.com/trsaints/projeto-2a.git
 cd agendai
 ```
 
 ### Clonando o repositório
+
 Com o SDK instalado e o repositório clonado, basta executar:
 ```
 dotnet run
 ```
 
-[//]: # (> 💾 **Banco de dados local:**  )
-
-[//]: # (> O Agendai gerencia seus dados em um banco SQLite, criado automaticamente no primeiro uso. Nenhuma configuração extra é necessária: basta executar e começar a utilizar.)
-
 ## Requisitos
 O Agendai atende aos seguintes requisitos funcionais:
-* Gerenciar compromissos:
+* Gerenciar compromissos (eventos e tarefas):
   > Cadastro de compromissos com título, descrição, data e hora;
 
   > Edição de compromissos existentes;
@@ -144,6 +143,7 @@ public abstract class Entity
     public string Name { get; set; }
 }
 ```
+
 ### Recurrence
 Entidade abstrata que adiciona propriedades de recorrência.
 
@@ -169,6 +169,7 @@ public class Event : Recurrence
     public string? Color { get; set; }
 }
 ```
+
 ### Todo
 
 Representa tarefas vinculadas a eventos, com controle de status e turnos.
@@ -282,6 +283,7 @@ public enum TodoStatus
 }
 ```
 
+---
 
 ## Estrutura do Sistema
 
@@ -335,7 +337,7 @@ Realiza a conversão entre `DateTime` e `string` no formato `"dd/MM/yyyy"`, faci
 - `ConvertBack`: transforma uma string formatada em `DateTime`.
 
 ```csharp
-  using System;
+using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
@@ -375,7 +377,7 @@ Converte entre `DateTime` e `DateTimeOffset`, permitindo que datas sejam manipul
 - `ConvertBack`: de `DateTimeOffset` para `DateTime`.
 
 ```csharp
-  using System;
+using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
@@ -413,7 +415,7 @@ Realiza a conversão entre o enum `Repeats` (definido em `Models`) e suas respec
 > Este converter não implementa a interface `IValueConverter`, sendo chamado de forma direta via código.
 
 ```csharp
-  using System;
+using System;
 using System.Globalization;
 using Agendai.Data.Models;
 using Avalonia.Data.Converters;
@@ -459,7 +461,7 @@ Converte entre o enum `TodoStatus` (modelo de tarefas) e valores booleanos, para
 - `ConvertBack`: transforma `bool` em `TodoStatus` (ex.: `true` → `TodoStatus.Complete`).
 
 ```csharp
-  using System;
+using System;
 using System.Globalization;
 using Agendai.Data.Models;
 using Avalonia.Data.Converters;
@@ -510,7 +512,7 @@ Converte um índice numérico (`int`) em um `DataTemplate` visual específico, p
 > Este converter permite alternar dinamicamente entre os modos de visualização do calendário na interface.
 
 ```csharp
-  using System;
+using System;
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
@@ -590,7 +592,7 @@ public class GetListsNamesMessenger
 Esta classe representa uma mensagem de navegação de data no sistema.
 
 - **Propriedade:**
-    - `SelectedDate (DateTime)`: contém a data selecionada que será utilizada para navegação.
+  - `SelectedDate (DateTime)`: contém a data selecionada que será utilizada para navegação.
 - **Objetivo**: Permitir que, ao selecionar uma nova data, outros componentes da aplicação sejam notificados para ajustar a interface (ex.: mudar o foco do calendário, exibir eventos daquela data, etc).
 - **Padrão aplicado**: segue o padrão de mensageria usado no MVVM para comunicação desacoplada entre `ViewModels`.
 
