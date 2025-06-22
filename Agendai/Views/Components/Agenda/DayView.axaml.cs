@@ -1,11 +1,8 @@
 ﻿using System.Linq;
-using Agendai.ViewModels;
 using Agendai.ViewModels.Agenda;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 
 
@@ -30,39 +27,43 @@ public partial class DayView : UserControl
 	private void ForwardClickToParent(object? sender, RoutedEventArgs e)
 	{
 		var parentAgenda = this.FindAncestorOfType<Agenda>();
-		parentAgenda?.OnEventOrTodoCLicked(sender, e);
+		parentAgenda?.OnEventOrTodoCLicked(sender);
 	}
 
 	private void SearchText_OnGotFocus(object? sender, GotFocusEventArgs e)
 	{
+		if (sender is null) return;
+
 		var autoComplete = (AutoCompleteBox)sender;
 		autoComplete.IsDropDownOpen = true;
 	}
 
 	private void SearchBox_TextChanged(object? sender, RoutedEventArgs e)
 	{
-		if (sender is AutoCompleteBox box)
+		if (sender is not AutoCompleteBox box) return;
+
+		if (DataContext is AgendaWindowViewModel vm)
 		{
-			if (this.DataContext is AgendaWindowViewModel vm) { vm.SearchText = box.Text; }
+			vm.SearchText = box.Text ?? string.Empty;
 		}
 	}
 
 	private void SearchBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
-		if (sender is AutoCompleteBox box && box.SelectedItem is string selectedName)
-		{
-			var viewModel = DataContext as AgendaWindowViewModel;
+		if (sender is not AutoCompleteBox { SelectedItem: string selectedName }) return;
 
-			var ev   = viewModel?.EventList.Events.FirstOrDefault(x => x.Name == selectedName);
-			var todo = viewModel?.TodoList.Todos.FirstOrDefault(x => x.Name == selectedName);
+		var viewModel = DataContext as AgendaWindowViewModel;
 
-			if (ev != null || todo != null)
-			{
-				var fakeButton   = new Button { Tag = ev ?? (object)todo };
-				var parentAgenda = this.FindAncestorOfType<Agenda>();
+		var ev   = viewModel?.EventList?.Events.FirstOrDefault(x => x.Name == selectedName);
+		var todo = viewModel?.TodoList?.Todos.FirstOrDefault(x => x.Name == selectedName);
 
-				parentAgenda?.OnEventOrTodoCLicked(fakeButton, e);
-			}
-		}
+		if (ev is null && todo is null) return;
+
+		if (todo is null) return;
+
+		Button fakeButton   = new() { Tag = ev ?? (object)todo };
+		var    parentAgenda = this.FindAncestorOfType<Agenda>();
+
+		parentAgenda?.OnEventOrTodoCLicked(fakeButton);
 	}
 }

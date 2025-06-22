@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Agendai.Data.Models;
 using Agendai.ViewModels.Agenda;
 using Avalonia.Controls;
@@ -28,51 +27,53 @@ public partial class MonthView : UserControl
 
 	private void OnDayClicked(object? sender, RoutedEventArgs e)
 	{
-		if (e.Source is Control source
-		    && (source.DataContext is Todo || source.DataContext is Event)) { return; }
+		if (e.Source is Control { DataContext: Todo or Event }) { return; }
 
-		if (sender is Border border && border.Tag is int clickedDate)
-		{
-			if (DataContext is AgendaWindowViewModel vm) { vm.GoToDay(clickedDate); }
-		}
+		if (sender is not Border { Tag: int clickedDate }) return;
+
+		if (DataContext is AgendaWindowViewModel vm) { vm.GoToDay(clickedDate); }
 	}
 
 	private void ForwardClickToParent(object? sender, RoutedEventArgs e)
 	{
 		var parentAgenda = this.FindAncestorOfType<Agenda>();
-		parentAgenda?.OnEventOrTodoCLicked(sender, e);
+		parentAgenda?.OnEventOrTodoCLicked(sender);
 	}
 
 	private void SearchText_OnGotFocus(object? sender, GotFocusEventArgs e)
 	{
+		if (sender is null) return;
+
 		var autoComplete = (AutoCompleteBox)sender;
 		autoComplete.IsDropDownOpen = true;
 	}
 
 	private void SearchBox_TextChanged(object? sender, RoutedEventArgs e)
 	{
-		if (sender is AutoCompleteBox box)
+		if (sender is not AutoCompleteBox box) return;
+
+		if (DataContext is AgendaWindowViewModel vm)
 		{
-			if (this.DataContext is AgendaWindowViewModel vm) { vm.SearchText = box.Text; }
+			vm.SearchText = box.Text ?? string.Empty;
 		}
 	}
 
 	private void SearchBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
-		if (sender is AutoCompleteBox box && box.SelectedItem is string selectedName)
-		{
-			var viewModel = DataContext as AgendaWindowViewModel;
+		if (sender is not AutoCompleteBox { SelectedItem: string selectedName }) return;
 
-			var ev   = viewModel?.EventList.Events.FirstOrDefault(x => x.Name == selectedName);
-			var todo = viewModel?.TodoList.Todos.FirstOrDefault(x => x.Name == selectedName);
+		var viewModel = DataContext as AgendaWindowViewModel;
 
-			if (ev != null || todo != null)
-			{
-				var fakeButton   = new Button { Tag = ev ?? (object)todo };
-				var parentAgenda = this.FindAncestorOfType<Agenda>();
+		var ev   = viewModel?.EventList?.Events.FirstOrDefault(x => x.Name == selectedName);
+		var todo = viewModel?.TodoList?.Todos.FirstOrDefault(x => x.Name == selectedName);
 
-				parentAgenda?.OnEventOrTodoCLicked(fakeButton, e);
-			}
-		}
+		if (ev is null && todo is null) return;
+
+		if (todo is null) return;
+
+		var fakeButton   = new Button { Tag = ev ?? (object)todo };
+		var parentAgenda = this.FindAncestorOfType<Agenda>();
+
+		parentAgenda?.OnEventOrTodoCLicked(fakeButton);
 	}
 }
