@@ -96,8 +96,8 @@
                     Foreground="White"
                     BorderBrush="#0078D7"
                     BorderThickness="2"
-                    Command="{Binding AddTodoCommand}" 
-                    IsEnabled="{Binding HasChanges}"/>
+                    Command="{Binding AddTodoCommand}"
+                    IsEnabled="{Binding HasChanges}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

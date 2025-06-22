@@ -1,36 +1,49 @@
 using Avalonia.Media;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace Agendai.Data.Models;
 
-public class Event(ulong id, string name) : Recurrence(id, name), INotifyPropertyChanged
+[Table("Events")]
+public class Event : Recurrence
 {
+	#region Entity State
+
+	[NotMapped]
+	private string? _color = "#FFB900";
+
+	#endregion
+
+
+	[StringLength(64)]
 	public string? AgendaName { get; set; }
-	
-	public virtual ICollection<Todo>? Todos { get; set; }
-	
-	public event PropertyChangedEventHandler? PropertyChanged;
 
-    private string? _color = "#FFB900";
-    public string? Color
-    {
-        get => _color;
-        set
-        {
-            if (_color != value)
-            {
-                _color = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ColorBrush));
-            }
-        }
-    }
+	public virtual ICollection<Todo?> Todos { get; set; } = [];
 
-    public IBrush ColorBrush => SolidColorBrush.Parse(Color ?? "#FFFFFF");
+	public Event() { }
+	public Event(int id, string name) : base(id, name) { }
 
-    protected virtual void OnPropertyChanged(string propertyName)
+
+	#region State Tracking
+
+	[Required]
+	public string? Color
 	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		get => _color;
+
+		set
+		{
+			if (_color == value) return;
+
+			_color = value;
+			OnPropertyChanged();
+			OnPropertyChanged(nameof(ColorBrush));
+		}
 	}
+
+	public IBrush ColorBrush => SolidColorBrush.Parse(Color ?? "#FFFFFF");
+
+	#endregion
 }

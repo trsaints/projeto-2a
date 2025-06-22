@@ -1,55 +1,73 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Agendai.Services.Views;
 using Avalonia.Markup.Xaml;
 using Agendai.ViewModels;
+using Agendai.ViewModels.Agenda;
 using Agendai.Views;
 using Avalonia.Styling;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Agendai;
 
 public partial class App : Application
 {
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
+	public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
-        // Register ViewLocator as a DataTemplate in application resources
-        // Updated to current Avalonia API
-        if (!Resources.TryGetResource("ViewLocator", ThemeVariant.Default, out _))
-        {
-            Resources.Add("ViewLocator", new ViewLocator());
-        }
-    }
+	public override void Initialize()
+	{
+		AvaloniaXamlLoader.Load(this);
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
-        }
+		if (!Resources.TryGetResource("ViewLocator", ThemeVariant.Default, out _))
+		{
+			Resources.Add("ViewLocator", new ViewLocator());
+		}
+	}
 
-        base.OnFrameworkInitializationCompleted();
-    }
+	public override void OnFrameworkInitializationCompleted()
+	{
+		ServiceCollection serviceCollection = new();
 
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+		serviceCollection.AddSingleton<MainWindowViewModel>()
+		                 .AddTransient<EventListViewModel>()
+		                 .AddTransient<TodoListViewModel>()
+		                 .AddTransient<AgendaWindowViewModel>()
+		                 .AddTransient<TodoWindowViewModel>()
+		                 .AddTransient<PomodoroWindowViewModel>();
 
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
-        }
-    }
+		serviceCollection.AddTransient<AgendaMonthController>()
+		                 .AddTransient<AgendaWeekController>()
+		                 .AddTransient<AgendaDayController>();
+
+		ServiceProvider = serviceCollection.BuildServiceProvider();
+
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+		{
+			DisableAvaloniaDataAnnotationValidation();
+
+			desktop.MainWindow = new MainWindow
+			{
+				DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
+			};
+		}
+
+		base.OnFrameworkInitializationCompleted();
+	}
+
+	private static void DisableAvaloniaDataAnnotationValidation()
+	{
+		var dataValidationPluginsToRemove =
+				BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>()
+				              .ToArray();
+
+		foreach (var plugin in dataValidationPluginsToRemove)
+		{
+			BindingPlugins.DataValidators.Remove(plugin);
+		}
+	}
 }

@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Agendai.ViewModels.Agenda"
              xmlns:models="clr-namespace:Agendai.Data.Models"
              x:DataType="vm:AgendaWindowViewModel">
-    
+
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type models:Event}">
             <Button Click="ForwardClickToParent"
@@ -23,7 +23,7 @@
 
 
         <DataTemplate DataType="{x:Type models:Todo}">
-            <Button Click="ForwardClickToParent" 
+            <Button Click="ForwardClickToParent"
                     Margin="2"
                     Padding="1"
                     BorderBrush="Black"
@@ -41,7 +41,7 @@
 
 
     <StackPanel>
-        
+
         <Grid Margin="0 0 0 20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -95,9 +95,9 @@
                                  ItemsSource="{Binding SearchableItems}"
                                  GotFocus="SearchText_OnGotFocus"
                                  FilterMode="Contains"
-                                 MinimumPrefixLength="0" 
+                                 MinimumPrefixLength="0"
                                  TextChanged="SearchBox_TextChanged"
-                                 SelectionChanged="SearchBox_SelectionChanged"/>
+                                 SelectionChanged="SearchBox_SelectionChanged" />
             </StackPanel>
 
             <Button Grid.Column="2"
@@ -119,15 +119,15 @@
         </Grid>
 
         <Border Background="WhiteSmoke" Padding="10" CornerRadius="10">
-            <DataGrid 
+            <DataGrid
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding DayViewRows}" 
+                ItemsSource="{Binding DayViewRows}"
                 HeadersVisibility="None"
                 IsReadOnly="True"
                 GridLinesVisibility="All"
                 MaxHeight="500"
                 VerticalScrollBarVisibility="Hidden">
-                
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Hour}" Width="80" />
                     <DataGridTemplateColumn>

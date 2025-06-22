@@ -24,7 +24,7 @@
 
                     <timer:Timer Margin="0 0 0 24" />
 
-                    <todoList:TodoList ItemsSource="{Binding TodoWindowVm.IncompleteTodos}"/>
+                    <todoList:TodoList ItemsSource="{Binding TodoWindowVm.IncompleteTodos}" />
 
                     <Button Command="{Binding OpenPomodoroCommand}"
                             Margin="0,0,0,0"
@@ -64,7 +64,7 @@
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <TextBlock FontSize="18" Margin="0 16 0 24" FontWeight="Bold">Minhas Tarefas</TextBlock>
 
-                    <todoList:TodoList ItemsSource="{Binding TodoWindowVm.IncompleteTodos}"/>
+                    <todoList:TodoList ItemsSource="{Binding TodoWindowVm.IncompleteTodos}" />
 
                     <Button Command="{Binding OpenTodoCommand}"
                             Margin="0,0,0,0"
@@ -106,7 +106,7 @@
                 </Grid>
             </Border>
         </Panel>
-        <Panel 
+        <Panel
             Grid.ColumnSpan="2"
             IsVisible="{Binding EventListVm.OpenAddEvent}"
             ZIndex="100">
