@@ -36,6 +36,10 @@ Aqui há um destaque para a utilização das listas e pilhas, pois elas são fun
 
 Essa combinação dá flexibilidade para o sistema “enxergar o futuro” (com as listas) e “relembrar o passado” (com as pilhas), tornando o gerenciamento da recorrência eficiente e organizado.
 
+![recurrence-example.png](./Agendai/Assets/recurrence-exampl.png)
+
+A imagem acima traz um exemplo direto da recorrência da tarefa "Treino Fullbody", que é diária e só deixa de aparecer caso esteja "Completa" 
+
 ---
 
 ## Inicializando o Sistema
@@ -630,6 +634,220 @@ Aqui estão definidos os layouts e controles apresentados ao usuário.
 
 Contém os **ViewModels**, que implementam o padrão **MVVM (Model-View-ViewModel)**.  
 Os ViewModels fazem a mediação entre a interface e a lógica de negócios, mantendo o estado e comportamento das telas.
+
+#### Main Window View Model
+Consiste na view model de entrada do projeto, ela configura o que deve ser inicializado no projeto, implementando os métodos:
+
+```csharp
+namespace Agendai.ViewModels.Interfaces;
+
+public interface IMainWindowViewModel
+{
+	public ViewModelBase? CurrentViewModel { get; set; }
+
+	public void NavigateToHome();
+	public void NavigateToAgenda();
+	public void NavigateToTodo();
+	public void NavigateToPomodoro();
+}
+
+```
+
+#### View Model Base
+View model que é implementada pelas outras para poder utilizar das funcionalidades de retornar para a home do projeto, implementando os métodos:
+
+```csharp
+using System.Windows.Input;
+
+
+namespace Agendai.ViewModels.Interfaces;
+
+public interface IViewModelBase
+{
+	public  MainWindowViewModel? MainViewModel     { get; set; }
+	public  ICommand             ReturnHomeCommand { get; }
+	private void                 ReturnHome()      { MainViewModel?.NavigateToHome(); }
+}
+
+```
+
+#### Home Window View Model
+View model da primeira tela do projeto, traz as principais funcionalidades de navegação, além disso, instancia as view models que precisam estar sendo utilizadas no resto do projeto
+
+```csharp
+using System.Windows.Input;
+
+
+namespace Agendai.ViewModels.Interfaces;
+
+public interface IHomeWindowViewModel
+{
+	public bool IsPopupOpen            { get; set; }
+	public bool IsEventListsAbleToView { get; set; }
+	public bool IsTodoListsAbleToView  { get; set; }
+	public bool IsAgendaWindow         { get; set; }
+	public bool IsTodoWindow           { get; set; }
+	public bool IsPomodoroWindow       { set; }
+
+	public TodoWindowViewModel? TodoWindowVm { get; set; }
+	public EventListViewModel?  EventListVm  { get; set; }
+
+	public string   EventListsVisibilityText { get; }
+	public string   TodoListsVisibilityText  { get; }
+	public ICommand OpenPopupCommand         { get; }
+	public ICommand OpenTodoFormCommand      { get; }
+	public ICommand OpenEventFormCommand     { get; }
+	public ICommand OpenAgendaCommand        { get; }
+	public ICommand OpenTodoCommand          { get; }
+	public ICommand OpenPomodoroCommand      { get; }
+}
+```
+
+#### Todo Window View Model
+View model que traz todos os métodos gerais que tratam das tarefas, cuidando da criação, edição e visualização
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Agendai.Data.Abstractions;
+using Agendai.Data.Models;
+
+
+namespace Agendai.ViewModels.Interfaces;
+
+public interface ITodoWindowViewModel
+{
+	HomeWindowViewModel? HomeWindowVm { get; set; }
+	EventListViewModel?  EventListVm  { get; set; }
+
+	Action?   OnTaskAdded           { get; set; }
+	ICommand? OpenPopupCommand      { get; }
+	ICommand? SelectTarefaCommand   { get; }
+	ICommand? AddTodoCommand        { get; }
+	ICommand? CancelCommand         { get; }
+	ICommand? AddTodoToEventCommand { get; }
+
+	bool OpenAddTask { get; set; }
+
+	ObservableCollection<Todo>          Todos            { get; set; }
+	ObservableCollection<Todo>          IncompleteTodos  { get; set; }
+	ObservableCollection<Todo>          TodoHistory      { get; set; }
+	ObservableCollection<Todo>          IncompleteResume { get; set; }
+	ObservableCollection<string>        ListNames        { get; set; }
+	ObservableCollection<RepeatsOption> RepeatOptions    { get; }
+	ObservableCollection<Todo?>         FreeTodos        { get; }
+	IEnumerable<TodosByListName>        TodosByListName  { get; }
+	IEnumerable<string>                 FreeTodosNames   { get; }
+
+	string        NewTaskName      { get; set; }
+	string        NewDescription   { get; set; }
+	string        SelectedTodoName { get; set; }
+	string        ListName         { get; set; }
+	DateTime      NewDue           { get; set; }
+	bool          IsPopupOpen      { get; set; }
+	bool          HasChanges       { get; }
+	RepeatsOption SelectedRepeats  { get; set; }
+	Todo?         EditingTodo      { get; set; }
+	Todo?         SelectedTodo     { get; set; }
+
+	void ClearTodoForm();
+}
+```
+
+#### Event List View Model
+View model que trata as funcionalidades da parte de eventos, trazendo os métodos de criação, edição, visualização, relacionamentos de ventos
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Agendai.Data.Abstractions;
+using Agendai.Data.Models;
+using Avalonia.Media;
+
+
+namespace Agendai.ViewModels.Interfaces;
+
+public interface IEventListViewModel
+{
+	public ObservableCollection<Event>         Events                { get; set; }
+	public ObservableCollection<RepeatsOption> RepeatOptions         { get; }
+	public ObservableCollection<string>        AgendaNames           { get; set; }
+	public ObservableCollection<Todo?>         TodosForSelectedEvent { get; set; }
+	public IEnumerable<EventsByAgenda>         EventsByAgendaName    { get; }
+
+	public bool                 IsAddTodoPopupOpen { get; set; }
+	public bool                 OpenAddEvent       { get; set; }
+	public bool                 CanSave            { get; }
+	public string               NewEventName       { get; set; }
+	public DateTime             NewDue             { get; set; }
+	public string               NewDescription     { get; set; }
+	public string               AgendaName         { get; set; }
+	public RepeatsOption        Repeat             { get; set; }
+	public Event?               SelectedEvent      { get; }
+	public bool                 HasRelatedTodos    { get; set; }
+	public TodoWindowViewModel? TodoWindowVm       { get; }
+	public Color?               NewColor           { get; set; }
+
+	public Action?  OnEventAddedOrUpdated { get; set; }
+	public ICommand AddEventCommand       { get; }
+	public ICommand CancelCommand         { get; }
+	public ICommand OpenPopupCommand      { get; }
+	public ICommand ClosePopupCommand     { get; }
+
+	public void LoadEvent(Event? ev);
+	public void UpdateCanSave();
+	public void NotifyTodosForSelectedEventChanged();
+	public void RemoveTodoFromEvent(Todo? todo);
+}
+```
+
+#### Agenda Window View Model
+View model que cuida de todas as funcionalidades da agenda, visualizações (mensal, semanal e diária), mudança das mesmas, renderização das informações, tratamento de ações do usuário.
+
+```csharp
+using System;
+using System.Collections.ObjectModel;
+using Agendai.Data.Abstractions;
+using Agendai.Data.Models;
+
+
+namespace Agendai.ViewModels.Interfaces;
+
+public interface IAgendaWindowViewModel
+{
+	public int      SelectedIndex     { get; set; }
+	public string[] SelectedListNames { get; }
+	public bool     ShowData          { get; }
+	public string   SelectedMonth     { get; set; }
+	public string   SelectedWeek      { get; set; }
+	public string   SelectedDay       { get; set; }
+	public DateTime CurrentMonth      { get; set; }
+	public DateTime CurrentWeek       { get; set; }
+	public DateTime CurrentDay        { get; set; }
+	public string   SearchText        { get; set; }
+
+	public ObservableCollection<string>   SearchableItems { get; set; }
+	public ObservableCollection<MonthRow> MonthViewRows   { get; }
+	public ObservableCollection<WeekRow>  WeekViewRows    { get; }
+	public ObservableCollection<DayRow>   DayViewRows     { get; }
+
+	public void GoToPreviousMonth();
+	public void GoToNextMonth();
+	public void GoToPreviousWeek();
+	public void GoToNextWeek();
+	public void GoToPreviousDay();
+	public void GoToNextDay();
+	public void GoToDay(int date);
+	public void ToggleShowData();
+	public void EditEvent(Event ev);
+	public void EditTodo(Todo   todo);
+	public void UpdateDataGridItems();
+}
+```
 
 ---
 
