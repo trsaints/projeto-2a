@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Globalization;
+using Agendai.Controllers.Interfaces;
 using Agendai.Services.Views;
 using Agendai.ViewModels;
 
 
 namespace Agendai.Controllers;
 
-public class AgendaDayController
+public class AgendaDayController : IAgendaDayController
 {
 	#region Dependencies
 
