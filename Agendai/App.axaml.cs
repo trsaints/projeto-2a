@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Agendai.Services.Views;
 using Avalonia.Markup.Xaml;
 using Agendai.ViewModels;
 using Agendai.ViewModels.Agenda;
@@ -32,11 +33,16 @@ public partial class App : Application
 	{
 		ServiceCollection serviceCollection = new();
 
-		serviceCollection.AddSingleton<MainWindowViewModel>();
-		serviceCollection.AddTransient<EventListViewModel>();
-		serviceCollection.AddTransient<AgendaWindowViewModel>();
-		serviceCollection.AddTransient<TodoWindowViewModel>();
-		serviceCollection.AddTransient<PomodoroWindowViewModel>();
+		serviceCollection.AddSingleton<MainWindowViewModel>()
+		                 .AddTransient<EventListViewModel>()
+		                 .AddTransient<TodoListViewModel>()
+		                 .AddTransient<AgendaWindowViewModel>()
+		                 .AddTransient<TodoWindowViewModel>()
+		                 .AddTransient<PomodoroWindowViewModel>();
+
+		serviceCollection.AddTransient<AgendaMonthController>()
+		                 .AddTransient<AgendaWeekController>()
+		                 .AddTransient<AgendaDayController>();
 
 		ServiceProvider = serviceCollection.BuildServiceProvider();
 
