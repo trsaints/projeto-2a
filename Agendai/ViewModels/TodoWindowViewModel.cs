@@ -402,7 +402,7 @@ public class TodoWindowViewModel : ViewModelBase
 		RefreshFreeTodos();
 		ClearTodoForm();
 
-		IncompleteTodos  = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
+		IncompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !Todo.IsComplete(t)));
 		IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
 		OnTaskAdded?.Invoke();
@@ -433,6 +433,8 @@ public class TodoWindowViewModel : ViewModelBase
 	#endregion
 
 
+	#region Utils
+
 	private void InitializeSampleTodos()
 	{
 		_todos = [..Todo.Sample()];
@@ -442,13 +444,13 @@ public class TodoWindowViewModel : ViewModelBase
 
 	private void InitializeCollections()
 	{
-		_incompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
-		_todoHistory     = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+		_incompleteTodos =
+				new ObservableCollection<Todo>(Todos.Where(t => !Todo.IsComplete(t)));
+		_todoHistory = new ObservableCollection<Todo>(Todos.Where(Todo.IsComplete));
 		_listNames =
 				new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct()!);
 		_incompleteResume = new ObservableCollection<Todo>(_incompleteTodos.Take(7));
 	}
 
-
-	private static bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
+	#endregion
 }

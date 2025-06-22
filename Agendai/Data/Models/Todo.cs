@@ -94,5 +94,7 @@ public class Todo : Recurrence
 		];
 	}
 
+	public static bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
+
 	#endregion
 }
