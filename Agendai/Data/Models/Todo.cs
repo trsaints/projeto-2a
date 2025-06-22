@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -52,4 +53,46 @@ public class Todo : Recurrence
 
 
 	public event Action<Todo, TodoStatus>? OnStatusChanged;
+
+
+	#region Utils
+
+	public static List<Todo> Sample()
+	{
+		return
+		[
+			new Todo(1, "Comprar Pamonha")
+			{
+				Description = "Comprar pamonha na feira",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Compras",
+				Status      = TodoStatus.Complete
+			},
+			new Todo(2, "Treino Fullbody")
+			{
+				Description = "Treino fullbody na feira",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.Daily,
+				ListName    = "Treinos"
+			},
+			new Todo(3, "Lavar o chão")
+			{
+				Description = "Lavar o chão da sala",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Casa"
+			},
+			new Todo(4, "Lavar o banheiro")
+			{
+				Description = "Lavar o banheiro",
+				Due         = DateTime.Today,
+				Repeats     = Repeats.None,
+				ListName    = "Casa",
+				Status      = TodoStatus.Complete
+			}
+		];
+	}
+
+	#endregion
 }
