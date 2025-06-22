@@ -102,7 +102,7 @@ public class TodoWindowViewModel : ViewModelBase
 					Due          = NewDue,
 					Repeats      = SelectedRepeats.Repeats,
 					ListName     = ListName,
-					RelatedEvent = relatedEvent
+					Event = relatedEvent
 				};
 
 				todo.OnStatusChanged += HandleStatusChanged;
@@ -307,8 +307,8 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Seleção de Tarefa Existente
 
-	private ObservableCollection<Todo> _freeTodos = new();
-	public ObservableCollection<Todo> FreeTodos
+	private ObservableCollection<Todo?> _freeTodos = new();
+	public ObservableCollection<Todo?> FreeTodos
 	{
 		get => _freeTodos;
 
@@ -371,8 +371,8 @@ public class TodoWindowViewModel : ViewModelBase
 
 	private void RefreshFreeTodos()
 	{
-		FreeTodos = new ObservableCollection<Todo>(
-			Todos.Where(t => t.RelatedEvent == null)
+		FreeTodos = new ObservableCollection<Todo?>(
+			Todos.Where(t => t.Event == null)
 		);
 	}
 
@@ -394,7 +394,7 @@ public class TodoWindowViewModel : ViewModelBase
 			EditingTodo.Due          = NewDue;
 			EditingTodo.Repeats      = SelectedRepeats.Repeats;
 			EditingTodo.ListName     = ListName;
-			EditingTodo.RelatedEvent = relatedEv;
+			EditingTodo.Event = relatedEv;
 			todo                     = EditingTodo;
 
 			OnPropertyChanged(nameof(Todos));
@@ -408,7 +408,7 @@ public class TodoWindowViewModel : ViewModelBase
 				Due          = NewDue,
 				Repeats      = SelectedRepeats.Repeats,
 				ListName     = ListName,
-				RelatedEvent = relatedEv
+				Event = relatedEv
 			};
 
 			todo.OnStatusChanged += HandleStatusChanged;

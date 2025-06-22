@@ -14,8 +14,8 @@ public class HomeWindowViewModel : ViewModelBase
 	public  string EventListsVisibilityText => IsEventListsAbleToView ? "Ocultar" : "Exibir";
 	public  string TodoListsVisibilityText  => IsTodoListsAbleToView ? "Ocultar" : "Exibir";
 
-	public TodoWindowViewModel TodoWindowVm { get; set; }
-	public EventListViewModel  EventListVm  { get; set; }
+	public TodoWindowViewModel? TodoWindowVm { get; set; }
+	public EventListViewModel   EventListVm  { get; set; }
 
 	private ICommand _openPopupCommand;
 	private ICommand _openTodoFormCommand;

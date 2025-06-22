@@ -13,19 +13,21 @@ namespace Agendai.ViewModels;
 
 public class EventListViewModel : ViewModelBase
 {
-	#region Fields
+	#region View-Model State
 
-	private Event?                       _currentEvent;
-	private Event?                       _selectedEvent;
-	private bool                         _canSave;
-	private bool                         _isAddTodoPopupOpen;
-	private bool                         _openAddEvent;
-	private string                       _newEventName = string.Empty;
-	private DateTime                     _newDue = DateTime.Today;
-	private string                       _newDescription = string.Empty;
-	private string                       _agendaName = string.Empty;
-	private RepeatsOption                _repeat = new RepeatsOption { Repeats = Repeats.None };
-	private ObservableCollection<Todo>   _todosForSelectedEvent = new();
+	private Event? _currentEvent;
+	private Event? _selectedEvent;
+	private bool   _canSave;
+	private bool   _isAddTodoPopupOpen;
+	private bool   _openAddEvent;
+
+	private string                      _newEventName = string.Empty;
+	private DateTime                    _newDue = DateTime.Today;
+	private string                      _newDescription = string.Empty;
+	private string                      _agendaName = string.Empty;
+	private RepeatsOption               _repeat = new() { Repeats = Repeats.None };
+	private ObservableCollection<Todo?> _todosForSelectedEvent = [];
+
 	private ObservableCollection<string> _agendaNames;
 
 	#endregion
@@ -33,29 +35,27 @@ public class EventListViewModel : ViewModelBase
 
 	#region Constructor
 
-	public EventListViewModel(TodoWindowViewModel todoWindowVm = null)
+	public EventListViewModel(TodoWindowViewModel? todoWindowVm = null)
 	{
 		TodoWindowVm = todoWindowVm;
 
-		OpenPopupCommand    = new RelayCommand(() => IsAddTodoPopupOpen = true);
-		ClosePopupCommand   = new RelayCommand(() => IsAddTodoPopupOpen = false);
-		SelectTarefaCommand = new RelayCommand(() => OpenAddEvent       = true);
-		AddEventCommand     = new RelayCommand(AddOrUpdateEvent, () => CanSave);
-		CancelCommand       = new RelayCommand(CancelAction);
-
+		OpenPopupCommand  = new RelayCommand(() => IsAddTodoPopupOpen = true);
+		ClosePopupCommand = new RelayCommand(() => IsAddTodoPopupOpen = false);
+		AddEventCommand   = new RelayCommand(AddOrUpdateEvent, () => CanSave);
+		CancelCommand     = new RelayCommand(CancelAction);
 
 		OnEventAddedOrUpdated = () => { OpenAddEvent = false; };
 
 		Events = new ObservableCollection<Event>(GenerateSampleEvents());
 		_agendaNames =
-				new ObservableCollection<string>(Events.Select(e => e.AgendaName).Distinct());
+				new ObservableCollection<string>(Events.Select(e => e.AgendaName).Distinct()!);
 
-		if (TodoWindowVm != null)
+		if (TodoWindowVm is not null)
 		{
-			TodoWindowVm.PropertyChanged += (s, e) =>
+			TodoWindowVm.PropertyChanged += (_, e) =>
 			{
-				if (e.PropertyName == nameof(TodoWindowVm.NewTaskName)
-				    || e.PropertyName == nameof(TodoWindowVm.SelectedTodoName))
+				if (e.PropertyName is nameof(TodoWindowVm.NewTaskName)
+				                      or nameof(TodoWindowVm.SelectedTodoName))
 				{
 					UpdateCanSave();
 				}
@@ -66,7 +66,7 @@ public class EventListViewModel : ViewModelBase
 	#endregion
 
 
-	#region Properties
+	#region State Tracking
 
 	public ObservableCollection<Event> Events { get; set; }
 
@@ -82,12 +82,6 @@ public class EventListViewModel : ViewModelBase
 		get => _agendaNames;
 		set => SetProperty(ref _agendaNames, value);
 	}
-
-	public ICommand AddEventCommand     { get; }
-	public ICommand CancelCommand       { get; }
-	public ICommand SelectTarefaCommand { get; }
-	public ICommand OpenPopupCommand    { get; }
-	public ICommand ClosePopupCommand   { get; }
 
 	public bool IsAddTodoPopupOpen
 	{
@@ -161,19 +155,18 @@ public class EventListViewModel : ViewModelBase
 	{
 		get => _selectedEvent;
 
-		set
+		private set
 		{
-			if (_selectedEvent != value)
-			{
-				_selectedEvent = value;
-				OnPropertyChanged();
-				OnPropertyChanged(nameof(HasRelatedTodos));
-				UpdateTodosForSelectedEvent();
-			}
+			if (_selectedEvent == value) return;
+
+			_selectedEvent = value;
+			OnPropertyChanged();
+			OnPropertyChanged(nameof(HasRelatedTodos));
+			UpdateTodosForSelectedEvent();
 		}
 	}
 
-	public ObservableCollection<Todo> TodosForSelectedEvent
+	public ObservableCollection<Todo?> TodosForSelectedEvent
 	{
 		get => _todosForSelectedEvent;
 		set => SetProperty(ref _todosForSelectedEvent, value);
@@ -215,6 +208,16 @@ public class EventListViewModel : ViewModelBase
 	#endregion
 
 
+	#region Commands
+
+	public ICommand AddEventCommand   { get; }
+	public ICommand CancelCommand     { get; }
+	public ICommand OpenPopupCommand  { get; }
+	public ICommand ClosePopupCommand { get; }
+
+	#endregion
+
+
 	#region Public Methods
 
 	private static Color? StringToColor(string? colorStr)
@@ -226,36 +229,39 @@ public class EventListViewModel : ViewModelBase
 
 	public void LoadEvent(Event? ev)
 	{
-		_currentEvent = ev;
-		NewEventName = ev?.Name ?? "";
-		NewDescription = ev?.Description ?? "";
-		NewDue = ev?.Due ?? DateTime.Today;
-		Repeat = RepeatOptions.FirstOrDefault(r => r.Repeats == ev.Repeats) ?? RepeatOptions[0];
-		AgendaName = ev?.AgendaName ?? "";
+		_currentEvent  = ev;
+		NewEventName   = ev?.Name ?? string.Empty;
+		NewDescription = ev?.Description ?? string.Empty;
+		NewDue         = ev?.Due ?? DateTime.Today;
+
+		Repeat = RepeatOptions.FirstOrDefault(r => r.Repeats == ev!.Repeats)
+		         ?? RepeatOptions[0];
+
+		AgendaName    = ev?.AgendaName ?? string.Empty;
 		SelectedEvent = _currentEvent;
-		NewColor = StringToColor(ev?.Color);
+		NewColor      = StringToColor(ev?.Color);
 
 		UpdateCanSave();
 	}
 
 	public void UpdateCanSave()
 	{
-		if (TodoWindowVm == null) return;
+		if (TodoWindowVm is null) return;
 
-		bool taskListChanged = false;
+		bool taskListChanged;
 
-		if (_currentEvent != null)
+		if (_currentEvent is not null)
 		{
-			var currentTodos  = _currentEvent.Todos ?? new List<Todo>();
-			var selectedTodos = TodosForSelectedEvent ?? new ObservableCollection<Todo>();
+			var currentTodos  = _currentEvent.Todos;
+			var selectedTodos = TodosForSelectedEvent;
 
 			taskListChanged = !currentTodos.SequenceEqual(selectedTodos);
 		}
-		else { taskListChanged = (TodosForSelectedEvent?.Count > 0); }
+		else { taskListChanged = TodosForSelectedEvent.Count > 0; }
 
-		bool hasTaskChanges =
-				!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName?.Trim())
-				|| !string.IsNullOrWhiteSpace(TodoWindowVm?.SelectedTodoName?.Trim())
+		var hasTaskChanges =
+				!string.IsNullOrWhiteSpace(TodoWindowVm?.NewTaskName.Trim())
+				|| !string.IsNullOrWhiteSpace(TodoWindowVm?.SelectedTodoName.Trim())
 				|| taskListChanged;
 
 		CanSave = !string.IsNullOrWhiteSpace(NewEventName)
@@ -263,7 +269,7 @@ public class EventListViewModel : ViewModelBase
 		              || NewEventName != _currentEvent.Name
 		              || NewDescription != _currentEvent.Description
 		              || NewDue.Date != _currentEvent.Due.Date
-		              || Repeat?.Repeats != _currentEvent.Repeats
+		              || Repeat.Repeats != _currentEvent.Repeats
 		              || AgendaName != _currentEvent.AgendaName
 		              || hasTaskChanges
 		              || NewColor != StringToColor(_currentEvent.Color));
@@ -272,13 +278,13 @@ public class EventListViewModel : ViewModelBase
 	}
 
 
-	public void AddOrUpdateEvent()
+	private void AddOrUpdateEvent()
 	{
 		if (!CanSave) return;
 
-		if (_currentEvent == null)
+		if (_currentEvent is null)
 		{
-			var newEvent = new Event((uint)(Events.Count + 1), NewEventName)
+			var newEvent = new Event(Events.Count + 1, NewEventName)
 			{
 				Description = NewDescription,
 				Due         = NewDue,
@@ -302,15 +308,17 @@ public class EventListViewModel : ViewModelBase
 		UpdateCanSave();
 	}
 
-	public void ClearEventForm()
+	private void ClearEventForm()
 	{
 		NewEventName   = string.Empty;
 		NewDescription = string.Empty;
 		NewDue         = DateTime.Today;
 		Repeat         = new RepeatsOption { Repeats = Repeats.None };
 		AgendaName     = string.Empty;
-		if (TodoWindowVm != null)
+
+		if (TodoWindowVm is not null)
 			TodoWindowVm.SelectedTodoName = string.Empty;
+
 		_currentEvent = null;
 		SelectedEvent = null;
 	}
@@ -320,17 +328,17 @@ public class EventListViewModel : ViewModelBase
 		OnPropertyChanged(nameof(TodosForSelectedEvent));
 	}
 
-	public void RemoveTodoFromEvent(Todo todo)
+	public void RemoveTodoFromEvent(Todo? todo)
 	{
-		if (todo == null) return;
+		if (todo is null) return;
 
 		TodosForSelectedEvent.Remove(todo);
 
 		TodoWindowVm?.FreeTodos.Add(todo);
 
-		todo.RelatedEvent = null;
-
+		todo.Event      = null;
 		HasRelatedTodos = TodosForSelectedEvent.Count > 0;
+
 		OnPropertyChanged(nameof(TodosForSelectedEvent));
 		UpdateCanSave();
 	}
@@ -350,11 +358,11 @@ public class EventListViewModel : ViewModelBase
 
 	private void UpdateTodosForSelectedEvent()
 	{
-		TodosForSelectedEvent = new ObservableCollection<Todo>(SelectedEvent?.Todos ?? []);
+		TodosForSelectedEvent = new ObservableCollection<Todo?>(SelectedEvent?.Todos ?? []);
 
 		HasRelatedTodos = TodosForSelectedEvent.Count > 0;
 
-		TodosForSelectedEvent.CollectionChanged += (s, e) =>
+		TodosForSelectedEvent.CollectionChanged += (_, _) =>
 		{
 			HasRelatedTodos = TodosForSelectedEvent.Count > 0;
 		};
@@ -362,18 +370,15 @@ public class EventListViewModel : ViewModelBase
 
 	private void AddTodosToEvent(Event ev)
 	{
-		if (ev.Todos == null)
-			ev.Todos = new List<Todo>();
-
 		ev.Todos = ev.Todos.Where(t => TodosForSelectedEvent.Contains(t)).ToList();
 
 		foreach (var todo in TodosForSelectedEvent)
 		{
-			if (!ev.Todos.Contains(todo))
-			{
-				ev.Todos.Add(todo);
-				todo.RelatedEvent = ev;
-			}
+			if (ev.Todos.Contains(todo)) continue;
+
+			ev.Todos.Add(todo);
+
+			if (todo is not null) todo.Event = ev;
 		}
 	}
 
@@ -386,14 +391,11 @@ public class EventListViewModel : ViewModelBase
 		ev.Repeats     = Repeat.Repeats;
 		ev.AgendaName  = AgendaName;
 		ev.Color       = NewColor?.ToString() ?? "#FFFFFF";
-
-		if (ev.Todos == null)
-			ev.Todos = new List<Todo>();
 	}
 
-	private IEnumerable<Event> GenerateSampleEvents() => new[]
-	{
-		new Event(1, "Conferência da Pamonha")
+	private static IEnumerable<Event> GenerateSampleEvents() =>
+	[
+		new(1, "Conferência da Pamonha")
 		{
 			Description = "Conferência de pamonhas",
 			Due = new DateTime(
@@ -408,7 +410,7 @@ public class EventListViewModel : ViewModelBase
 			AgendaName = "Conferências",
 			Color      = "#4CABE4"
 		},
-		new Event(2, "Feira da Foda")
+		new(2, "Feira da Foda")
 		{
 			Description = "Conferência do Agro",
 			Due = new DateTime(
@@ -423,7 +425,7 @@ public class EventListViewModel : ViewModelBase
 			AgendaName = "Conferências",
 			Color      = "#FFB900"
 		},
-		new Event(3, "Festa do Peão")
+		new(3, "Festa do Peão")
 		{
 			Description = "Festa do Peão de Barretos",
 			Due = new DateTime(
@@ -438,7 +440,7 @@ public class EventListViewModel : ViewModelBase
 			AgendaName = "Festas",
 			Color      = "#E4080A"
 		},
-		new Event(4, "Feriado")
+		new(4, "Feriado")
 		{
 			Description = "Feriado de alguma coisa",
 			Due = new DateTime(
@@ -453,7 +455,7 @@ public class EventListViewModel : ViewModelBase
 			AgendaName = "Feriados",
 			Color      = "#7DDA58"
 		}
-	};
+	];
 
 	#endregion
 }

@@ -20,7 +20,7 @@ public class Event : Recurrence
 	[StringLength(64)]
 	public string? AgendaName { get; set; }
 
-	public virtual ICollection<Todo> Todos { get; set; } = [];
+	public virtual ICollection<Todo?> Todos { get; set; } = [];
 
 	public Event() { }
 	public Event(int id, string name) : base(id, name) { }

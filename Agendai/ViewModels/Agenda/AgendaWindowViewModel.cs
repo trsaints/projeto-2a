@@ -146,8 +146,8 @@ public class AgendaWindowViewModel : ViewModelBase, INotifyPropertyChanged
 	public ObservableCollection<WeekRow>  WeekViewRows  { get; } = new();
 	public ObservableCollection<DayRow>   DayViewRows   { get; } = new();
 
-	public EventListViewModel  EventList { get; set; } = new();
-	public TodoWindowViewModel TodoList  { get; set; } = new();
+	public EventListViewModel   EventList { get; set; } = new();
+	public TodoWindowViewModel? TodoList  { get; set; } = new();
 
 	public AgendaMonthController MonthController { get; }
 	public AgendaWeekController  WeekController  { get; }
