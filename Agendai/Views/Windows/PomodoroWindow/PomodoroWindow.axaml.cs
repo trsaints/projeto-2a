@@ -1,9 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 
-namespace Agendai;
+namespace Agendai.Views.Windows.PomodoroWindow;
 
 public partial class PomodoroWindow : UserControl
 {
