@@ -1,24 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Agendai.Data;
-using Agendai.Data.Converters;
 using Agendai.Data.Models;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
-using DynamicData.Binding;
-using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
 
 namespace Agendai.ViewModels;
 
 public class TodoWindowViewModel : ViewModelBase
 {
-	public TodoWindowViewModel(HomeWindowViewModel homeWindowVm = null)
+	public TodoWindowViewModel(HomeWindowViewModel? homeWindowVm = null)
 	{
 		InitializeCommands();
 		InitializeSampleTodos();
@@ -26,7 +21,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 		_newDue = DateTime.Today;
 
-		if (homeWindowVm != null)
+		if (homeWindowVm is not null)
 		{
 			HomeWindowVm = homeWindowVm;
 			EventListVm  = HomeWindowVm.EventListVm;
@@ -36,28 +31,26 @@ public class TodoWindowViewModel : ViewModelBase
 		{
 			if (_suppressPropertyChanged) return;
 
-			if (e.PropertyName is nameof(NewTaskName)
-			                      or nameof(NewDescription)
-			                      or nameof(NewDue)
-			                      or nameof(SelectedRepeats)
-			                      or nameof(ListName)
-			                      or nameof(EditingTodo))
-			{
-				UpdateHasChanges();
-				(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
-			}
+			if (e.PropertyName is not (nameof(NewTaskName)
+			                           or nameof(NewDescription)
+			                           or nameof(NewDue)
+			                           or nameof(SelectedRepeats)
+			                           or nameof(ListName)
+			                           or nameof(EditingTodo))) return;
+
+			UpdateHasChanges();
+			(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
 		};
 
 		RefreshFreeTodos();
 	}
 
 
-	#region Dependências
+	#region Dependencies
 
-	public HomeWindowViewModel HomeWindowVm     { get; set; }
-	public EventListViewModel  EventListVm      { get; set; }
-	public RepeatsConverter    RepeatsConverter { get; } = new();
-	public Action?             OnTaskAdded      { get; set; }
+	public HomeWindowViewModel? HomeWindowVm { get; set; }
+	public EventListViewModel?  EventListVm  { get; set; }
+	public Action?              OnTaskAdded  { get; set; }
 
 	#endregion
 
@@ -82,7 +75,7 @@ public class TodoWindowViewModel : ViewModelBase
 			}
 		);
 
-		AddTodoCommand = new RelayCommand<Event?>(ev => AddTodo(ev), _ => HasChanges);
+		AddTodoCommand = new RelayCommand<Event?>(AddTodo, _ => HasChanges);
 
 		CancelCommand = new RelayCommand(() =>
 			{
@@ -94,15 +87,15 @@ public class TodoWindowViewModel : ViewModelBase
 
 		AddTodoToEventCommand = new RelayCommand(() =>
 			{
-				var relatedEvent = EventListVm?.SelectedEvent;
+				var relatedEvent = EventListVm.SelectedEvent;
 
-				var todo = new Todo((uint)(Todos.Count + 1), NewTaskName)
+				var todo = new Todo(Todos.Count + 1, NewTaskName)
 				{
-					Description  = NewDescription,
-					Due          = NewDue,
-					Repeats      = SelectedRepeats.Repeats,
-					ListName     = ListName,
-					Event = relatedEvent
+					Description = NewDescription,
+					Due         = NewDue,
+					Repeats     = SelectedRepeats.Repeats,
+					ListName    = ListName,
+					Event       = relatedEvent
 				};
 
 				todo.OnStatusChanged += HandleStatusChanged;
@@ -112,13 +105,17 @@ public class TodoWindowViewModel : ViewModelBase
 				RefreshFreeTodos();
 				ClearTodoForm();
 
-				HomeWindowVm.EventListVm.TodosForSelectedEvent.Add(todo);
-				HomeWindowVm.EventListVm.HasRelatedTodos =
-						HomeWindowVm.EventListVm.TodosForSelectedEvent.Count > 0;
 
-				HomeWindowVm.EventListVm.UpdateCanSave();
+				if (HomeWindowVm is not null)
+				{
+					HomeWindowVm.EventListVm.TodosForSelectedEvent.Add(todo);
+					HomeWindowVm.EventListVm.HasRelatedTodos =
+							HomeWindowVm.EventListVm.TodosForSelectedEvent.Count > 0;
 
-				HomeWindowVm.EventListVm.IsAddTodoPopupOpen = false;
+					HomeWindowVm.EventListVm.UpdateCanSave();
+
+					HomeWindowVm.EventListVm.IsAddTodoPopupOpen = false;
+				}
 
 				FreeTodos.Remove(todo);
 			}
@@ -129,8 +126,6 @@ public class TodoWindowViewModel : ViewModelBase
 
 
 	#region Propriedades de UI
-
-	public string Title { get; set; } = "Tarefas";
 
 	private bool _isPopupOpen;
 	public bool IsPopupOpen
@@ -151,24 +146,24 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Tarefas e Listagens
 
-	private ObservableCollection<Todo>? _todos;
+	private ObservableCollection<Todo> _todos = [];
 	public ObservableCollection<Todo> Todos
 	{
-		get => _todos ?? [];
+		get => _todos;
 		set => SetProperty(ref _todos, value);
 	}
 
-	private ObservableCollection<Todo>? _incompleteTodos;
+	private ObservableCollection<Todo> _incompleteTodos = [];
 	public ObservableCollection<Todo> IncompleteTodos
 	{
-		get => _incompleteTodos ?? [];
+		get => _incompleteTodos;
 		set => SetProperty(ref _incompleteTodos, value);
 	}
 
-	private ObservableCollection<Todo>? _todoHistory;
+	private ObservableCollection<Todo> _todoHistory = [];
 	public ObservableCollection<Todo> TodoHistory
 	{
-		get => _todoHistory ?? [];
+		get => _todoHistory;
 		set => SetProperty(ref _todoHistory, value);
 	}
 
@@ -202,14 +197,14 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Nova Tarefa (Formulário)
 
-	private string _newTaskName;
+	private string _newTaskName = string.Empty;
 	public string NewTaskName
 	{
 		get => _newTaskName;
 		set => SetProperty(ref _newTaskName, value);
 	}
 
-	private string _newDescription;
+	private string _newDescription = string.Empty;
 	public string NewDescription
 	{
 		get => _newDescription;
@@ -251,21 +246,20 @@ public class TodoWindowViewModel : ViewModelBase
 
 		set
 		{
-			if (SetProperty(ref _editingTodo, value) && value != null)
-			{
-				_suppressPropertyChanged = true;
+			if (!SetProperty(ref _editingTodo, value) || value == null) return;
 
-				NewTaskName    = value.Name;
-				NewDescription = value.Description;
-				NewDue         = value.Due;
-				SelectedRepeats = RepeatOptions.FirstOrDefault(r => r.Repeats == value.Repeats)
-				                  ?? RepeatOptions[0];
-				ListName = value.ListName;
+			_suppressPropertyChanged = true;
 
-				_suppressPropertyChanged = false;
-				UpdateHasChanges();
-				(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
-			}
+			NewTaskName    = value.Name;
+			NewDescription = value.Description ?? string.Empty;
+			NewDue         = value.Due;
+			SelectedRepeats = RepeatOptions.FirstOrDefault(r => r.Repeats == value.Repeats)
+			                  ?? RepeatOptions[0];
+			ListName = value.ListName ?? string.Empty;
+
+			_suppressPropertyChanged = false;
+			UpdateHasChanges();
+			(AddTodoCommand as RelayCommand)?.NotifyCanExecuteChanged();
 		}
 	}
 
@@ -278,7 +272,7 @@ public class TodoWindowViewModel : ViewModelBase
 
 	private void UpdateHasChanges()
 	{
-		HasChanges = EditingTodo == null
+		HasChanges = EditingTodo is null
 				? !string.IsNullOrWhiteSpace(NewTaskName)
 				: EditingTodo.Name != NewTaskName
 				  || EditingTodo.Description != NewDescription
@@ -298,7 +292,7 @@ public class TodoWindowViewModel : ViewModelBase
 		ListName         = string.Empty;
 		EditingTodo      = null;
 		SelectedTodo     = null;
-		SelectedTodoName = null;
+		SelectedTodoName = string.Empty;
 		HasChanges       = false;
 	}
 
@@ -307,27 +301,26 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Seleção de Tarefa Existente
 
-	private ObservableCollection<Todo?> _freeTodos = new();
+	private ObservableCollection<Todo?> _freeTodos = [];
 	public ObservableCollection<Todo?> FreeTodos
 	{
 		get => _freeTodos;
 
-		set
+		private set
 		{
-			if (SetProperty(ref _freeTodos, value))
-			{
-				_freeTodos.CollectionChanged += (s, e) =>
-				{
-					OnPropertyChanged(nameof(FreeTodosNames));
-				};
+			if (!SetProperty(ref _freeTodos, value)) return;
 
+			_freeTodos.CollectionChanged += (_, _) =>
+			{
 				OnPropertyChanged(nameof(FreeTodosNames));
-			}
+			};
+
+			OnPropertyChanged(nameof(FreeTodosNames));
 		}
 	}
 
 	public IEnumerable<string> FreeTodosNames =>
-			FreeTodos.Select(t => t.Name);
+			FreeTodos.Select(t => t?.Name)!;
 
 	private Todo? _selectedTodo;
 	public Todo? SelectedTodo
@@ -336,35 +329,32 @@ public class TodoWindowViewModel : ViewModelBase
 		set => SetProperty(ref _selectedTodo, value);
 	}
 
-	private string _selectedTodoName;
+	private string _selectedTodoName = string.Empty;
 	public string SelectedTodoName
 	{
 		get => _selectedTodoName;
 
 		set
 		{
-			if (_selectedTodoName != value)
-			{
-				_selectedTodoName = value;
-				OnPropertyChanged();
+			if (_selectedTodoName == value) return;
 
-				var todoName = _selectedTodoName;
+			_selectedTodoName = value;
+			OnPropertyChanged();
 
-				var todo = FreeTodos.FirstOrDefault(t => t.Name == todoName);
+			var todoName = _selectedTodoName;
 
-				if (todo != null)
+			var todo = FreeTodos.FirstOrDefault(t => t?.Name == todoName);
+
+			if (todo is null) return;
+
+			Dispatcher.UIThread.Post(() =>
 				{
-					Dispatcher.UIThread.Post(() =>
-						{
-							FreeTodos.Remove(todo);
-							HomeWindowVm.EventListVm?.TodosForSelectedEvent.Add(todo);
-							HomeWindowVm.EventListVm?.NotifyTodosForSelectedEventChanged();
-
-							HomeWindowVm.EventListVm.UpdateCanSave();
-						}
-					);
+					FreeTodos.Remove(todo);
+					HomeWindowVm?.EventListVm.TodosForSelectedEvent.Add(todo);
+					HomeWindowVm?.EventListVm.NotifyTodosForSelectedEventChanged();
+					HomeWindowVm?.EventListVm.UpdateCanSave();
 				}
-			}
+			);
 		}
 	}
 
@@ -381,38 +371,35 @@ public class TodoWindowViewModel : ViewModelBase
 
 	#region Métodos principais
 
-	public Todo? AddTodo(Event? relatedEv)
+	private void AddTodo(Event? relatedEv)
 	{
-		if (string.IsNullOrWhiteSpace(NewTaskName)) return null;
-
-		Todo todo;
+		if (string.IsNullOrWhiteSpace(NewTaskName)) return;
 
 		if (EditingTodo != null)
 		{
-			EditingTodo.Name         = NewTaskName;
-			EditingTodo.Description  = NewDescription;
-			EditingTodo.Due          = NewDue;
-			EditingTodo.Repeats      = SelectedRepeats.Repeats;
-			EditingTodo.ListName     = ListName;
-			EditingTodo.Event = relatedEv;
-			todo                     = EditingTodo;
+			EditingTodo.Name        = NewTaskName;
+			EditingTodo.Description = NewDescription;
+			EditingTodo.Due         = NewDue;
+			EditingTodo.Repeats     = SelectedRepeats.Repeats;
+			EditingTodo.ListName    = ListName;
+			EditingTodo.Event       = relatedEv;
 
 			OnPropertyChanged(nameof(Todos));
 			OnPropertyChanged(nameof(TodosByListName));
 		}
 		else
 		{
-			todo = new Todo(Convert.ToUInt32(Todos.Count + 1), NewTaskName)
+			Todo newTodo = new(Todos.Count + 1, NewTaskName)
 			{
-				Description  = NewDescription,
-				Due          = NewDue,
-				Repeats      = SelectedRepeats.Repeats,
-				ListName     = ListName,
-				Event = relatedEv
+				Description = NewDescription,
+				Due         = NewDue,
+				Repeats     = SelectedRepeats.Repeats,
+				ListName    = ListName,
+				Event       = relatedEv
 			};
 
-			todo.OnStatusChanged += HandleStatusChanged;
-			Todos.Add(todo);
+			newTodo.OnStatusChanged += HandleStatusChanged;
+			Todos.Add(newTodo);
 		}
 
 		RefreshFreeTodos();
@@ -422,8 +409,6 @@ public class TodoWindowViewModel : ViewModelBase
 		IncompleteResume = new ObservableCollection<Todo>(IncompleteTodos.Take(7));
 
 		OnTaskAdded?.Invoke();
-
-		return todo;
 	}
 
 	private void HandleStatusChanged(Todo todo, TodoStatus newStatus)
@@ -490,15 +475,16 @@ public class TodoWindowViewModel : ViewModelBase
 	private void InitializeCollections()
 	{
 		_incompleteTodos = new ObservableCollection<Todo>(Todos.Where(t => !IsComplete(t)));
-		_todoHistory = new ObservableCollection<Todo>(Todos.Where(IsComplete));
-		_listNames = new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct());
+		_todoHistory     = new ObservableCollection<Todo>(Todos.Where(IsComplete));
+		_listNames =
+				new ObservableCollection<string>(Todos.Select(t => t.ListName).Distinct()!);
 		_incompleteResume = new ObservableCollection<Todo>(_incompleteTodos.Take(7));
 	}
 
 	#endregion
 
 
-	private bool _suppressPropertyChanged = false;
+	private bool _suppressPropertyChanged;
 
-	private bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
+	private static bool IsComplete(Todo todo) => todo.Status == TodoStatus.Complete;
 }
