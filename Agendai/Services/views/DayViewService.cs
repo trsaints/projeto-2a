@@ -60,7 +60,6 @@ namespace Agendai.Services.Views
 
             var minDateEvent = filteredEvents.Any() ? filteredEvents.Min(e => e.Due) : DateTime.MaxValue;
             var minDateTodo = filteredTodos.Any() ? filteredTodos.Min(t => t.Due) : DateTime.MaxValue;
-
             var minDate = minDateEvent < minDateTodo ? minDateEvent : minDateTodo;
 
             if (!string.IsNullOrWhiteSpace(searchText) && minDate != DateTime.MaxValue)
@@ -68,50 +67,52 @@ namespace Agendai.Services.Views
                 referenceDate = minDate;
             }
 
-            var eventSchedulers = new Dictionary<ulong, RecurringScheduler<Event>>();
-            foreach (var ev in filteredEvents.Where(e => e.Repeats != Repeats.None))
-                eventSchedulers[ev.Id] = new RecurringScheduler<Event>(ev);
+            var eventSchedulers = new List<RecurringScheduler<Event>>(
+                filteredEvents.Where(e => e.Repeats != Repeats.None)
+                              .Select(e => new RecurringScheduler<Event>(e)));
 
-            var todoSchedulers = new Dictionary<ulong, RecurringScheduler<Todo>>();
-            foreach (var todo in filteredTodos.Where(t => t.Repeats != Repeats.None))
-                todoSchedulers[todo.Id] = new RecurringScheduler<Todo>(todo);
+            var todoSchedulers = new List<RecurringScheduler<Todo>>(
+                filteredTodos.Where(t => t.Repeats != Repeats.None)
+                             .Select(t => new RecurringScheduler<Todo>(t)));
 
             var dayOccurrences = new List<object>();
 
-            foreach (var ev in filteredEvents.Where(e => e.Repeats == Repeats.None && e.Due.Date == referenceDate.Date))
-                dayOccurrences.Add(ev);
+            dayOccurrences.AddRange(
+                filteredEvents.Where(e => e.Repeats == Repeats.None && e.Due.Date == referenceDate.Date));
+            dayOccurrences.AddRange(
+                filteredTodos.Where(t => t.Repeats == Repeats.None && t.Due.Date == referenceDate.Date));
 
-            foreach (var scheduler in eventSchedulers.Values)
+            foreach (var scheduler in eventSchedulers)
             {
-                dayOccurrences.AddRange(
-                    scheduler.GetUpcoming()
-                             .Where(o => o.Due.Date == referenceDate.Date)
-                             .Select(o => o.Item));
+                RecurrenceOccurrence<Event>? occ;
+                while ((occ = scheduler.GetNext()) != null)
+                {
+                    if (occ.Due.Date > referenceDate.Date) break;
+                    if (occ.Due.Date == referenceDate.Date)
+                        dayOccurrences.Add(occ.Item);
+                }
             }
 
-            foreach (var todo in filteredTodos.Where(t => t.Repeats == Repeats.None && t.Due.Date == referenceDate.Date))
-                dayOccurrences.Add(todo);
-
-            foreach (var scheduler in todoSchedulers.Values)
+            foreach (var scheduler in todoSchedulers)
             {
-                dayOccurrences.AddRange(
-                    scheduler.GetUpcoming()
-                             .Where(o => o.Due.Date == referenceDate.Date)
-                             .Select(o => o.Item));
+                RecurrenceOccurrence<Todo>? occ;
+                while ((occ = scheduler.GetNext()) != null)
+                {
+                    if (occ.Due.Date > referenceDate.Date) break;
+                    if (occ.Due.Date == referenceDate.Date)
+                        dayOccurrences.Add(occ.Item);
+                }
             }
 
             var dayMap = new Dictionary<string, ObservableCollection<object>>();
-
             foreach (var item in dayOccurrences)
             {
-                DateTime due;
-                if (item is Event ev)
-                    due = ev.Due;
-                else if (item is Todo td)
-                    due = td.Due;
-                else
-                    continue;
-
+                DateTime due = item switch
+                {
+                    Event ev => ev.Due,
+                    Todo td => td.Due,
+                    _ => DateTime.MinValue
+                };
                 var hourKey = due.ToString("HH:mm");
 
                 if (!dayMap.ContainsKey(hourKey))
@@ -124,6 +125,7 @@ namespace Agendai.Services.Views
 
             return referenceDate;
         }
+
 
         public static Dictionary<string, ObservableCollection<object>> MapDayItemsFrom(
             IEnumerable<Event> events,
